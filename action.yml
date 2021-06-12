@@ -1,0 +1,82 @@
+name: HtmlProofer Action
+author: athackst
+description: Run HtmlProofer
+
+inputs:
+  # required inputs 
+  directory:
+    description: The directory to scan
+    required: true
+    default: "./_site"
+  # optional inputs
+  assume_extension:
+    description: Automatically add extension (e.g. .html) to file paths, to allow extensionless URLs (as supported by Jekyll 3 and GitHub Pages)
+    required: false
+  check_external_hash:
+    description: Check whether external anchors exist
+    required: false
+  check_favicon:
+    description: Check whether favicons are valid
+    required: false
+  check_html:
+    description: Validate HTML
+    required: false
+  check_img_http:
+    description: Enforce that images use HTTPS
+    required: false
+  check_opengraph:
+    description: Check images and URLs in Open Graph metadata
+    required: false
+  empty_alt_ignore:
+    description: Allow images with empty alt tags
+    required: false
+  enforce_https:
+    description: Require that links use HTTPS
+    required: false
+  max_concurrency:
+    description: Maximum number of concurrent requests
+    required: false
+  internal_domains:
+    description: Newline-separated list of internal domains
+    required: false
+    default: |
+      ${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+      ${{ github.event.repository.name }}
+  max_paralell:
+    description: Maximum parallel processes
+    required: false
+  connect_timeout:
+    description: HTTP connection timeout
+    required: false
+  ssl_verifypeer:
+    description: If you’re hitting a non-verifiable SSL server then you’ll have to disable peer verification to make SSL work
+    required: false
+  ssl_verifyhost:
+    description: "If you are getting `SSL: certificate subject name does not match target host name` from curl"
+    required: false
+  timeout:
+    description: HTTP request timeout
+    required: false
+  url_ignore:
+    description: Newline-separated list of URLs to ignore
+    required: false
+    default: |
+      https://fonts.gstatic.com
+  url_ignore_re:
+    description: Newline-separated list of URL regexes to ignore
+    required: false
+  url_swap:
+    description: Newline-separated list of regex expressions to swap in urls
+    required: false
+    default: |
+      ^\/${{ github.event.repository.name }}:
+  retries:
+    description: Number of times to retry checking links
+    required: false
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+branding:
+  icon: link
+  color: green
