@@ -67,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#macro-rendering-error" class="md-skip">
+        <a href="#htmlproofer-action" class="md-skip">
           Skip to content
         </a>
       
@@ -212,9 +212,66 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          htmlproofer-action
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         htmlproofer-action
       </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -239,6 +296,48 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    License
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -250,20 +349,140 @@
               
                 
                 
-                <h1 id="macro-rendering-error"><em>Macro Rendering Error</em></h1>
-<p><strong>UndefinedError</strong>: 'secrets' is undefined</p>
-<div class="highlight"><pre><span></span><code>Traceback (most recent call last):
-  File &quot;/opt/venv/lib/python3.9/site-packages/mkdocs_macros/plugin.py&quot;, line 443, in render
-    return md_template.render(**page_variables)
-  File &quot;/opt/venv/lib/python3.9/site-packages/jinja2/environment.py&quot;, line 1304, in render
-    self.environment.handle_exception()
-  File &quot;/opt/venv/lib/python3.9/site-packages/jinja2/environment.py&quot;, line 925, in handle_exception
-    raise rewrite_traceback_stack(source=source)
-  File &quot;&lt;template&gt;&quot;, line 32, in top-level template code
-  File &quot;/opt/venv/lib/python3.9/site-packages/jinja2/environment.py&quot;, line 474, in getattr
-    return getattr(obj, attribute)
-jinja2.exceptions.UndefinedError: &#39;secrets&#39; is undefined
+                <h1 id="htmlproofer-action">htmlproofer-action</h1>
+<p>A <a href="https://github.com/features/actions">Github Action</a> that runs <a href="https://github.com/gjtorikian/html-proofer">htmlproofer</a>.</p>
+<p>Defaults are set up to support jekyll + Github Pages websites.</p>
+<h2 id="usage">Usage</h2>
+<p>Add this snippet to a github workflow after the step that builds your site.</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
 </code></pre></div>
+<h3 id="example">Example</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Build and deploy Jekyll site to GitHub Pages</span>
+
+<span class="nt">on</span><span class="p">:</span>
+  <span class="nt">push</span><span class="p">:</span>
+    <span class="nt">branches</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">main</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+  <span class="nt">github-pages</span><span class="p">:</span>
+    <span class="nt">runs-on</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+    <span class="nt">steps</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+      <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">helaili/jekyll-action@v2</span>
+        <span class="nt">with</span><span class="p">:</span>
+          <span class="nt">token</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+      <span class="p p-Indicator">-</span> <span class="nt">uses</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
+</code></pre></div>
+<h3 id="options">Options</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>directory</code></td>
+<td>The directory to scan</td>
+<td>./_site <strong>(required)</strong></td>
+</tr>
+<tr>
+<td><code>assume_extension</code></td>
+<td>Automatically add extension (e.g. .html) to file paths</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>check_external_hash</code></td>
+<td>Check whether external anchors exist</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>check_favicon</code></td>
+<td>Check whether favicons are valid</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>check_html</code></td>
+<td>Validate HTML</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>check_img_http</code></td>
+<td>Enforce that images use HTTPS</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>check_opengraph</code></td>
+<td>Check images and URLs in Open Graph metadata</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>empty_alt_ignore</code></td>
+<td>Allow images with empty alt tags</td>
+<td>false</td>
+</tr>
+<tr>
+<td><code>enforce_https</code></td>
+<td>Require that links use HTTPS</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>max_concurrency</code></td>
+<td>Maximum number of concurrent requests</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>internal_domains</code></td>
+<td>Newline-separated list of internal domains</td>
+<td><code>https://{user}.github.io/{repo}</code></td>
+</tr>
+<tr>
+<td><code>max_parallel</code></td>
+<td>Maximum parallel processes</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>connect_timeout</code></td>
+<td>HTTP connection timeout</td>
+<td>30</td>
+</tr>
+<tr>
+<td><code>ssl_verifypeer</code></td>
+<td>Disable peer verification.</td>
+<td>true</td>
+</tr>
+<tr>
+<td><code>ssl_verifyhost</code></td>
+<td>Disable host verification</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>HTTP request timeout</td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>url_ignore</code></td>
+<td>Newline-separated list of URLs to ignore</td>
+<td>(empty)</td>
+</tr>
+<tr>
+<td><code>url_ignore_re</code></td>
+<td>Newline-separated list of URL regexes to ignore</td>
+<td>(empty)</td>
+</tr>
+<tr>
+<td><code>retries</code></td>
+<td>Number of times to retry checking links</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h2 id="license">License</h2>
+<p>This software is licensed under <a href="LICENSE">Apache 2.0</a>.</p>
                 
               
               
