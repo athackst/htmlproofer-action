@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#htmlproofer-action-wip-do-not-fork" class="md-skip">
+        <a href="#htmlproofer-action" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              htmlproofer-action (WIP -- do not fork)
+              htmlproofer-action
             
           </span>
         </div>
@@ -209,12 +209,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          htmlproofer-action (WIP -- do not fork)
+          htmlproofer-action
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
-        htmlproofer-action (WIP -- do not fork)
+        htmlproofer-action
       </a>
       
         
@@ -345,7 +345,7 @@
               
                 
                 
-                <h1 id="htmlproofer-action-wip-do-not-fork">htmlproofer-action (WIP -- do not fork)</h1>
+                <h1 id="htmlproofer-action">htmlproofer-action</h1>
 <p>A <a href="https://github.com/features/actions">Github Action</a> that runs <a href="https://github.com/gjtorikian/html-proofer">htmlproofer</a>.</p>
 <p>Defaults are set up to support jekyll + Github Pages websites.</p>
 <h2 id="usage">Usage</h2>
@@ -463,12 +463,17 @@ jobs:
 <tr>
 <td><code>url_ignore</code></td>
 <td>Newline-separated list of URLs to ignore</td>
-<td>(empty)</td>
+<td><code>https://fonts.gstatic.com</code></td>
 </tr>
 <tr>
 <td><code>url_ignore_re</code></td>
 <td>Newline-separated list of URL regexes to ignore</td>
 <td>(empty)</td>
+</tr>
+<tr>
+<td><code>url_swap</code></td>
+<td>Newline-separated list of URL regexes to swap to a value</td>
+<td><code>/{repo}:</code></td>
 </tr>
 <tr>
 <td><code>retries</code></td>
