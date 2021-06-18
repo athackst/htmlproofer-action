@@ -75,8 +75,4 @@ end
 
 puts options
 
-begin
-  HTMLProofer.check_directory(get_str("DIRECTORY"), options).run
-rescue => msg
-  puts "#{msg}"
-end
+HTMLProofer.check_directory(get_str("DIRECTORY"), options).run
