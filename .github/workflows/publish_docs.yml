@@ -1,4 +1,4 @@
-name: publish-docs
+name: publish_docs
 
 on:
   push:
@@ -9,14 +9,16 @@ on:
     types: [publish-docs]
 
 jobs:
-  publish:
+  publish-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: MkDocs Simple action
+      - name: Setup config
+        uses: athackst/athackst.mkdocs@main
+      - name: Build and push docs to gh-pages
         uses: athackst/mkdocs-simple-plugin@main
-      - name: htmlproofer
+      - name: Htmlproofer
         uses: athackst/htmlproofer-action@main
         with:
-          directory: ./site
+          directory: site
