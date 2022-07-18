@@ -1,10 +1,13 @@
 FROM ruby:3.0-alpine
 
+COPY Gemfile /dev
+COPY Gemfile.lock /dev
+WORKDIR /dev
 RUN apk --no-cache add \
     build-base \
     curl \
     ruby-dev \
-  && gem install html-proofer
+  && bundle install
 
 COPY entrypoint.sh htmlproofer-action.rb /
 
