@@ -19,6 +19,13 @@ def get_bool(name, fallback)
   end
 end
 
+def get_name(value, name)
+  if value
+    return name = "\n"
+  end
+  return ""
+end
+
 def get_int(name, fallback)
   s = ENV["INPUT_#{name}"]
   return fallback if s.nil? or s == ""
@@ -38,18 +45,17 @@ url_ignore_re = get_str("URL_IGNORE_RE").split("\n").map { |s| Regexp.new s }
 url_ignore = get_str("URL_IGNORE").split("\n").concat url_ignore_re
 
 options = {
-  :assume_extension => get_bool("ASSUME_EXTENSION", false),
   :check_external_hash => get_bool("CHECK_EXTERNAL_HASH", true),
-  :check_favicon => get_bool("CHECK_FAVICON", true),
-  :check_html => get_bool("CHECK_HTML", true),
-  :check_img_http => get_bool("CHECK_IMG_HTTP", true),
-  :check_opengraph => get_bool("CHECK_OPENGRAPH", true),
-  :empty_alt_ignore => get_bool("EMPTY_ALT_IGNORE", false),
+  :checks => get_list(get_name(get_bool("CHECK_FAVICON", true), "Favicon") + 
+                      get_name(get_bool("CHECK_HTML", true), "Links") + 
+                      get_name(get_bool("CHECK_IMG_HTTP", true), "Images") + 
+                      get_name(get_bool("CHECK_SCRIPTS", true), "Scripts") +
+                      get_name(get_bool("CHECK_OPENGRAPH", true), "OpenGraph")),
+  :ignore_empty_alt => get_bool("EMPTY_ALT_IGNORE", false),
   :enforce_https => get_bool("ENFORCE_HTTPS", true),
   :hydra => {
     :max_concurrency => get_int("MAX_CONCURRENCY", 50),
   },
-  :internal_domains => get_list("INTERNAL_DOMAINS"),
   :parallel => { :in_processes => get_int("MAX_PARALLEL", 3) },
   :typhoeus => {
     :connecttimeout => get_int("CONNECT_TIMEOUT", 30),
@@ -61,7 +67,7 @@ options = {
     :ssl_verifyhost => get_int("SSL_VERIFYHOST", 0),
     :timeout => get_int("TIMEOUT", 120),
   },
-  :url_ignore => url_ignore,
+  :ignore_urls => url_ignore,
 }
 
 options[:url_swap] = {}

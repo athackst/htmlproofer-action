@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "bundle install",
+            "type": "shell",
+            "command": "bundle install"
+        },
+        {
+            "label": "build docs",
+            "type": "shell",
+            "command": "mkdocs_simple_gen --build"
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "dependsOn":["build docs"],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "command": "ruby htmlproofer-action.rb",
+            "options": {
+                "env": {
+                    "INPUT_DIRECTORY": "site"
+                }
+            }
+        }
+    ]
+}

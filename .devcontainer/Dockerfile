@@ -11,9 +11,17 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/l
 
 RUN curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 
-# [Optional] Uncomment this section to install additional OS packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <your-package-list-here>
+# Install pip3
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends python3-pip
+
+# Install mkdocs-simple-plugin for testing
+RUN pip3 install -U pip && \
+    pip3 install mkdocs-simple-plugin
+
+# Get my git aliases
+RUN wget -O /etc/profile.d/git_aliases.sh https://github.com/athackst/workstation_setup/raw/main/user/.aliases/git_aliases.sh \
+    && echo "source /etc/profile.d/git_aliases.sh" >> "/home/vscode/.bashrc"
 
 # [Optional] Uncomment this line to install additional gems.
 # RUN gem install <your-gem-names-here>
