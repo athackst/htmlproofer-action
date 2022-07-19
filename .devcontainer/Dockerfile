@@ -13,7 +13,9 @@ RUN curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo b
 
 # Install pip3
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends python3-pip
+    && apt-get -y install --no-install-recommends python3-pip curl
+
+RUN curl -sSL https://get.docker.com/ | sh
 
 # Install mkdocs-simple-plugin for testing
 RUN pip3 install -U pip && \
