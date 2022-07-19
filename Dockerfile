@@ -1,13 +1,9 @@
-FROM ruby:3.0-alpine
+FROM alpine/bundle:3.1.2
 
-COPY Gemfile /dev
-COPY Gemfile.lock /dev
-WORKDIR /dev
-RUN apk --no-cache add \
-    build-base \
-    curl \
-    ruby-dev \
-  && bundle install
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
 
 COPY entrypoint.sh htmlproofer-action.rb /
 
