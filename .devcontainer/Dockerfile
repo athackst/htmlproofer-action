@@ -15,6 +15,7 @@ RUN curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo b
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends python3-pip curl
 
+# Install docker
 RUN curl -sSL https://get.docker.com/ | sh
 
 # Install mkdocs-simple-plugin for testing
