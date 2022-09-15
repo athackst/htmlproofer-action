@@ -13,7 +13,7 @@ jobs:
       - name: Build docs locally
         uses: athackst/mkdocs-simple-plugin@main
         with:
-          push: 0
+          push: false
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0' # Not needed with a .ruby-version file
