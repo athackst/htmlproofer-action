@@ -29,7 +29,9 @@
             "command": "ruby htmlproofer-action.rb",
             "options": {
                 "env": {
-                    "INPUT_DIRECTORY": "site"
+                    "INPUT_DIRECTORY": "site",
+                    "INPUT_URL_SWAP": "^http.?//localhost:",
+                    "INPUT_URL_IGNORE": "https://fonts.gstatic.com"
                 }
             }
         }

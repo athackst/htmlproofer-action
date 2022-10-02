@@ -21,7 +21,7 @@ end
 
 def get_name(value, name)
   if value
-    return name = "\n"
+    return "#{name}\n"
   end
   return ""
 end
@@ -38,7 +38,7 @@ def get_str(name)
 end
 
 def get_list(name)
-  get_str(name).split("\n").concat
+  name.split("\n").concat
 end
 
 url_ignore_re = get_str("URL_IGNORE_RE").split("\n").map { |s| Regexp.new s }
@@ -46,7 +46,7 @@ url_ignore = get_str("URL_IGNORE").split("\n").concat url_ignore_re
 
 options = {
   :check_external_hash => get_bool("CHECK_EXTERNAL_HASH", true),
-  :checks => get_list(get_name(get_bool("CHECK_FAVICON", true), "Favicon") + 
+  :checks => get_list(get_name(get_bool("CHECK_FAVICON", true), "Favicon") +
                       get_name(get_bool("CHECK_HTML", true), "Links") + 
                       get_name(get_bool("CHECK_IMG_HTTP", true), "Images") + 
                       get_name(get_bool("CHECK_SCRIPTS", true), "Scripts") +
@@ -70,15 +70,19 @@ options = {
   :ignore_urls => url_ignore,
 }
 
-options[:url_swap] = {}
-get_list("URL_SWAP").each do |s|
+options[:swap_urls] = {}
+get_list(get_str("URL_SWAP")).each do |s|
   splt = s.split(/(?<!\\):/, 2)
 
   re = splt[0].gsub(/\\:/, ":")
   string = splt[1].gsub(/\\:/, ":")
-  options[:url_swap][Regexp.new(re)] = string
+  options[:swap_urls][Regexp.new(re)] = string
 end
 
 puts options
 
 HTMLProofer.check_directory(get_str("DIRECTORY"), options).run
+
+if options[:checks].empty?
+  abort("No checks run")
+end
