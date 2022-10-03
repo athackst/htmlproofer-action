@@ -9,6 +9,11 @@
             "command": "bundle install"
         },
         {
+            "label": "bundle update",
+            "type": "shell",
+            "command": "bundle update"
+        },
+        {
             "label": "build docs",
             "type": "shell",
             "command": "mkdocs_simple_gen --build"
@@ -30,7 +35,6 @@
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
-                    "INPUT_URL_SWAP": "^http.?//localhost:",
                     "INPUT_URL_IGNORE": "https://fonts.gstatic.com"
                 }
             }
