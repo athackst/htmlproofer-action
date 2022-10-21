@@ -6,7 +6,7 @@
 		"dockerfile": "Dockerfile",
 		"args": { 
 			// Update 'VARIANT' to pick a Ruby version: 3, 3.0, 2, 2.7, 2.6
-			"VARIANT": "3",
+			"VARIANT": "3.1",
 			// Options
 			"INSTALL_NODE": "true",
 			"NODE_VERSION": "lts/*"
@@ -14,7 +14,10 @@
 	},
 	// Set up docker in docker to test image
 	"runArgs": ["-v=/var/run/docker.sock:/var/run/docker.sock"],
-
+	"mounts": [
+		"source=/${env:HOME}/.bash_aliases,target=/home/vscode/.bash_aliases,type=bind,consistency=cached",
+		"source=/${env:HOME}/.aliases,target=/home/vscode/.aliases,type=bind,consistency=cached"
+	],
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
 		"terminal.integrated.profiles.linux": {
@@ -28,7 +31,8 @@
 	"extensions": [
 		"rebornix.Ruby",
 		"wingrunr21.vscode-ruby",
-		"esbenp.prettier-vscode"
+		"esbenp.prettier-vscode",
+		"yzhang.markdown-all-in-one"
 	],
 	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
