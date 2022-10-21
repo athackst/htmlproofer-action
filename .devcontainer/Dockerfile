@@ -22,10 +22,6 @@ RUN curl -sSL https://get.docker.com/ | sh
 RUN pip3 install -U pip && \
     pip3 install mkdocs-simple-plugin
 
-# Get my git aliases
-RUN wget -O /etc/profile.d/git_aliases.sh https://github.com/athackst/workstation_setup/raw/main/user/.aliases/git_aliases.sh \
-    && echo "source /etc/profile.d/git_aliases.sh" >> "/home/vscode/.bashrc"
-
 # [Optional] Uncomment this line to install additional gems.
 # RUN gem install <your-gem-names-here>
 
