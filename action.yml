@@ -70,6 +70,7 @@ inputs:
     required: false
     default: |
       ^\/${{ github.event.repository.name }}:
+      ^.*${{ github.repository_owner }}.github.io\/${{ github.event.repository.name }}:
   retries:
     description: Number of times to retry checking links
     required: false
