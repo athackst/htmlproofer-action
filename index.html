@@ -439,6 +439,11 @@
 <td>./_site <strong>(required)</strong></td>
 </tr>
 <tr>
+<td><code>allow_missing_href</code></td>
+<td>Do not flag a tags missing href</td>
+<td>false</td>
+</tr>
+<tr>
 <td><code>assume_extension</code></td>
 <td>Automatically add extension (e.g. .html) to file paths</td>
 <td>true</td>
@@ -489,23 +494,18 @@
 <td><code>https://{user}.github.io/{repo}</code></td>
 </tr>
 <tr>
-<td><code>max_parallel</code></td>
-<td>Maximum parallel processes</td>
-<td>3</td>
-</tr>
-<tr>
 <td><code>connect_timeout</code></td>
 <td>HTTP connection timeout</td>
 <td>30</td>
 </tr>
 <tr>
 <td><code>ssl_verifypeer</code></td>
-<td>Disable peer verification.</td>
-<td>true</td>
+<td>Enable peer verification.</td>
+<td>false</td>
 </tr>
 <tr>
 <td><code>ssl_verifyhost</code></td>
-<td>Disable host verification</td>
+<td>Enable host verification</td>
 <td>0</td>
 </tr>
 <tr>
@@ -531,7 +531,7 @@
 <tr>
 <td><code>retries</code></td>
 <td>Number of times to retry checking links</td>
-<td>3</td>
+<td>1</td>
 </tr>
 </tbody>
 </table>
