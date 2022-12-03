@@ -1,6 +1,6 @@
 #!/bin/sh
 
-tries="${INPUT_RETRIES:-3}"
+tries="${INPUT_RETRIES:-1}"
 
 code=1
 while [ "$tries" -ge 1 ]; do

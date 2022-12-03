@@ -9,6 +9,9 @@ inputs:
     required: true
     default: "./_site"
   # optional inputs
+  allow_missing_href:
+    description: Do not flag a tags missing href
+    required: false
   assume_extension:
     description: Automatically add extension (e.g. .html) to file paths, to allow extensionless URLs (as supported by Jekyll 3 and GitHub Pages)
     required: false
@@ -45,6 +48,7 @@ inputs:
   max_paralell:
     description: Maximum parallel processes
     required: false
+    deprecationMessage: Parallel has been deprecated in htmlproofer
   connect_timeout:
     description: HTTP connection timeout
     required: false

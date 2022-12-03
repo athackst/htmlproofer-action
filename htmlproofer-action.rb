@@ -45,6 +45,7 @@ url_ignore_re = get_str("URL_IGNORE_RE").split("\n").map { |s| Regexp.new s }
 url_ignore = get_str("URL_IGNORE").split("\n").concat url_ignore_re
 
 options = {
+  :allow_missing_href => get_bool("ALLOW_MISSING_HREF", false),
   :check_external_hash => get_bool("CHECK_EXTERNAL_HASH", true),
   :checks => get_list(get_name(get_bool("CHECK_FAVICON", true), "Favicon") +
                       get_name(get_bool("CHECK_HTML", true), "Links") + 
@@ -56,7 +57,6 @@ options = {
   :hydra => {
     :max_concurrency => get_int("MAX_CONCURRENCY", 50),
   },
-  :parallel => { :in_processes => get_int("MAX_PARALLEL", 3) },
   :typhoeus => {
     :connecttimeout => get_int("CONNECT_TIMEOUT", 30),
     :followlocation => true,
@@ -66,6 +66,8 @@ options = {
     :ssl_verifypeer => get_bool("SSL_VERIFYPEER", false),
     :ssl_verifyhost => get_int("SSL_VERIFYHOST", 0),
     :timeout => get_int("TIMEOUT", 120),
+    :cookiefile => ".cookies",
+    :cookiejar => ".cookies"
   },
   :ignore_urls => url_ignore,
 }
