@@ -38,6 +38,7 @@ jobs:
 | Name                  | Description                                              | Default                           |
 | --------------------- | -------------------------------------------------------- | --------------------------------- |
 | `directory`           | The directory to scan                                    | ./\_site **(required)**           |
+| `allow_missing_href`  | Do not flag a tags missing href                          | false                             |
 | `assume_extension`    | Automatically add extension (e.g. .html) to file paths   | true                              |
 | `check_external_hash` | Check whether external anchors exist                     | true                              |
 | `check_favicon`       | Check whether favicons are valid                         | true                              |
@@ -48,15 +49,14 @@ jobs:
 | `enforce_https`       | Require that links use HTTPS                             | true                              |
 | `max_concurrency`     | Maximum number of concurrent requests                    | 50                                |
 | `internal_domains`    | Newline-separated list of internal domains               | `https://{user}.github.io/{repo}` |
-| `max_parallel`        | Maximum parallel processes                               | 3                                 |
 | `connect_timeout`     | HTTP connection timeout                                  | 30                                |
-| `ssl_verifypeer`      | Disable peer verification.                               | true                              |
-| `ssl_verifyhost`      | Disable host verification                                | 0                                 |
+| `ssl_verifypeer`      | Enable peer verification.                                | false                             |
+| `ssl_verifyhost`      | Enable host verification                                 | 0                                 |
 | `timeout`             | HTTP request timeout                                     | 120                               |
 | `url_ignore`          | Newline-separated list of URLs to ignore                 | `https://fonts.gstatic.com`       |
 | `url_ignore_re`       | Newline-separated list of URL regexes to ignore          | (empty)                           |
 | `url_swap`            | Newline-separated list of URL regexes to swap to a value | `/{repo}:`                        |
-| `retries`             | Number of times to retry checking links                  | 3                                 |
+| `retries`             | Number of times to retry checking links                  | 1                                 |
 
 ## License
 

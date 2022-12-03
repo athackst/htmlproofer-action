@@ -58,3 +58,6 @@ build-iPhoneSimulator/
 # mkdocs generated files
 site/
 mkdocs.yml
+
+# htmlproofer generated files
+.cookies
