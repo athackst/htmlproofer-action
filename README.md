@@ -56,7 +56,7 @@ jobs:
 | `url_ignore`          | Newline-separated list of URLs to ignore                 | `https://fonts.gstatic.com`       |
 | `url_ignore_re`       | Newline-separated list of URL regexes to ignore          | (empty)                           |
 | `url_swap`            | Newline-separated list of URL regexes to swap to a value | `/{repo}:`                        |
-| `retries`             | Number of times to retry checking links                  | 1                                 |
+| `retries`             | Number of times to retry checking links                  | 3                                 |
 
 ## License
 
