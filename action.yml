@@ -78,6 +78,7 @@ inputs:
   retries:
     description: Number of times to retry checking links
     required: false
+    default: 3
 runs:
   using: "docker"
   image: "Dockerfile"
