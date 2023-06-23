@@ -1,0 +1,15 @@
+name: release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  release-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup environment
+        run: |
+          echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
