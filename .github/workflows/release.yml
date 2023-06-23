@@ -10,6 +10,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup environment
+      - name: Setup environment (release)
+        if: ${{ github.event.release.tag_name != '' }}
         run: |
-          echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+          echo "VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      - name: Setup environment (draft)
+        if: ${{ github.event.release.tag_name == '' }}
+        run: |
+          echo "VERSION=latest" >> $GITHUB_ENV
+      - name: Login to DockerHub
+        uses: docker/login-action@v2.2.0
+        with:
+          username: althack
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - name: Build and push docker image
+        uses: docker/build-push-action@v4.1.1
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: althack/htmlproofer:${{ env.VERSION }}
+          push: true
