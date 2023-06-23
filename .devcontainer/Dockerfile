@@ -21,6 +21,7 @@ RUN curl -sSL https://get.docker.com/ | sh
 # Install mkdocs-simple-plugin for testing
 RUN pip3 install -U pip && \
     pip3 install mkdocs-simple-plugin
+    pip3 install mkdocs-material
 
 # [Optional] Uncomment this line to install additional gems.
 # RUN gem install <your-gem-names-here>

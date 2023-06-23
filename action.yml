@@ -64,11 +64,16 @@ inputs:
   url_ignore:
     description: Newline-separated list of URLs to ignore
     required: false
-    default: |
-      https://fonts.gstatic.com
+    deprecationMessage: Use ignore_urls instead
   url_ignore_re:
     description: Newline-separated list of URL regexes to ignore
     required: false
+    depreactionMessage: Use ignore_urls instead
+  ignore_url:
+    description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
+    required: false
+    default: |
+      https://fonts.gstatic.com
   url_swap:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
