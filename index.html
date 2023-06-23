@@ -306,8 +306,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
+  <a href="#quickstart" class="md-nav__link">
+    Quickstart
   </a>
   
 </li>
@@ -321,6 +321,40 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-with-mkdocs" class="md-nav__link">
+    Use with mkdocs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignore-a-url" class="md-nav__link">
+    Ignore a url
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-docker" class="md-nav__link">
+    Local docker
+  </a>
   
 </li>
       
@@ -389,8 +423,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
+  <a href="#quickstart" class="md-nav__link">
+    Quickstart
   </a>
   
 </li>
@@ -404,6 +438,40 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-with-mkdocs" class="md-nav__link">
+    Use with mkdocs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ignore-a-url" class="md-nav__link">
+    Ignore a url
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-docker" class="md-nav__link">
+    Local docker
+  </a>
   
 </li>
       
@@ -436,7 +504,7 @@
 <p>Add this snippet to a github workflow after the step that builds your site.</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
 </code></pre></div>
-<h3 id="example">Example</h3>
+<h3 id="quickstart">Quickstart</h3>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and deploy Jekyll site to GitHub Pages</span>
 
 <span class="nt">on</span><span class="p">:</span>
@@ -448,10 +516,18 @@
 <span class="w">  </span><span class="nt">github-pages</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">helaili/jekyll-action@v2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Ruby</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruby/setup-ruby@v1</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
+<span class="w">          </span><span class="nt">bundler-cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">          </span><span class="nt">cache-version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build with Jekyll</span>
+<span class="w">        </span><span class="c1"># Outputs to the &#39;./_site&#39; directory by default</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bundle exec jekyll build</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">JEKYLL_GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.GITHUB_TOKEN }}</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
 </code></pre></div>
 <h3 id="options">Options</h3>
@@ -545,14 +621,19 @@
 <td>120</td>
 </tr>
 <tr>
-<td><code>url_ignore</code></td>
+<td><code>ignore_urls</code></td>
 <td>Newline-separated list of URLs to ignore</td>
 <td><code>https://fonts.gstatic.com</code></td>
 </tr>
 <tr>
+<td><code>url_ignore</code></td>
+<td>Newline-separated list of URLs to ignore</td>
+<td>(deprecated)</td>
+</tr>
+<tr>
 <td><code>url_ignore_re</code></td>
 <td>Newline-separated list of URL regexes to ignore</td>
-<td>(empty)</td>
+<td>(deprecated)</td>
 </tr>
 <tr>
 <td><code>url_swap</code></td>
@@ -566,6 +647,50 @@
 </tr>
 </tbody>
 </table>
+<h2 id="examples">Examples</h2>
+<h3 id="use-with-mkdocs">Use with mkdocs</h3>
+<div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and deploy Jekyll site to GitHub Pages</span>
+
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">github-pages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and push docs</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/mkdocs-simple-plugin@main</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
+<span class="w">        </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">site</span>
+</code></pre></div>
+<h3 id="ignore-a-url">Ignore a url</h3>
+<p>This uses the same syntax as htmlproofer, but you can either use a comma or new line to separate values.</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ignore_url</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">/twitter.com/</span>
+<span class="w">      </span><span class="no">https://fonts.gstatic.com</span>
+</code></pre></div>
+<h2 id="local-docker">Local docker</h2>
+<p>You can also run this locally using the docker image. This can be helpful in understanding errors.</p>
+<p>I make a local alias that calls the docker file with environment variables set based on my common use cases.</p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>htmlproofer<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="nv">curr_dir</span><span class="o">=</span><span class="nv">$PWD</span>
+<span class="w">        </span><span class="nv">ignore</span><span class="o">=</span><span class="s2">&quot;https://www.linkedin.com/in/allisonthackston,http://sdformat.org,/gazebosim.org/docs/citadel/&quot;</span>
+<span class="w">        </span><span class="nv">url_swap</span><span class="o">=</span><span class="s2">&quot;^https.?\/\/www.allisonthackston.com:&quot;</span>
+<span class="w">        </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">curr_dir</span><span class="si">}</span>:/app<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_DIRECTORY</span><span class="o">=</span>/app<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_IGNORE_URLS</span><span class="o">=</span><span class="si">${</span><span class="nv">ignore</span><span class="si">}</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_URL_SWAP</span><span class="o">=</span><span class="si">${</span><span class="nv">url_swap</span><span class="si">}</span><span class="w"> </span>althack/htmlproofer:latest
+<span class="o">}</span>
+</code></pre></div>
+<p>Then I can just go to the folder the site is built in and run the htmlproofer.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>site
+htmlproofer
+</code></pre></div>
 <h2 id="license">License</h2>
 <p>This software is licensed under <a href="https://github.com/athackst/htmlproofer-action/blob/main/LICENSE">Apache 2.0</a>.</p>
 
