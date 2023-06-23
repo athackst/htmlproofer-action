@@ -69,7 +69,7 @@ inputs:
     description: Newline-separated list of URL regexes to ignore
     required: false
     depreactionMessage: Use ignore_urls instead
-  ignore_url:
+  ignore_urls:
     description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
     required: false
     default: |

@@ -54,10 +54,10 @@ url_ignore_re = get_str("URL_IGNORE_RE").split("\n").map { |s| Regexp.new s }
 url_ignore = get_str("URL_IGNORE").split(/,|\n/).each_with_object([]) do | url, arr |
   arr << to_regex?(url)
 end
-ignore_url = get_str("IGNORE_URL").split(/,|\n/).each_with_object([]) do | url, arr |
+ignore_urls = get_str("IGNORE_URLS").split(/,|\n/).each_with_object([]) do | url, arr |
   arr << to_regex?(url)
 end
-url_ignore = url_ignore.concat(ignore_url, url_ignore_re)
+ignore_urls = ignore_urls.concat(url_ignore, url_ignore_re)
 
 options = {
   :allow_missing_href => get_bool("ALLOW_MISSING_HREF", false),
@@ -84,7 +84,7 @@ options = {
     :cookiefile => ".cookies",
     :cookiejar => ".cookies"
   },
-  :ignore_urls => url_ignore,
+  :ignore_urls => ignore_urls,
 }
 
 options[:swap_urls] = {}
