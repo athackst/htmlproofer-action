@@ -100,7 +100,7 @@ This uses the same syntax as htmlproofer, but you can either use a comma or new 
 - name: Htmlproofer
   uses: athackst/htmlproofer-action@main
   with:
-    ignore_url: |
+    ignore_urls: |
       /twitter.com/
       https://fonts.gstatic.com
 ```
