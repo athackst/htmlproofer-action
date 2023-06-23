@@ -35,7 +35,7 @@
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
-                    "INPUT_URL_IGNORE": "https://fonts.gstatic.com",
+                    "INPUT_IGNORE_URL": "https://fonts.gstatic.com,/linkedin.com/",
                     "INPUT_ALLOW_MISSING_HREF": "true"
                 }
             }

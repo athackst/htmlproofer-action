@@ -7,4 +7,4 @@ RUN bundle install
 
 COPY entrypoint.sh htmlproofer-action.rb /
 
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash", "-c", "/entrypoint.sh"]
