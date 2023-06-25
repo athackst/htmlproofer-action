@@ -5,6 +5,9 @@ WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
-COPY entrypoint.sh htmlproofer-action.rb /
+COPY entrypoint.sh /
+COPY htmlproofer-action.rb /
+
+WORKDIR /site
 
 CMD ["/bin/bash", "-c", "/entrypoint.sh"]

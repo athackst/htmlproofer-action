@@ -21,7 +21,7 @@ end
 
 def get_name(value, name)
   if value
-    return "#{name}\n"
+    return "#{name}"
   end
   return ""
 end
@@ -38,7 +38,7 @@ def get_str(name)
 end
 
 def get_list(name)
-  name.split("\n").concat
+  name.split(/,|\n/)
 end
 
 def to_regex?(item)
@@ -49,12 +49,12 @@ def to_regex?(item)
   end
 end
 
-url_ignore_re = get_str("URL_IGNORE_RE").split("\n").map { |s| Regexp.new s }
+url_ignore_re = get_list(get_str("URL_IGNORE_RE")).map { |s| Regexp.new s }
 # url_ignore = get_str("URL_IGNORE").split("\n").concat url_ignore_re
-url_ignore = get_str("URL_IGNORE").split(/,|\n/).each_with_object([]) do | url, arr |
+url_ignore = get_list(get_str("URL_IGNORE")).each_with_object([]) do | url, arr |
   arr << to_regex?(url)
 end
-ignore_urls = get_str("IGNORE_URLS").split(/,|\n/).each_with_object([]) do | url, arr |
+ignore_urls = get_list(get_str("IGNORE_URLS")).each_with_object([]) do | url, arr |
   arr << to_regex?(url)
 end
 ignore_urls = ignore_urls.concat(url_ignore, url_ignore_re)
@@ -62,11 +62,11 @@ ignore_urls = ignore_urls.concat(url_ignore, url_ignore_re)
 options = {
   :allow_missing_href => get_bool("ALLOW_MISSING_HREF", false),
   :check_external_hash => get_bool("CHECK_EXTERNAL_HASH", true),
-  :checks => get_list(get_name(get_bool("CHECK_FAVICON", true), "Favicon") +
-                      get_name(get_bool("CHECK_HTML", true), "Links") + 
-                      get_name(get_bool("CHECK_IMG_HTTP", true), "Images") + 
-                      get_name(get_bool("CHECK_SCRIPTS", true), "Scripts") +
-                      get_name(get_bool("CHECK_OPENGRAPH", true), "OpenGraph")),
+  :checks => [ get_name(get_bool("CHECK_FAVICON", true), "Favicon"),
+               get_name(get_bool("CHECK_HTML", true), "Links"),
+               get_name(get_bool("CHECK_IMG_HTTP", true), "Images"),
+               get_name(get_bool("CHECK_SCRIPTS", true), "Scripts"),
+               get_name(get_bool("CHECK_OPENGRAPH", true), "OpenGraph")],
   :ignore_empty_alt => get_bool("EMPTY_ALT_IGNORE", false),
   :enforce_https => get_bool("ENFORCE_HTTPS", true),
   :hydra => {
