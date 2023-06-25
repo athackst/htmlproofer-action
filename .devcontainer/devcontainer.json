@@ -18,24 +18,20 @@
 		"source=/${env:HOME}/.bash_aliases,target=/home/vscode/.bash_aliases,type=bind,consistency=cached",
 		"source=/${env:HOME}/.aliases,target=/home/vscode/.aliases,type=bind,consistency=cached"
 	],
-	// Set *default* container specific settings.json values on container create.
-	"settings": { 
-		"terminal.integrated.profiles.linux": {
-			"bash": {
-				"path": "bash"
-			}
-		},
-	},
 
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"rebornix.Ruby",
-		"wingrunr21.vscode-ruby",
-		"esbenp.prettier-vscode",
-		"yzhang.markdown-all-in-one",
-		"eamodio.gitlens"
-	],
-	
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rebornix.Ruby",
+				"wingrunr21.vscode-ruby",
+				"esbenp.prettier-vscode",
+				"yzhang.markdown-all-in-one",
+				"eamodio.gitlens"
+			]
+		}
+	},
+
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 

@@ -113,18 +113,19 @@ I make a local alias that calls the docker file with environment variables set b
 
 ```sh
 function htmlproofer() {
-        curr_dir=$PWD
-        ignore="https://www.linkedin.com/in/allisonthackston,http://sdformat.org,/gazebosim.org/docs/citadel/"
-        url_swap="^https.?\/\/www.allisonthackston.com:"
-        docker run -v ${curr_dir}:/app -e INPUT_DIRECTORY=/app -e INPUT_IGNORE_URLS=${ignore} -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
+        curr_dir="$PWD/$1"
+        echo "Running on $curr_dir"
+        base_dir=$(basename "$PWD")
+        ignore="https://www.linkedin.com/in/allisonthackston,http://sdformat.org,/gazebosim.org/docs/citadel/,https://fonts.gstatic.com,/regex101.com/"
+        url_swap="^\/${base_dir}:,^\/dev:,^\/v\d+\.\d+\.\d+:"
+        docker run -v ${curr_dir}:/site -e INPUT_DIRECTORY=/site -e INPUT_IGNORE_URLS=${ignore} -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
 }
 ```
 
 Then I can just go to the folder the site is built in and run the htmlproofer.
 
 ```bash
-cd site
-htmlproofer
+htmlproofer _site
 ```
 
 ## License

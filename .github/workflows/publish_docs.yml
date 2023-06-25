@@ -1,12 +1,24 @@
-name: publish_docs
+name: Publish docs
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
   repository_dispatch:
     types: [publish-docs]
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   publish-docs:
@@ -16,9 +28,22 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup config
         uses: athackst/athackst.mkdocs@main
-      - name: Build and push docs to gh-pages
+      - name: Publish dev docs
         uses: athackst/mkdocs-simple-plugin@main
+        with:
+          version: dev
+      - name: Publish release docs
+        if: ${{ github.event.release.tag_name }}
+        uses: athackst/mkdocs-simple-plugin@main
+        with:
+          version: ${{ github.event.release.tag_name }} latest
+          default_version: ${{ github.event.release.tag_name }}
       - name: Htmlproofer
         uses: athackst/htmlproofer-action@main
         with:
           directory: site
+          url_swap: |
+            ^https.?\/\/athackst.github.io\/${{ github.event.repository.name }}:
+            ^\/${{ github.event.repository.name }}:
+            ^\/dev:
+            ^\/v\d+\.\d+\.\d+:
