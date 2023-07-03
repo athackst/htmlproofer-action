@@ -5,7 +5,7 @@ tries="${INPUT_RETRIES:-3}"
 code=1
 while [ "$tries" -ge 1 ]; do
   tries=$((tries-1))
-  ruby /htmlproofer-action.rb
+  ruby /usr/src/htmlproofer_action/main.rb
   code="$?"
   if [ "$code" -eq 0 ]; then
     break

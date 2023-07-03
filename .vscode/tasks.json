@@ -4,41 +4,76 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "bundle install",
+            "label": "bundle: install",
             "type": "shell",
             "command": "bundle install"
         },
         {
-            "label": "bundle update",
+            "label": "bundle: update",
             "type": "shell",
             "command": "bundle update"
         },
         {
-            "label": "build docs",
+            "label": "mkdocs: build",
             "type": "shell",
             "command": "mkdocs_simple_gen --build"
         },
         {
-            "label": "build docker",
+            "label": "docker: build",
             "type": "shell",
             "command": "docker build -t althack/htmlproofer:latest ."
         },
         {
+            "label": "docker: test",
+            "type": "shell",
+            "dependsOn": ["docker: build"],
+            "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "rubocop"
+        },
+        {
+            "label": "lint (fix)",
+            "type": "shell",
+            "command": "rubocop -A"
+        },
+        {
             "label": "test",
             "type": "shell",
-            "dependsOn":["build docs"],
+            "command": "rspec tests/htmlproofer_action_spec.rb",
+            "options": {
+                "env": {
+                    "INPUT_DIRECTORY": "site",
+                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/",
+                    "INPUT_ALLOW_MISSING_HREF": "true"
+                }
+            }
+        },        
+        {
+            "label": "test: integration",
+            "type": "shell",
+            "dependsOn":["mkdocs: build"],
+            "command": "ruby lib/main.rb",
+            "options": {
+                "env": {
+                    "INPUT_DIRECTORY": "site",
+                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/",
+                    "INPUT_ALLOW_MISSING_HREF": "true"
+                }
+            }
+        },
+        {
+            "label": "test: all",
+            "type": "shell",
+            "dependsOrder": "parallel",
+            "dependsOn":["test", "test: integration", "docker: test", "lint"],
             "group": {
                 "kind": "test",
                 "isDefault": true
             },
-            "command": "ruby htmlproofer-action.rb",
-            "options": {
-                "env": {
-                    "INPUT_DIRECTORY": "site",
-                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin.com/",
-                    "INPUT_ALLOW_MISSING_HREF": "true"
-                }
-            }
         }
+
     ]
 }
