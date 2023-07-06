@@ -1,14 +1,4 @@
 {
-    "ruby.useBundler": true,
-    "ruby.locate": {
-        "exclude": "{**/@(test|spec|tmp|.*),**/@(test|spec|tmp|.*)/**,**/*_spec.rb}",
-        "include": "**/*.rb"
-    },
-	"ruby.intellisense": "rubyLocate",
-	"ruby.codeCompletion": "rcodetools",
-	"ruby.format": "rubocop",
-	"ruby.lint": {
-		"rubocop": true
-	}
-	
+	"rubyLsp.formatter": "auto",
+	"rubyLsp.rubyVersionManager": "rvm"
 }
