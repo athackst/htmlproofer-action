@@ -1,6 +1,7 @@
-name: release
+name: Docker
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -9,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  release-docker:
+  docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,6 +24,7 @@ jobs:
           echo "VERSION=latest" >> $GITHUB_ENV
       - name: Login to DockerHub
         uses: docker/login-action@v2.2.0
+        if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
         with:
           username: althack
           password: ${{ secrets.DOCKER_TOKEN }}
@@ -32,4 +34,4 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: althack/htmlproofer:${{ env.VERSION }}
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}

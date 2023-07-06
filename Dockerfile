@@ -1,12 +1,12 @@
-FROM alpine/bundle:3.1.2
+FROM ruby:3.2.2-bullseye
 
-WORKDIR /app
+WORKDIR /usr/src/htmlproofer_action
 
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle config set without 'development' && bundle install
 
 COPY entrypoint.sh /
-COPY htmlproofer-action.rb /
+COPY lib .
 
 WORKDIR /site
 
