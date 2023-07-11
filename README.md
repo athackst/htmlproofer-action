@@ -105,6 +105,22 @@ This uses the same syntax as htmlproofer, but you can either use a comma or new 
       https://fonts.gstatic.com
 ```
 
+### Swap a url
+
+This swaps urls so that local base name and version numbers are disregarded in url links
+
+```yaml
+- name: Htmlproofer
+  uses: athackst/htmlproofer-action@main
+  with:
+    directory: site
+    url_swap: |
+      ^https.?\/\/.*.github.io\/${{ github.event.repository.name }}:
+      ^\/${{ github.event.repository.name }}:
+      ^\/dev:
+      ^\/v\d+\.\d+\.\d+:
+```
+
 ## Local docker
 
 You can also run this locally using the docker image. This can be helpful in understanding errors.
@@ -116,9 +132,8 @@ function htmlproofer() {
         curr_dir="$PWD/$1"
         echo "Running on $curr_dir"
         base_dir=$(basename "$PWD")
-        ignore="https://www.linkedin.com/in/allisonthackston,http://sdformat.org,/gazebosim.org/docs/citadel/,https://fonts.gstatic.com,/regex101.com/"
         url_swap="^\/${base_dir}:,^\/dev:,^\/v\d+\.\d+\.\d+:"
-        docker run -v ${curr_dir}:/site -e INPUT_DIRECTORY=/site -e INPUT_IGNORE_URLS=${ignore} -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
+        docker run -v ${curr_dir}:/site -e INPUT_DIRECTORY=/site -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
 }
 ```
 
