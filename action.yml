@@ -33,6 +33,9 @@ inputs:
   empty_alt_ignore:
     description: Allow images with empty alt tags
     required: false
+  missing_alt_ignore:
+    description: Allow images with missing alt tags
+    required: false
   enforce_https:
     description: Require that links use HTTPS
     required: false

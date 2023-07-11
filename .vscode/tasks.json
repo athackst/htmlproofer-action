@@ -42,7 +42,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "rspec tests/htmlproofer_action_spec.rb",
+            "command": "rspec tests/*spec.rb",
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",

@@ -95,6 +95,7 @@ module HtmlprooferAction
         EnvOptions.get_name_if('CHECK_OPENGRAPH', true, 'OpenGraph')
       ],
       ignore_empty_alt: EnvOptions.get_bool('EMPTY_ALT_IGNORE', false),
+      ignore_missing_alt: EnvOptions.get_bool('MISSING_ALT_IGNORE', false),
       enforce_https: EnvOptions.get_bool('ENFORCE_HTTPS', true),
       hydra: {
         max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 50)

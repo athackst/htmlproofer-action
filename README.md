@@ -54,6 +54,7 @@ jobs:
 | `check_img_http`      | Enforce that images use HTTPS                            | true                              |
 | `check_opengraph`     | Check images and URLs in Open Graph metadata             | true                              |
 | `empty_alt_ignore`    | Allow images with empty alt tags                         | false                             |
+| `missing_alt_ignore`  | Allow images with missing alt tags                       | false                             |
 | `enforce_https`       | Require that links use HTTPS                             | true                              |
 | `max_concurrency`     | Maximum number of concurrent requests                    | 50                                |
 | `internal_domains`    | Newline-separated list of internal domains               | `https://{user}.github.io/{repo}` |
