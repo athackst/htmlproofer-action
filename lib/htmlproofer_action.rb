@@ -115,7 +115,8 @@ module HtmlprooferAction
       ignore_urls: EnvOptions.get_regex_list('URL_IGNORE_RE', true) \
                   + EnvOptions.get_regex_list('URL_IGNORE', false) \
                   + EnvOptions.get_regex_list('IGNORE_URLS', false),
-      swap_urls: EnvOptions.get_swap_map('URL_SWAP')
+      swap_urls: EnvOptions.get_swap_map('URL_SWAP'),
+      ignore_files: EnvOptions.get_regex_list('IGNORE_FILES', false)
     }
   end
   # rubocop: enable Metrics/AbcSize

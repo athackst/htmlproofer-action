@@ -305,7 +305,7 @@ describe HtmlprooferAction do
       allow(EnvOptions).to receive(:get_int).and_return(50, 30, 0, 120)
       allow(EnvOptions).to receive(:get_str).and_return('/site')
       allow(EnvOptions).to receive(:get_name_if).and_return('Favicon', 'Links', 'Images', 'Scripts', 'OpenGraph')
-      allow(EnvOptions).to receive(:get_regex_list).and_return([], [], [])
+      allow(EnvOptions).to receive(:get_regex_list).and_return([], [], [], ['404.html', Regexp.new('foo')])
       allow(EnvOptions).to receive(:get_swap_map).and_return({
                                                                Regexp.new('foo') => 'bar',
                                                                Regexp.new('baz') => 'qux'
@@ -334,6 +334,7 @@ describe HtmlprooferAction do
                                          Regexp.new('foo') => 'bar',
                                          Regexp.new('baz') => 'qux'
                                        })
+      expect(result[:ignore_files]).to eq(['404.html', Regexp.new('foo')])
     end
   end
 end

@@ -83,6 +83,9 @@ inputs:
     default: |
       ^\/${{ github.event.repository.name }}:
       ^.*${{ github.repository_owner }}.github.io\/${{ github.event.repository.name }}:
+  ignore_files:
+    description: Newline-separated list of regex or strings containing file paths that are safe to ignore
+    required: false
   retries:
     description: Number of times to retry checking links
     required: false
