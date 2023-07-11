@@ -11,8 +11,8 @@
         <link rel="canonical" href="https://athackst.github.io/htmlproofer-action/dev/">
       
       
+        <link rel="prev" href="LICENSE/">
       
-        <link rel="next" href="LICENSE/">
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
@@ -262,6 +262,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="LICENSE/" class="md-nav__link">
+        LICENSE
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -346,6 +361,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#swap-a-url" class="md-nav__link">
+    Swap a url
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -369,21 +391,6 @@
   
 </nav>
       
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="LICENSE/" class="md-nav__link">
-        LICENSE
-      </a>
     </li>
   
 
@@ -459,6 +466,13 @@
           <li class="md-nav__item">
   <a href="#ignore-a-url" class="md-nav__link">
     Ignore a url
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#swap-a-url" class="md-nav__link">
+    Swap a url
   </a>
   
 </li>
@@ -677,6 +691,18 @@
 <span class="w">      </span><span class="no">/twitter.com/</span>
 <span class="w">      </span><span class="no">https://fonts.gstatic.com</span>
 </code></pre></div>
+<h3 id="swap-a-url">Swap a url</h3>
+<p>This swaps urls so that local base name and version numbers are disregarded in url links</p>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">site</span>
+<span class="w">    </span><span class="nt">url_swap</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">^https.?\/\/.*.github.io\/${{ github.event.repository.name }}:</span>
+<span class="w">      </span><span class="no">^\/${{ github.event.repository.name }}:</span>
+<span class="w">      </span><span class="no">^\/dev:</span>
+<span class="w">      </span><span class="no">^\/v\d+\.\d+\.\d+:</span>
+</code></pre></div>
 <h2 id="local-docker">Local docker</h2>
 <p>You can also run this locally using the docker image. This can be helpful in understanding errors.</p>
 <p>I make a local alias that calls the docker file with environment variables set based on my common use cases.</p>
@@ -684,9 +710,8 @@
 <span class="w">        </span><span class="nv">curr_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Running on </span><span class="nv">$curr_dir</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="nv">base_dir</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">&quot;</span><span class="k">)</span>
-<span class="w">        </span><span class="nv">ignore</span><span class="o">=</span><span class="s2">&quot;https://www.linkedin.com/in/allisonthackston,http://sdformat.org,/gazebosim.org/docs/citadel/,https://fonts.gstatic.com,/regex101.com/&quot;</span>
 <span class="w">        </span><span class="nv">url_swap</span><span class="o">=</span><span class="s2">&quot;^\/</span><span class="si">${</span><span class="nv">base_dir</span><span class="si">}</span><span class="s2">:,^\/dev:,^\/v\d+\.\d+\.\d+:&quot;</span>
-<span class="w">        </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">curr_dir</span><span class="si">}</span>:/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_DIRECTORY</span><span class="o">=</span>/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_IGNORE_URLS</span><span class="o">=</span><span class="si">${</span><span class="nv">ignore</span><span class="si">}</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_URL_SWAP</span><span class="o">=</span><span class="si">${</span><span class="nv">url_swap</span><span class="si">}</span><span class="w"> </span>althack/htmlproofer:latest
+<span class="w">        </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">curr_dir</span><span class="si">}</span>:/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_DIRECTORY</span><span class="o">=</span>/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_URL_SWAP</span><span class="o">=</span><span class="si">${</span><span class="nv">url_swap</span><span class="si">}</span><span class="w"> </span>althack/htmlproofer:latest
 <span class="o">}</span>
 </code></pre></div>
 <p>Then I can just go to the folder the site is built in and run the htmlproofer.</p>
