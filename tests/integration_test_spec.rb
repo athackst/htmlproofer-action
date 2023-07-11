@@ -30,7 +30,6 @@ describe HtmlprooferAction do
     ENV['INPUT_DIRECTORY'] = File.join(@test_directory, 'empty_alt')
     # Set the EMPTY_ALT_IGNORE environment variable to true
     ENV['INPUT_EMPTY_ALT_IGNORE'] = 'false'
-
     # Execute the code under test
     options = HtmlprooferAction.build_options
     expect(htmlproofer_exit_code(options)).to eq(1)
@@ -82,6 +81,28 @@ describe HtmlprooferAction do
 
     # Set the EMPTY_ALT_IGNORE environment variable to true
     ENV['INPUT_MISSING_ALT_IGNORE'] = 'false'
+
+    # Execute the code under test
+    options = HtmlprooferAction.build_options
+    expect(htmlproofer_exit_code(options)).to eq(1)
+  end
+
+  it 'ignores ignore.html when ignore_files set to ignore.html' do
+    ENV['INPUT_DIRECTORY'] = File.join(@test_directory, 'ignore_files')
+
+    # Set the EMPTY_ALT_IGNORE environment variable to true
+    ENV['INPUT_IGNORE_FILES'] = '/ignore.html/'
+
+    # Execute the code under test
+    options = HtmlprooferAction.build_options
+    expect(htmlproofer_exit_code(options)).to eq(0)
+  end
+
+  it 'returns error on ignore.html when ignore_files is none' do
+    ENV['INPUT_DIRECTORY'] = File.join(@test_directory, 'ignore_files')
+
+    # Set the EMPTY_ALT_IGNORE environment variable to true
+    ENV['INPUT_IGNORE_FILES'] = ''
 
     # Execute the code under test
     options = HtmlprooferAction.build_options

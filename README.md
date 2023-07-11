@@ -66,6 +66,7 @@ jobs:
 | `url_ignore`          | Newline-separated list of URLs to ignore                 | (deprecated)                      |
 | `url_ignore_re`       | Newline-separated list of URL regexes to ignore          | (deprecated)                      |
 | `url_swap`            | Newline-separated list of URL regexes to swap to a value | `/{repo}:`                        |
+| `ignore_files`        | Newline-separated list of file paths to ignore           |                                   |
 | `retries`             | Number of times to retry checking links                  | 3                                 |
 
 ## Examples
