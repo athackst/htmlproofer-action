@@ -318,6 +318,7 @@ describe HtmlprooferAction do
       expect(result[:check_external_hash]).to eq(true)
       expect(result[:checks]).to eq(%w[Favicon Links Images Scripts OpenGraph])
       expect(result[:ignore_empty_alt]).to eq(true)
+      expect(result[:ignore_missing_alt]).to eq(true)
       expect(result[:enforce_https]).to eq(true)
       expect(result[:hydra][:max_concurrency]).to eq(50)
       expect(result[:typhoeus][:connecttimeout]).to eq(30)
