@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Extensions</title>
+</head>
+<body>
+  <h1>Extensions Test</h1>
+  <p>This is a test file with a .foo extension.</p>
+  <p>It has a bad link.</p>
+  <a href="not-a-link.html">Link</a>
+</body>
+</html>

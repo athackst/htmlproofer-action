@@ -43,31 +43,36 @@ jobs:
 
 ### Options
 
-| Name                  | Description                                              | Default                           |
-| --------------------- | -------------------------------------------------------- | --------------------------------- |
-| `directory`           | The directory to scan                                    | ./\_site **(required)**           |
-| `allow_missing_href`  | Do not flag a tags missing href                          | false                             |
-| `assume_extension`    | Automatically add extension (e.g. .html) to file paths   | true                              |
-| `check_external_hash` | Check whether external anchors exist                     | true                              |
-| `check_favicon`       | Check whether favicons are valid                         | true                              |
-| `check_html`          | Validate HTML                                            | true                              |
-| `check_img_http`      | Enforce that images use HTTPS                            | true                              |
-| `check_opengraph`     | Check images and URLs in Open Graph metadata             | true                              |
-| `empty_alt_ignore`    | Allow images with empty alt tags                         | false                             |
-| `missing_alt_ignore`  | Allow images with missing alt tags                       | false                             |
-| `enforce_https`       | Require that links use HTTPS                             | true                              |
-| `max_concurrency`     | Maximum number of concurrent requests                    | 50                                |
-| `internal_domains`    | Newline-separated list of internal domains               | `https://{user}.github.io/{repo}` |
-| `connect_timeout`     | HTTP connection timeout                                  | 30                                |
-| `ssl_verifypeer`      | Enable peer verification.                                | false                             |
-| `ssl_verifyhost`      | Enable host verification                                 | 0                                 |
-| `timeout`             | HTTP request timeout                                     | 120                               |
-| `ignore_urls`         | Newline-separated list of URLs to ignore                 | `https://fonts.gstatic.com`       |
-| `url_ignore`          | Newline-separated list of URLs to ignore                 | (deprecated)                      |
-| `url_ignore_re`       | Newline-separated list of URL regexes to ignore          | (deprecated)                      |
-| `url_swap`            | Newline-separated list of URL regexes to swap to a value | `/{repo}:`                        |
-| `ignore_files`        | Newline-separated list of file paths to ignore           |                                   |
-| `retries`             | Number of times to retry checking links                  | 3                                 |
+| Name                   | Description                                                                                                                                         | Default                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `directory`            | The directory to scan                                                                                                                               | ./\_site **(required)**          |
+| `allow_hash_href`      | If `true`, assumes `href="#"` anchors are valid                                                                                                     | `true`                           |
+| `allow_missing_href`   | If `true`, does not flag `a` tags missing `href`. In HTML5, this is technically allowed, but could also be human error.                             | `false`                          |
+| `assume_extension`     | Automatically add specified extension to files for internal links, to allow extensionless URLs (as supported by most servers)                       | `.html`                          |
+| `checks`               | An array of Strings indicating which checks you want to run                                                                                         | `['Links', 'Images', 'Scripts']` |
+| `check_external_hash`  | Checks whether external hashes exist (even if the webpage exists)                                                                                   | `true`                           |
+| `check_internal_hash`  | Checks whether internal hashes exist (even if the webpage exists)                                                                                   | `true`                           |
+| `check_sri`            | Check that `<link>` and `<script>` external resources use SRI                                                                                       | false                            |
+| `directory_index_file` | Sets the file to look for when a link refers to a directory.                                                                                        | `index.html`                     |
+| `disable_external`     | If `true`, does not run the external link checker                                                                                                   | `false`                          |
+| `enforce_https`        | Fails a link if it's not marked as `https`.                                                                                                         | `true`                           |
+| `extensions`           | An array of Strings indicating the file extensions you would like to check (including the dot)                                                      | `['.html']`                      |
+| `ignore_empty_alt`     | If `true`, ignores images with empty/missing alt tags (in other words, `<img alt>` and `<img alt="">` are valid; set this to `false` to flag those) | `true`                           |
+| `ignore_files`         | An array of Strings or RegExps containing file paths that are safe to ignore.                                                                       | `[]`                             |
+| `ignore_empty_mailto`  | If `true`, allows `mailto:` `href`s which do not contain an email address.                                                                          | `false`                          |
+| `ignore_missing_alt`   | If `true`, ignores images with missing alt tags                                                                                                     | `false`                          |
+| `ignore_status_codes`  | An array of numbers representing status codes to ignore.                                                                                            | `[]`                             |
+| `ignore_urls`          | An array of Strings or RegExps containing URLs that are safe to ignore. This affects all HTML attributes, such as `alt` tags on images.             | `[]`                             |
+| `swap_urls`            | A hash containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`.                           | `{}`                             |
+| `retries`              | Number of times to retry checking links                                                                                                             | 3                                |
+
+The following options are currently not supported by this action
+
+| Name                   | Description                                                                                                                                         | Default                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `log_level`            | Sets the logging level, as determined by [Yell](https://github.com/rudionrails/yell). One of `:debug`, `:info`, `:warn`, `:error`, or `:fatal`.     | `:info`                          |
+| `only_4xx`             | Only reports errors for links that fall within the 4xx status code range.                                                                           | `false`                          |
+| `swap_attributes`      | JSON-formatted config that maps element names to the preferred attribute to check                                                                   | `{}`                             |
 
 ## Examples
 

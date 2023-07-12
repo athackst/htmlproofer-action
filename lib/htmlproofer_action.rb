@@ -10,39 +10,59 @@ CHROME_FROZEN_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 
 # Helper functions to get options from the environment variables
 module EnvOptions
+  # Return the environment variable value from a name or from a list of names (first non-nill)
+  def self.get_env(name)
+    # Ensure that names is an array
+    names = Array(name)
+    # Loop through and get the value of the variable.
+    names.each do |var|
+      value = ENV["INPUT_#{var}"]
+      return value unless value.nil? || value.empty?
+    end
+    nil
+  end
+
   # Return the boolean stored in env variable or fallback if it doesn't exist.
   def self.get_bool(name, fallback)
-    s = ENV["INPUT_#{name}"]
-    return fallback if s.nil? || s.empty?
+    value = get_env(name)
 
-    case s.downcase
-    when /^(t|true)$/i, /^(y|yes)$/i, '1'
+    case value
+    when true, 'true', /^(t|true)$/i, /^(y|yes)$/i, '1'
       true
-    else
+    when false, 'false', /^(f|false)$/i, /^(n|no)$/i, '0'
       false
+    else
+      fallback
     end
   end
 
   # Return return_name if env variable is true, use fallback for truthy if doesn't exist.
-  def self.get_name_if(name, fallback, return_name)
+  def self.return_value_if(name, fallback, return_name)
     get_bool(name, fallback) ? return_name : ''
   end
 
   # Return the int stored in env variable or fallback if it doesn't exist.
   def self.get_int(name, fallback)
-    s = ENV["INPUT_#{name}"]
+    s = get_env(name)
     s.nil? || s.empty? ? fallback : s.to_i
   end
 
   # Return the string stored in env variable or fallback if it doesn't exist.
   def self.get_str(name, fallback = '')
-    s = ENV["INPUT_#{name}"]
+    s = get_env(name)
     s.nil? ? fallback : s
   end
 
-  # Return a list given a string, split by either commas or new lines.
-  def self.get_list(str)
-    str.nil? ? [] : str.split(/,|\n/)
+  # Return a list given an env varialbe, split by either commas or new lines.
+  def self.get_list(name, fallback = [])
+    s = get_env(name)
+    s.nil? ? fallback : s.split(/,|\n/)
+  end
+
+  # Return a list of ints given an env varialbe, split by either commas or new lines.
+  def self.get_int_list(name, fallback = [])
+    s = get_env(name)
+    s.nil? ? fallback : s.split(/,|\n/).map(&:to_i)
   end
 
   # Convert a string to a regex if it begins and ends with '/'.
@@ -51,14 +71,19 @@ module EnvOptions
   end
 
   # Return a list of either Regex expressions or strings to match.
-  def self.get_regex_list(str, as_regex)
-    get_list(get_str(str)).map { |s| as_regex ? Regexp.new(s) : to_regex?(s) }
+  def self.get_only_regex_list(name, fallback = [])
+    get_list(name, fallback).map { |s| Regexp.new(s) }
+  end
+
+  # Return a list of either Regex expressions or strings to match.
+  def self.get_regex_list(name, fallback = [])
+    get_list(name, fallback).map { |s| to_regex?(s) }
   end
 
   # Return a dict with a regex expr => string replacement.
-  def self.get_swap_map(str)
+  def self.get_swap_map(name)
     output = {}
-    get_list(get_str(str)).each do |s|
+    get_list(name).each do |s|
       splt = s.split(/(?<!\\):/, 2)
       re = splt[0].gsub(/\\:/, ':').strip
       string = splt[1].gsub(/\\:/, ':').strip
@@ -85,24 +110,37 @@ module HtmlprooferAction
   # This function just builds options.  It's easier to read them all together than to separate them up.
   def self.build_options
     {
+      allow_hash_href: EnvOptions.get_bool('ALLOW_HASH_HREF', true),
       allow_missing_href: EnvOptions.get_bool('ALLOW_MISSING_HREF', false),
-      check_external_hash: EnvOptions.get_bool('CHECK_EXTERNAL_HASH', true),
+      assume_extension: EnvOptions.get_str('ASSUME_EXTENSION', '.html'),
       checks: [
-        EnvOptions.get_name_if('CHECK_FAVICON', true, 'Favicon'),
-        EnvOptions.get_name_if('CHECK_HTML', true, 'Links'),
-        EnvOptions.get_name_if('CHECK_IMG_HTTP', true, 'Images'),
-        EnvOptions.get_name_if('CHECK_SCRIPTS', true, 'Scripts'),
-        EnvOptions.get_name_if('CHECK_OPENGRAPH', true, 'OpenGraph')
+        EnvOptions.return_value_if('CHECK_FAVICON', false, 'Favicon'),
+        EnvOptions.return_value_if(%w[CHECK_LINKS CHECK_HTML], true, 'Links'),
+        EnvOptions.return_value_if(%w[CHECK_IMAGES CHECK_IMG_HTTP], true, 'Images'),
+        EnvOptions.return_value_if('CHECK_SCRIPTS', true, 'Scripts'),
+        EnvOptions.return_value_if('CHECK_OPENGRAPH', false, 'OpenGraph')
       ],
-      ignore_empty_alt: EnvOptions.get_bool('EMPTY_ALT_IGNORE', false),
-      ignore_missing_alt: EnvOptions.get_bool('MISSING_ALT_IGNORE', false),
+      check_external_hash: EnvOptions.get_bool('CHECK_EXTERNAL_HASH', true),
+      check_internal_hash: EnvOptions.get_bool('CHECK_INTERNAL_HASH', true),
+      check_sri: EnvOptions.get_bool('CHECK_SRI', false),
+      directory_index_file: EnvOptions.get_str('DIRECTORY_INDEX_FILE', 'index.html'),
+      disable_external: EnvOptions.get_bool('DISABLE_EXTERNAL', false),
       enforce_https: EnvOptions.get_bool('ENFORCE_HTTPS', true),
+      extensions: EnvOptions.get_list('EXTENSIONS', ['.html']),
+      ignore_empty_alt: EnvOptions.get_bool(%w[IGNORE_EMPTY_ALT EMPTY_ALT_IGNORE], true),
+      ignore_files: EnvOptions.get_regex_list('IGNORE_FILES', []),
+      ignore_empty_mailto: EnvOptions.get_bool('IGNORE_EMPTY_MAILTO', false),
+      ignore_missing_alt: EnvOptions.get_bool(%w[IGNORE_MISSING_ALT MISSING_ALT_IGNORE], false),
+      ignore_status_codes: EnvOptions.get_int_list('IGNORE_STATUS_CODES', []),
+      ignore_urls: EnvOptions.get_only_regex_list('URL_IGNORE_RE', []) \
+                  + EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], []),
+      swap_urls: EnvOptions.get_swap_map(%w[SWAP_URLS URL_SWAP]),
       hydra: {
         max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 50)
       },
       typhoeus: {
         connecttimeout: EnvOptions.get_int('CONNECT_TIMEOUT', 30),
-        followlocation: true,
+        followlocation: EnvOptions.get_bool('FOLLOWLOCATION', true),
         headers: {
           'User-Agent' => CHROME_FROZEN_UA
         },
@@ -111,12 +149,7 @@ module HtmlprooferAction
         timeout: EnvOptions.get_int('TIMEOUT', 120),
         cookiefile: '.cookies',
         cookiejar: '.cookies'
-      },
-      ignore_urls: EnvOptions.get_regex_list('URL_IGNORE_RE', true) \
-                  + EnvOptions.get_regex_list('URL_IGNORE', false) \
-                  + EnvOptions.get_regex_list('IGNORE_URLS', false),
-      swap_urls: EnvOptions.get_swap_map('URL_SWAP'),
-      ignore_files: EnvOptions.get_regex_list('IGNORE_FILES', false)
+      }
     }
   end
   # rubocop: enable Metrics/AbcSize
