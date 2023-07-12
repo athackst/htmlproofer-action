@@ -130,12 +130,12 @@ You can also run this locally using the docker image. This can be helpful in und
 I make a local alias that calls the docker file with environment variables set based on my common use cases.
 
 ```sh
-function htmlproofer() {
+function htmlproofer_action() {
         curr_dir="$PWD/$1"
         echo "Running on $curr_dir"
         base_dir=$(basename "$PWD")
         url_swap="^\/${base_dir}:,^\/dev:,^\/v\d+\.\d+\.\d+:"
-        docker run -v ${curr_dir}:/site -e INPUT_DIRECTORY=/site -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
+        docker run -v ${curr_dir}:/site -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
 }
 ```
 
