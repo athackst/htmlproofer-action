@@ -6,7 +6,7 @@ require 'rspec'
 require_relative '../lib/htmlproofer_action'
 
 def regex_or_substring_match(string, pattern)
-  pattern.is_a?(Regexp) ? pattern.match?(string) : string.include?(pattern)
+  pattern.is_a?(Regexp) ? pattern.match?(string) : string == pattern
 end
 
 # rubocop: disable Metrics/BlockLength
@@ -189,7 +189,7 @@ describe EnvOptions do
   describe '#get_regex_list' do
     context 'when the environment variable is set with comma-separated values' do
       before do
-        allow(EnvOptions).to receive(:get_str).with('test').and_return('/stackoverflow\.com/,github.com')
+        allow(EnvOptions).to receive(:get_str).with('test').and_return('/stackoverflow\.com/,http://github.com')
       end
 
       it 'returns an array of regular expressions when as_regex is true' do
@@ -200,6 +200,7 @@ describe EnvOptions do
         expect(regex_or_substring_match('/stackoverflow.com/', result[0])).to be_truthy
         expect(result[1]).to be_a(Regexp)
         expect(regex_or_substring_match('http://github.com', result[1])).to be_truthy
+        expect(regex_or_substring_match('http://github.com/', result[1])).to be_truthy # Can match part of string
       end
 
       it 'returns an array of strings when as_regex is false' do
@@ -210,6 +211,7 @@ describe EnvOptions do
         expect(regex_or_substring_match('http://stackoverflow.com', result[0])).to be_truthy
         expect(result[1]).to be_a(String)
         expect(regex_or_substring_match('http://github.com', result[1])).to be_truthy
+        expect(regex_or_substring_match('http://github.com/', result[1])).to be_falsey # Needs to match whole string
       end
     end
 
