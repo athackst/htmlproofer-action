@@ -716,12 +716,12 @@
 <h2 id="local-docker">Local docker</h2>
 <p>You can also run this locally using the docker image. This can be helpful in understanding errors.</p>
 <p>I make a local alias that calls the docker file with environment variables set based on my common use cases.</p>
-<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>htmlproofer<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>htmlproofer_action<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <span class="w">        </span><span class="nv">curr_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Running on </span><span class="nv">$curr_dir</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="nv">base_dir</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">&quot;</span><span class="k">)</span>
 <span class="w">        </span><span class="nv">url_swap</span><span class="o">=</span><span class="s2">&quot;^\/</span><span class="si">${</span><span class="nv">base_dir</span><span class="si">}</span><span class="s2">:,^\/dev:,^\/v\d+\.\d+\.\d+:&quot;</span>
-<span class="w">        </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">curr_dir</span><span class="si">}</span>:/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_DIRECTORY</span><span class="o">=</span>/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_URL_SWAP</span><span class="o">=</span><span class="si">${</span><span class="nv">url_swap</span><span class="si">}</span><span class="w"> </span>althack/htmlproofer:latest
+<span class="w">        </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">curr_dir</span><span class="si">}</span>:/site<span class="w"> </span>-e<span class="w"> </span><span class="nv">INPUT_URL_SWAP</span><span class="o">=</span><span class="si">${</span><span class="nv">url_swap</span><span class="si">}</span><span class="w"> </span>althack/htmlproofer:latest
 <span class="o">}</span>
 </code></pre></div>
 <p>Then I can just go to the folder the site is built in and run the htmlproofer.</p>
