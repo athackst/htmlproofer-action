@@ -108,11 +108,11 @@ inputs:
   check_html:
     description: Validate HTML
     required: false
-    depreactionMessage: use `check_links`
+    deprecationMessage: use `check_links`
   check_img_http:
     description: Enforce that images use HTTPS
     required: false
-    depreactionMessage: use `check_images`
+    deprecationMessage: use `check_images`
   empty_alt_ignore:
     description: Allow images with empty alt tags
     required: false
@@ -128,15 +128,15 @@ inputs:
   url_ignore_re:
     description: Newline-separated list of URL regexes to ignore
     required: false
-    depreactionMessage: Use `ignore_urls` instead
+    deprecationMessage: Use `ignore_urls` instead
   url_swap:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
-    depreactionMessage: Use `swap_urls` instead
+    deprecationMessage: Use `swap_urls` instead
   internal_domains:
     description: Newline-separated list of internal domains
     required: false
-    depreactionMessage: Setting `internal_domains` has been deprecated in htmlproofer
+    deprecationMessage: Setting `internal_domains` has been deprecated in htmlproofer
   max_paralell:
     description: Maximum parallel processes
     required: false
