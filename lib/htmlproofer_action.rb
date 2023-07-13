@@ -94,7 +94,7 @@ module EnvOptions
 end
 
 # Helper module to get all of the options for htmlproofer
-module HtmlprooferAction
+module HTMLProoferAction
   def self.run(options)
     directory = EnvOptions.get_str('DIRECTORY', '/site')
     HTMLProofer.check_directory(directory, options).run
