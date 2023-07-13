@@ -560,114 +560,126 @@
 <td>./_site <strong>(required)</strong></td>
 </tr>
 <tr>
+<td><code>allow_hash_href</code></td>
+<td>If <code>true</code>, assumes <code>href="#"</code> anchors are valid</td>
+<td><code>true</code></td>
+</tr>
+<tr>
 <td><code>allow_missing_href</code></td>
-<td>Do not flag a tags missing href</td>
-<td>false</td>
+<td>If <code>true</code>, does not flag <code>a</code> tags missing <code>href</code>. In HTML5, this is technically allowed, but could also be human error.</td>
+<td><code>false</code></td>
 </tr>
 <tr>
 <td><code>assume_extension</code></td>
-<td>Automatically add extension (e.g. .html) to file paths</td>
-<td>true</td>
+<td>Automatically add specified extension to files for internal links, to allow extensionless URLs (as supported by most servers)</td>
+<td><code>.html</code></td>
+</tr>
+<tr>
+<td><code>checks</code></td>
+<td>An array of Strings indicating which checks you want to run</td>
+<td><code>['Links', 'Images', 'Scripts']</code></td>
 </tr>
 <tr>
 <td><code>check_external_hash</code></td>
-<td>Check whether external anchors exist</td>
-<td>true</td>
+<td>Checks whether external hashes exist (even if the webpage exists)</td>
+<td><code>true</code></td>
 </tr>
 <tr>
-<td><code>check_favicon</code></td>
-<td>Check whether favicons are valid</td>
-<td>true</td>
+<td><code>check_internal_hash</code></td>
+<td>Checks whether internal hashes exist (even if the webpage exists)</td>
+<td><code>true</code></td>
 </tr>
 <tr>
-<td><code>check_html</code></td>
-<td>Validate HTML</td>
-<td>true</td>
-</tr>
-<tr>
-<td><code>check_img_http</code></td>
-<td>Enforce that images use HTTPS</td>
-<td>true</td>
-</tr>
-<tr>
-<td><code>check_opengraph</code></td>
-<td>Check images and URLs in Open Graph metadata</td>
-<td>true</td>
-</tr>
-<tr>
-<td><code>empty_alt_ignore</code></td>
-<td>Allow images with empty alt tags</td>
+<td><code>check_sri</code></td>
+<td>Check that <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> external resources use SRI</td>
 <td>false</td>
 </tr>
 <tr>
-<td><code>missing_alt_ignore</code></td>
-<td>Allow images with missing alt tags</td>
-<td>false</td>
+<td><code>directory_index_file</code></td>
+<td>Sets the file to look for when a link refers to a directory.</td>
+<td><code>index.html</code></td>
+</tr>
+<tr>
+<td><code>disable_external</code></td>
+<td>If <code>true</code>, does not run the external link checker</td>
+<td><code>false</code></td>
 </tr>
 <tr>
 <td><code>enforce_https</code></td>
-<td>Require that links use HTTPS</td>
-<td>true</td>
+<td>Fails a link if it's not marked as <code>https</code>.</td>
+<td><code>true</code></td>
 </tr>
 <tr>
-<td><code>max_concurrency</code></td>
-<td>Maximum number of concurrent requests</td>
-<td>50</td>
+<td><code>extensions</code></td>
+<td>An array of Strings indicating the file extensions you would like to check (including the dot)</td>
+<td><code>['.html']</code></td>
 </tr>
 <tr>
-<td><code>internal_domains</code></td>
-<td>Newline-separated list of internal domains</td>
-<td><code>https://{user}.github.io/{repo}</code></td>
-</tr>
-<tr>
-<td><code>connect_timeout</code></td>
-<td>HTTP connection timeout</td>
-<td>30</td>
-</tr>
-<tr>
-<td><code>ssl_verifypeer</code></td>
-<td>Enable peer verification.</td>
-<td>false</td>
-</tr>
-<tr>
-<td><code>ssl_verifyhost</code></td>
-<td>Enable host verification</td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>timeout</code></td>
-<td>HTTP request timeout</td>
-<td>120</td>
-</tr>
-<tr>
-<td><code>ignore_urls</code></td>
-<td>Newline-separated list of URLs to ignore</td>
-<td><code>https://fonts.gstatic.com</code></td>
-</tr>
-<tr>
-<td><code>url_ignore</code></td>
-<td>Newline-separated list of URLs to ignore</td>
-<td>(deprecated)</td>
-</tr>
-<tr>
-<td><code>url_ignore_re</code></td>
-<td>Newline-separated list of URL regexes to ignore</td>
-<td>(deprecated)</td>
-</tr>
-<tr>
-<td><code>url_swap</code></td>
-<td>Newline-separated list of URL regexes to swap to a value</td>
-<td><code>/{repo}:</code></td>
+<td><code>ignore_empty_alt</code></td>
+<td>If <code>true</code>, ignores images with empty/missing alt tags (in other words, <code>&lt;img alt&gt;</code> and <code>&lt;img alt=""&gt;</code> are valid; set this to <code>false</code> to flag those)</td>
+<td><code>true</code></td>
 </tr>
 <tr>
 <td><code>ignore_files</code></td>
-<td>Newline-separated list of file paths to ignore</td>
-<td></td>
+<td>An array of Strings or RegExps containing file paths that are safe to ignore.</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ignore_empty_mailto</code></td>
+<td>If <code>true</code>, allows <code>mailto:</code> <code>href</code>s which do not contain an email address.</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ignore_missing_alt</code></td>
+<td>If <code>true</code>, ignores images with missing alt tags</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>ignore_status_codes</code></td>
+<td>An array of numbers representing status codes to ignore.</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>ignore_urls</code></td>
+<td>An array of Strings or RegExps containing URLs that are safe to ignore. This affects all HTML attributes, such as <code>alt</code> tags on images.</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>swap_urls</code></td>
+<td>A hash containing key-value pairs of <code>RegExp =&gt; String</code>. It transforms URLs that match <code>RegExp</code> into <code>String</code> via <code>gsub</code>.</td>
+<td><code>{}</code></td>
 </tr>
 <tr>
 <td><code>retries</code></td>
 <td>Number of times to retry checking links</td>
 <td>3</td>
+</tr>
+</tbody>
+</table>
+<p>The following options are currently not supported by this action</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>log_level</code></td>
+<td>Sets the logging level, as determined by <a href="https://github.com/rudionrails/yell">Yell</a>. One of <code>:debug</code>, <code>:info</code>, <code>:warn</code>, <code>:error</code>, or <code>:fatal</code>.</td>
+<td><code>:info</code></td>
+</tr>
+<tr>
+<td><code>only_4xx</code></td>
+<td>Only reports errors for links that fall within the 4xx status code range.</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>swap_attributes</code></td>
+<td>JSON-formatted config that maps element names to the preferred attribute to check</td>
+<td><code>{}</code></td>
 </tr>
 </tbody>
 </table>
