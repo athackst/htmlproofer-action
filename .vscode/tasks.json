@@ -14,11 +14,6 @@
             "command": "bundle update"
         },
         {
-            "label": "mkdocs: build",
-            "type": "shell",
-            "command": "mkdocs_simple_gen --build"
-        },
-        {
             "label": "docker: build",
             "type": "shell",
             "command": "docker build -t althack/htmlproofer:latest ."
@@ -43,6 +38,9 @@
             "label": "test",
             "type": "shell",
             "command": "rspec tests/*spec.rb",
+            "presentation": {
+                "clear": true
+            },
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
@@ -50,9 +48,14 @@
                     "INPUT_ALLOW_MISSING_HREF": "true"
                 }
             }
-        },        
+        },
         {
-            "label": "test: integration",
+            "label": "mkdocs: build",
+            "type": "shell",
+            "command": "mkdocs_simple_gen --build"
+        },     
+        {
+            "label": "mkdocs: test",
             "type": "shell",
             "dependsOn":["mkdocs: build"],
             "command": "ruby lib/main.rb",
@@ -68,7 +71,7 @@
             "label": "test: all",
             "type": "shell",
             "dependsOrder": "parallel",
-            "dependsOn":["test", "test: integration", "docker: test", "lint"],
+            "dependsOn":["test", "mkdocs: test", "docker: test", "lint"],
             "group": {
                 "kind": "test",
                 "isDefault": true

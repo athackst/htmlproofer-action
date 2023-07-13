@@ -9,51 +9,86 @@ inputs:
     required: true
     default: "./_site"
   # optional inputs
+  allow_hash_href:
+    description: Whether `href="#"` anchors are valid
+    required: false
   allow_missing_href:
     description: Do not flag a tags missing href
     required: false
   assume_extension:
     description: Automatically add extension (e.g. .html) to file paths, to allow extensionless URLs (as supported by Jekyll 3 and GitHub Pages)
     required: false
-  check_external_hash:
-    description: Check whether external anchors exist
-    required: false
   check_favicon:
     description: Check whether favicons are valid
     required: false
-  check_html:
-    description: Validate HTML
+  check_links:
+    description: Check whether 'a', 'link' elements are working
     required: false
-  check_img_http:
-    description: Enforce that images use HTTPS
+  check_images:
+    description: Check whether 'img' elements are working
+    required: false
+  check_scripts:
+    description: Check whether 'script' elements are working
     required: false
   check_opengraph:
     description: Check images and URLs in Open Graph metadata
     required: false
-  empty_alt_ignore:
-    description: Allow images with empty alt tags
+  check_external_hash:
+    description: Check whether external anchors exist
     required: false
-  missing_alt_ignore:
-    description: Allow images with missing alt tags
+  check_internal_hash:
+    description: Checks whether internal hashes exist (even if the webpage exists)
+  check_sri:
+    description: Check that `<link>` and `<script>` external resources use SRI
+    required: false
+  directory_index_file:
+    description: Sets the file to look for when a link refers to a directory.
+    required: false
+  disable_external:
+    description: If `true`, does not run the external link checker
     required: false
   enforce_https:
     description: Require that links use HTTPS
     required: false
+  extensions:
+    description: An array of Strings indicating the file extensions you would like to check (including the dot)
+    required: false
+  ignore_empty_alt:
+    description: If `true`, ignores images with empty/missing alt tags
+    required: false
+  ignore_files:
+    description: Newline-separated list of regex or strings containing file paths that are safe to ignore
+    required: false
+  ignore_empty_mailto:
+    description:  If `true`, allows `mailto:` `href`s which do not contain an email address.
+    required: false
+  ignore_missing_alt:
+    description: If `true`, ignores images with missing alt tags
+    required: false
+  ignore_status_codes:
+    description: An array of numbers representing status codes to ignore. 
+    required: false
+  ignore_urls:
+    description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
+    required: false
+    default: |
+      https://fonts.gstatic.com
+  swap_urls:
+    description: Newline-separated list of regex expressions to swap in urls
+    required: false
+    default: |
+      ^\/${{ github.event.repository.name }}:
+      ^.*${{ github.repository_owner }}.github.io\/${{ github.event.repository.name }}:
+  # Hydra options
   max_concurrency:
     description: Maximum number of concurrent requests
     required: false
-  internal_domains:
-    description: Newline-separated list of internal domains
-    required: false
-    default: |
-      ${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
-      ${{ github.event.repository.name }}
-  max_paralell:
-    description: Maximum parallel processes
-    required: false
-    deprecationMessage: Parallel has been deprecated in htmlproofer
+  # Typhoeus options
   connect_timeout:
     description: HTTP connection timeout
+    required: false
+  followlocation:
+    description: If 'true' will follow redirections
     required: false
   ssl_verifypeer:
     description: If you’re hitting a non-verifiable SSL server then you’ll have to disable peer verification to make SSL work
@@ -64,32 +99,48 @@ inputs:
   timeout:
     description: HTTP request timeout
     required: false
-  url_ignore:
-    description: Newline-separated list of URLs to ignore
-    required: false
-    deprecationMessage: Use ignore_urls instead
-  url_ignore_re:
-    description: Newline-separated list of URL regexes to ignore
-    required: false
-    depreactionMessage: Use ignore_urls instead
-  ignore_urls:
-    description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
-    required: false
-    default: |
-      https://fonts.gstatic.com
-  url_swap:
-    description: Newline-separated list of regex expressions to swap in urls
-    required: false
-    default: |
-      ^\/${{ github.event.repository.name }}:
-      ^.*${{ github.repository_owner }}.github.io\/${{ github.event.repository.name }}:
-  ignore_files:
-    description: Newline-separated list of regex or strings containing file paths that are safe to ignore
-    required: false
+  # Other
   retries:
     description: Number of times to retry checking links
     required: false
     default: 3
+  # Deprecated
+  check_html:
+    description: Validate HTML
+    required: false
+    depreactionMessage: use `check_links`
+  check_img_http:
+    description: Enforce that images use HTTPS
+    required: false
+    depreactionMessage: use `check_images`
+  empty_alt_ignore:
+    description: Allow images with empty alt tags
+    required: false
+    deprecationMessage: Use `ignore_empty_alt` instead
+  missing_alt_ignore:
+    description: Allow images with missing alt tags
+    required: false
+    deprecationMessage: Use `ignore_missing_alt` instead
+  url_ignore:
+    description: Newline-separated list of URLs to ignore
+    required: false
+    deprecationMessage: Use `ignore_urls` instead
+  url_ignore_re:
+    description: Newline-separated list of URL regexes to ignore
+    required: false
+    depreactionMessage: Use `ignore_urls` instead
+  url_swap:
+    description: Newline-separated list of regex expressions to swap in urls
+    required: false
+    depreactionMessage: Use `swap_urls` instead
+  internal_domains:
+    description: Newline-separated list of internal domains
+    required: false
+    depreactionMessage: Setting `internal_domains` has been deprecated in htmlproofer
+  max_paralell:
+    description: Maximum parallel processes
+    required: false
+    deprecationMessage: Setting `max_paralell` has been deprecated in htmlproofer
 runs:
   using: "docker"
   image: "Dockerfile"
