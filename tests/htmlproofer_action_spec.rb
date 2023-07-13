@@ -9,7 +9,6 @@ def regex_or_substring_match(string, pattern)
   pattern.is_a?(Regexp) ? pattern.match?(string) : string == pattern
 end
 
-# rubocop: disable Metrics/BlockLength
 describe EnvOptions do
   describe '#get_env' do
     context 'when a single environment variable is set' do
@@ -237,13 +236,12 @@ describe EnvOptions do
 
       expect(EnvOptions.get_int_list('test')).to eq([10, 20, 30, 40, 50])
     end
-    # rubocop: disable Layout/LineLength
+
     it 'returns a list of integers when the environment variable contains a combination of comma and newline separated values' do
       allow(EnvOptions).to receive(:get_env).with('test').and_return("100,200\n300,400\n500")
 
       expect(EnvOptions.get_int_list('test')).to eq([100, 200, 300, 400, 500])
     end
-    # rubocop: enable Layout/LineLength
 
     it 'returns the fallback value when the environment variable is not set' do
       fallback = [1, 2, 3]
@@ -366,7 +364,7 @@ describe EnvOptions do
   end
 end
 
-describe HtmlprooferAction do
+describe HTMLProoferAction do
   describe '#run' do
     context 'when options are provided' do
       let(:options) { { checks: ['Links'], log_level: ':debug' } }
@@ -376,7 +374,7 @@ describe HtmlprooferAction do
         htmlproofer_double = double('HTMLProofer')
         expect(HTMLProofer).to receive(:check_directory).with(directory, options).and_return(htmlproofer_double)
         expect(htmlproofer_double).to receive(:run)
-        HtmlprooferAction.run(options)
+        HTMLProoferAction.run(options)
       end
     end
   end
@@ -390,7 +388,7 @@ describe HtmlprooferAction do
         htmlproofer_double = double('HTMLProofer')
         expect(HTMLProofer).to receive(:check_directory).with(directory, options).and_return(htmlproofer_double)
         expect(htmlproofer_double).to receive(:run)
-        HtmlprooferAction.run_with_checks(options)
+        HTMLProoferAction.run_with_checks(options)
       end
     end
 
@@ -398,7 +396,7 @@ describe HtmlprooferAction do
       let(:options) { { checks: [], log_level: ':debug' } }
 
       it 'aborts the execution' do
-        expect { HtmlprooferAction.run_with_checks(options) }.to raise_error(SystemExit)
+        expect { HTMLProoferAction.run_with_checks(options) }.to raise_error(SystemExit)
           .and output("No checks run\n").to_stderr
       end
     end
@@ -417,7 +415,7 @@ describe HtmlprooferAction do
                                                                Regexp.new('baz') => 'qux'
                                                              })
 
-      result = HtmlprooferAction.build_options
+      result = HTMLProoferAction.build_options
 
       expect(result).to be_a(Hash)
       expect(result[:allow_missing_href]).to eq(true)
@@ -444,4 +442,3 @@ describe HtmlprooferAction do
     end
   end
 end
-# rubocop: enable Metrics/BlockLength
