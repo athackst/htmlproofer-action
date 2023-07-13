@@ -23,11 +23,13 @@
             "type": "shell",
             "dependsOn": ["docker: build"],
             "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
+            "group": "test"
         },
         {
             "label": "lint",
             "type": "shell",
-            "command": "rubocop"
+            "command": "rubocop",
+            "group": "test"
         },
         {
             "label": "lint (fix)",
@@ -41,6 +43,7 @@
             "presentation": {
                 "clear": true
             },
+            "group": "test",
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
@@ -59,6 +62,7 @@
             "type": "shell",
             "dependsOn":["mkdocs: build"],
             "command": "ruby lib/main.rb",
+            "group": "test",
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
