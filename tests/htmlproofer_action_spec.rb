@@ -332,6 +332,8 @@ describe EnvOptions do
   describe '#get_swap_map' do
     it 'returns a hash with regex expression => string replacement with newline' do
       allow(EnvOptions).to receive(:get_env).with('test').and_return("foo:bar\nbaz:qux")
+      allow(EnvOptions).to receive(:get_env).with('HOST').and_return('')
+      allow(EnvOptions).to receive(:get_env).with('BASE_PATH').and_return('')
 
       result = EnvOptions.get_swap_map('test')
 
@@ -343,6 +345,8 @@ describe EnvOptions do
 
     it 'returns a hash with regex expression => string replacement with commas' do
       allow(EnvOptions).to receive(:get_env).with('test').and_return('foo:bar,baz:qux')
+      allow(EnvOptions).to receive(:get_env).with('HOST').and_return('')
+      allow(EnvOptions).to receive(:get_env).with('BASE_PATH').and_return('')
 
       result = EnvOptions.get_swap_map('test')
 
@@ -354,12 +358,35 @@ describe EnvOptions do
 
     it 'handles escaped colons correctly' do
       allow(EnvOptions).to receive(:get_env).with('test').and_return('colon\\:bar:escape\\:qux')
+      allow(EnvOptions).to receive(:get_env).with('HOST').and_return('')
+      allow(EnvOptions).to receive(:get_env).with('BASE_PATH').and_return('')
 
       result = EnvOptions.get_swap_map('test')
 
       expect(result).to be_a(Hash)
       expect(result.size).to eq(1)
       expect(result[Regexp.new('colon:bar')]).to eq('escape:qux')
+    end
+  end
+
+  describe '#add_default_swap' do
+    it 'should remove HOST/BASE_PATH and BASE_PATH from output' do
+      output = {
+        Regexp.new('^.*example.com/mysite') => '',
+        Regexp.new('^/mysite') => ''
+      }
+      input = {}
+      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('example.com')
+      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/mysite')
+      expect(EnvOptions.add_default_swap(input)).to eq(output)
+    end
+
+    it 'should not modify output if HOST or BASE_PATH is empty' do
+      input = {}
+      output = {}
+      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('')
+      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('')
+      expect(EnvOptions.add_default_swap(input)).to eq(output)
     end
   end
 end

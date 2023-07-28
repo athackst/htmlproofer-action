@@ -1,4 +1,4 @@
 {
-	"rubyLsp.formatter": "auto",
+	"rubyLsp.formatter": "rubocop",
 	"rubyLsp.rubyVersionManager": "rvm"
 }

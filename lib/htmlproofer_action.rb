@@ -79,11 +79,23 @@ module EnvOptions
   # Return a dict with a regex expr => string replacement.
   def self.get_swap_map(name)
     output = {}
+    add_default_swap(output)
     get_list(name).each do |s|
       splt = s.split(/(?<!\\):/, 2)
       re = splt[0].gsub(/\\:/, ':').strip
       string = splt[1].gsub(/\\:/, ':').strip
       output[Regexp.new(re)] = string
+    end
+    output
+  end
+
+  def self.add_default_swap(output)
+    host_url = get_str('HOST')
+    base_name = get_str('BASE_PATH')
+    # Create regex host_url/base_name and /base_name
+    if !host_url.empty? && !base_name.empty?
+      output[Regexp.new("^.*#{host_url}#{base_name}")] = ''
+      output[Regexp.new("^#{base_name}")] = ''
     end
     output
   end
