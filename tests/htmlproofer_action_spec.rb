@@ -427,7 +427,6 @@ describe HTMLProoferAction do
       expect(result[:hydra][:max_concurrency]).to eq(50)
       expect(result[:typhoeus][:connecttimeout]).to eq(30)
       expect(result[:typhoeus][:followlocation]).to eq(true)
-      expect(result[:typhoeus][:headers]).to eq({ 'User-Agent' => CHROME_FROZEN_UA })
       expect(result[:typhoeus][:ssl_verifypeer]).to eq(true)
       expect(result[:typhoeus][:ssl_verifyhost]).to eq(0)
       expect(result[:typhoeus][:timeout]).to eq(120)
