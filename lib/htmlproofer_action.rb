@@ -4,6 +4,10 @@ require 'html-proofer'
 require 'json'
 require 'uri'
 
+# rubocop: disable Layout/LineLength
+CHROME_FROZEN_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+# rubocop: enable Layout/LineLength
+
 # Helper functions to get options from the environment variables
 module EnvOptions
   # Return the environment variable value from a name or from a list of names (first non-nill)
@@ -137,6 +141,9 @@ module HTMLProoferAction
       typhoeus: {
         connecttimeout: EnvOptions.get_int('CONNECT_TIMEOUT', 30),
         followlocation: EnvOptions.get_bool('FOLLOWLOCATION', true),
+        headers: {
+          'User-Agent' => CHROME_FROZEN_UA
+        },
         ssl_verifypeer: EnvOptions.get_bool('SSL_VERIFYPEER', false),
         ssl_verifyhost: EnvOptions.get_int('SSL_VERIFYHOST', 0),
         timeout: EnvOptions.get_int('TIMEOUT', 120),
