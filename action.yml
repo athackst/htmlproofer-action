@@ -3,7 +3,7 @@ author: athackst
 description: Run HtmlProofer
 
 inputs:
-  # required inputs 
+  # required inputs
   directory:
     description: The directory to scan
     required: true
@@ -66,7 +66,7 @@ inputs:
     description: If `true`, ignores images with missing alt tags
     required: false
   ignore_status_codes:
-    description: An array of numbers representing status codes to ignore. 
+    description: An array of numbers representing status codes to ignore.
     required: false
   ignore_urls:
     description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
@@ -76,9 +76,14 @@ inputs:
   swap_urls:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
-    default: |
-      ^\/${{ github.event.repository.name }}:
-      ^.*${{ github.repository_owner }}.github.io\/${{ github.event.repository.name }}:
+  host:
+    description: The host URL of your site
+    required: false
+    default: ${{ github.repository_owner }}.github.io
+  base_path:
+    description: The base name of your site
+    required: false
+    default: /${{ github.event.repository.name }}
   # Hydra options
   max_concurrency:
     description: Maximum number of concurrent requests
