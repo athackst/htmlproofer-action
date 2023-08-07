@@ -2,16 +2,16 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    addressable (2.8.4)
+    addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
     ast (2.4.2)
-    async (2.6.2)
+    async (2.6.3)
       console (~> 1.10)
       fiber-annotation
       io-event (~> 1.1)
       timers (~> 4.1)
-    console (1.17.2)
+    console (1.21.0)
       fiber-annotation
       fiber-local
     debug (1.8.0)
@@ -25,7 +25,7 @@ GEM
     fiber-annotation (0.2.0)
     fiber-local (1.0.0)
     hashery (2.1.2)
-    html-proofer (5.0.7)
+    html-proofer (5.0.8)
       addressable (~> 2.3)
       async (~> 2.1)
       nokogiri (~> 1.13)
@@ -35,16 +35,16 @@ GEM
       yell (~> 2.0)
       zeitwerk (~> 2.5)
     io-console (0.6.0)
-    io-event (1.2.2)
+    io-event (1.2.3)
     irb (1.7.1)
       reline (>= 0.3.0)
     json (2.6.3)
     language_server-protocol (3.17.0.3)
-    mini_portile2 (2.8.2)
-    nokogiri (1.15.2)
+    mini_portile2 (2.8.4)
+    nokogiri (1.15.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.15.2-x86_64-linux)
+    nokogiri (1.15.3-x86_64-linux)
       racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.3)
@@ -56,7 +56,7 @@ GEM
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    public_suffix (5.0.1)
+    public_suffix (5.0.3)
     racc (1.7.1)
     rainbow (3.1.1)
     regexp_parser (2.8.1)
@@ -97,7 +97,7 @@ GEM
       ethon (>= 0.9.0)
     unicode-display_width (2.4.2)
     yell (2.2.2)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.11)
 
 PLATFORMS
   ruby
