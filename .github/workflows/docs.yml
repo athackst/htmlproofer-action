@@ -19,7 +19,7 @@ permissions:
 # Cancel in-progress funs of the same workflow
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   docs:
