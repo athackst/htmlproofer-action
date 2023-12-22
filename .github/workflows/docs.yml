@@ -49,6 +49,9 @@ jobs:
         uses: ./
         with:
           directory: site
+          ignore_urls: |
+            https://twitter.com/althack
+            https://fonts.gstatic.com
           swap_urls: |
             ^\/dev:
             ^\/v\d+\.\d+\.\d+:
