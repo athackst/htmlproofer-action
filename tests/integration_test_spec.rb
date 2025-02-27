@@ -411,8 +411,8 @@ describe HTMLProoferAction do
       exit_code = htmlproofer_exit_code(options)
     end
 
-    expect(exit_code).to eq(0), "With options #{options}"
     expect(output[:stderr]).to be_empty
+    expect(exit_code).to eq(0), "With options #{options}"
   end
 
   it 'checks specified file extensions when extensions option is set' do
