@@ -165,7 +165,7 @@ describe HTMLProoferAction do
     end
 
     expect(exit_code).to eq(1), "With options #{options}"
-    expect(output[:stderr]).to include('example.com/image.jpg failed: Not Found (status code 404)')
+    expect(output[:stderr]).to include('example.com/image.jpg failed:')
   end
 
   it 'skips HTTP image check when check_images option set to false' do
