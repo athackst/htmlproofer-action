@@ -49,13 +49,13 @@ module EnvOptions
     s.nil? ? fallback : s
   end
 
-  # Return a list given an env varialbe, split by either commas or new lines.
+  # Return a list given an env variable, split by either commas or new lines.
   def self.get_list(name, fallback = [])
     s = get_env(name)
     s.nil? ? fallback : s.split(/,|\n/)
   end
 
-  # Return a list of ints given an env varialbe, split by either commas or new lines.
+  # Return a list of ints given an env variable, split by either commas or new lines.
   def self.get_int_list(name, fallback = [])
     s = get_env(name)
     s.nil? ? fallback : s.split(/,|\n/).map(&:to_i)
@@ -101,7 +101,7 @@ module EnvOptions
   end
 end
 
-# Helper module to get all of the options for htmlproofer
+# Helper module to get all of the options for HTMLProofer
 module HTMLProoferAction
   def self.run(options)
     directory = EnvOptions.get_str('DIRECTORY', '/site')
