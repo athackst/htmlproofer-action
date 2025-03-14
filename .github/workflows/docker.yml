@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "VERSION=latest" >> $GITHUB_ENV
       - name: Login to DockerHub
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
         with:
           username: althack
