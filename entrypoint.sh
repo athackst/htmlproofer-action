@@ -5,13 +5,13 @@ tries="${INPUT_RETRIES:-1}"
 code=1
 while [ "$tries" -ge 1 ]; do
   tries=$((tries-1))
-  ruby /usr/src/htmlproofer_action/main.rb
+  ruby /usr/src/htmlproofer_action/html_proofer_action.rb
   code="$?"
   if [ "$code" -eq 0 ]; then
     break
   fi
   if [ "$tries" -ge 1 ]; then
-    sleep 5
+    sleep 30
   fi
 done
 

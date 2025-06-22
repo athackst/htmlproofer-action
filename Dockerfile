@@ -1,8 +1,8 @@
-FROM ruby:3.2.2-bullseye
+FROM ruby:3.3
 
 WORKDIR /usr/src/htmlproofer_action
 
-COPY Gemfile Gemfile.lock ./
+COPY Gemfile ./
 RUN bundle config set without 'development' && bundle install
 
 COPY entrypoint.sh /

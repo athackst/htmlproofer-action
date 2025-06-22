@@ -1,52 +1,22 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "rdbg",
-            "name": "Debug current file with rdbg (params)",
-            "request": "launch",
-            "script": "${file}",
-            "args": [],
-            "askParameters": true
-        },
-        {
-            "type": "rdbg",
-            "name": "Debug active file (rspec)",
-            "request": "launch",
-            "command": "rspec",
-            "script": "${file}",
-            "args": [],
-            "askParameters": false
-        },
-        {
-            "type": "rdbg",
-            "name": "Debug active file (ruby)",
-            "request": "launch",
-            "command": "ruby",
-            "script": "${file}",
-            "args": [],
-            "askParameters": false
-        },
-        {
-            "type": "rdbg",
-            "name": "Attach with rdbg",
-            "request": "attach"
-        },
-        {
-            "type": "rdbg",
-            "name": "Debug htmproofer_action (rdbg)",
-            "request": "launch",
-            "command": "ruby",
-            "script": "${workspaceRoot}/htmlproofer_action.rb",
-            "askParameters": false,
-            "env": {
-                "INPUT_DIRECTORY": "site",
-                "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin.com/",
-                "INPUT_ALLOW_MISSING_HREF": "true"
-            }
-        }
-    ]
-}
+      {
+        "type": "ruby_lsp",
+        "name": "Debug",
+        "request": "launch",
+        "program": "ruby ${file}",
+      },
+      {
+        "type": "ruby_lsp",
+        "request": "launch",
+        "name": "Debug test file",
+        "program": "ruby -Itest ${relativeFile}",
+      },
+      {
+        "type": "ruby_lsp",
+        "request": "attach",
+        "name": "Attach to existing server",
+      },
+    ],
+  }
