@@ -45,10 +45,7 @@ module HTMLProoferAction
     def self.ignore_new_files
       return [] unless EnvOptions.get_bool('IGNORE_NEW_FILES', false)
 
-      base_sha = GitHelpers.detect_base_sha
-      return [] if base_sha.empty?
-
-      new_files = GitHelpers.new_files(base_sha)
+      new_files = GitHelpers.detect_new_files
 
       return [] if new_files.nil?
 

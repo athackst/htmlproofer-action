@@ -154,6 +154,16 @@ inputs:
 runs:
   using: "docker"
   image: "Dockerfile"
+  env:
+    GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
+    GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
+    GITHUB_REF: ${{ env.GITHUB_REF }}
+    GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
+    GITHUB_SHA: ${{ env.GITHUB_SHA }}
+    GITHUB_BASE_REF: ${{ env.GITHUB_BASE_REF }}
+    GITHUB_HEAD_REF: ${{ env.GITHUB_HEAD_REF }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
 
 branding:
   icon: link

@@ -80,8 +80,7 @@ RSpec.describe HTMLProoferAction::Runner do
     before do
       allow(EnvOptions).to receive(:get_bool).with('IGNORE_NEW_FILES', false).and_return(true)
       allow(GitHelpers).to receive_messages(
-        detect_base_sha: 'abc123',
-        new_files: ['foo.html', 'bar/index.html']
+        detect_new_files: ['foo.html', 'bar/index.html']
       )
     end
 
