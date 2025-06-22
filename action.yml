@@ -73,6 +73,10 @@ inputs:
     required: false
     default: |
       https://fonts.gstatic.com
+  ignore_new_files:
+    description: Whether to ignore files that are new
+    required: false
+    default: 'false'
   swap_urls:
     description: Newline-separated list of regex expressions to swap in urls
     required: false

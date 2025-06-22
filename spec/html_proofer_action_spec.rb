@@ -506,5 +506,76 @@ RSpec.describe HTMLProoferAction do
       stdout: a_string_including('')
     )
   end
+
+  it 'ignores links to matching urls for newly added files when IGNORE_NEW_FILES is true' do
+    Dir.mktmpdir do |temp_dir|
+      # Set up a minimal test site
+      source_dir = File.join(fixtures_path, 'minimal_site')
+      FileUtils.cp_r("#{source_dir}/.", temp_dir)
+
+      Dir.chdir(temp_dir) do
+        # Initialize a git repo with a base commit
+        `git init`
+        `git config user.email "test@example.com"`
+        `git config user.name "Test"`
+        `git add .`
+        `git commit -m "Initial commit"`
+        `git branch -M main`
+
+        # Add a new file that should trigger a warning normally
+        File.write('broken.html', '<a href="https://github.com/athackst/htmlproofer-action/broken.html">Invalid link</a>')
+        # Add to a new commit
+        `git checkout -q -b new`
+        `git add .`
+        `git commit -m "New commit"`
+
+        # Set environment
+        ENV['INPUT_DIRECTORY'] = temp_dir
+        ENV['INPUT_IGNORE_NEW_FILES'] = 'true'
+        ENV['BASE_BRANCH'] = 'main'
+
+        expect(htmlproofer_status_output).to match(
+          status: 0,
+          stderr: '',
+          stdout: a_string_including('.*broken')
+        )
+      end
+    end
+  end
+
+  it 'raises an error on links to matching urls for newly added files when IGNORE_NEW_FILES is false' do
+    Dir.mktmpdir do |temp_dir|
+      # Set up a minimal test site
+      source_dir = File.join(fixtures_path, 'minimal_site')
+      FileUtils.cp_r("#{source_dir}/.", temp_dir)
+
+      Dir.chdir(temp_dir) do
+        # Initialize a git repo with a base commit
+        `git init`
+        `git config user.email "test@example.com"`
+        `git config user.name "Test"`
+        `git add .`
+        `git commit -m "Initial commit"`
+        `git branch -M main`
+
+        # Add a new file that should trigger a warning normally
+        File.write('broken.html', '<a href="https://github.com/athackst/htmlproofer-action/broken.html">Invalid link</a>')
+        # Add to a new commit
+        `git checkout -q -b new`
+        `git add .`
+        `git commit -m "New commit"`
+
+        ENV['INPUT_DIRECTORY'] = temp_dir
+        ENV['INPUT_IGNORE_NEW_FILES'] = 'false'
+        ENV['BASE_BRANCH'] = 'main'
+
+        expect(htmlproofer_status_output).to match(
+          status: 1,
+          stderr: a_string_including('External link https://github.com/athackst/htmlproofer-action/broken.html failed (status code 404)'),
+          stdout: a_kind_of(String)
+        )
+      end
+    end
+  end
 end
 # rubocop:enable RSpec/ExampleLength

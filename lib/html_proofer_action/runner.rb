@@ -5,6 +5,7 @@ require 'json'
 require 'uri'
 
 require_relative 'env_options'
+require_relative 'git_helpers'
 
 module HTMLProoferAction
   # Helper module to get all of the options for HTMLProofer
@@ -25,7 +26,8 @@ module HTMLProoferAction
     def self.build_ignore_urls
       puts 'Getting ignore urls'
       EnvOptions.get_only_regex_list('URL_IGNORE_RE', []) +
-        EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], [])
+        EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], []) +
+        ignore_new_files
     end
 
     def self.default_swap
@@ -38,6 +40,23 @@ module HTMLProoferAction
         output[Regexp.new("^#{base_name}")] = ''
       end
       output
+    end
+
+    def self.ignore_new_files
+      return [] unless EnvOptions.get_bool('IGNORE_NEW_FILES', false)
+
+      base_sha = GitHelpers.detect_base_sha
+      return [] if base_sha.empty?
+
+      new_files = GitHelpers.new_files(base_sha)
+
+      return [] if new_files.nil?
+
+      new_files.map do |filename|
+        basename = Regexp.escape(File.basename(filename, File.extname(filename)))
+        original_ext = Regexp.escape(File.extname(filename).sub(/^\./, '')) # no dot
+        Regexp.new(".*#{basename}(/index)?\\.(#{original_ext}|html?)$", Regexp::IGNORECASE)
+      end
     end
 
     # rubocop: disable Metrics/AbcSize
