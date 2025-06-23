@@ -27,9 +27,10 @@ module HTMLProoferAction
 
       puts "Fetching file list via compare: #{ctx[:base_ref]}...#{ctx[:head_ref]}"
 
+      ENV['GH_TOKEN'] = ctx[:token] # Set token globally for this process
+
       output, err, status = Open3.capture3(
-        "gh api repos/#{ctx[:repo]}/compare/#{ctx[:base_ref]}...#{ctx[:head_ref]} --jq '.files[] | select(.status == \"added\" or .status == \"renamed\") | .filename'", # rubocop:disable Layout/LineLength
-        { 'GH_TOKEN' => ctx[:token] }
+        "gh api repos/#{ctx[:repo]}/compare/#{ctx[:base_ref]}...#{ctx[:head_ref]} --jq '.files[] | select(.status == \"added\" or .status == \"renamed\") | .filename'" # rubocop:disable Layout/LineLength
       )
 
       return output.split("\n") if status.success?
@@ -40,7 +41,7 @@ module HTMLProoferAction
 
     def self.pr_context_values
       base_ref, head_ref, repo = ENV.values_at('GITHUB_BASE_REF', 'GITHUB_HEAD_REF', 'GITHUB_REPOSITORY')
-      token = ENV['GITHUB_TOKEN'] || ENV.fetch('GH_TOKEN', nil)
+      token = ENV['INPUT_GH_TOKEN'] || ENV['GITHUB_TOKEN'] || ENV.fetch('GH_TOKEN', nil)
 
       warn 'WARN: Missing GitHub context to fetch PR files' unless base_ref && head_ref && repo && token
 

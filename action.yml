@@ -113,6 +113,10 @@ inputs:
     description: Number of times to retry checking links
     required: false
     default: 3
+  gh_token:
+    description: Github token
+    required: false
+    default: ${{ github.token }}
   # Deprecated
   check_html:
     description: Validate HTML
@@ -151,19 +155,60 @@ inputs:
     required: false
     deprecationMessage: Setting `max_paralell` has been deprecated in htmlproofer
 
+
+
 runs:
-  using: "docker"
-  image: "Dockerfile"
-  env:
-    GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
-    GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
-    GITHUB_REF: ${{ env.GITHUB_REF }}
-    GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-    GITHUB_SHA: ${{ env.GITHUB_SHA }}
-    GITHUB_BASE_REF: ${{ env.GITHUB_BASE_REF }}
-    GITHUB_HEAD_REF: ${{ env.GITHUB_HEAD_REF }}
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+  using: "composite"
+  steps:
+    - name: Install htmlproofer
+      run: gem install html-proofer
+      shell: bash
+
+    - name: Run Htmlproofer
+      run: ${{ github.action_path }}/entrypoint.sh
+      shell: bash
+      env:
+        GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
+        GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
+        GITHUB_REF: ${{ env.GITHUB_REF }}
+        GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
+        GITHUB_SHA: ${{ env.GITHUB_SHA }}
+        GITHUB_BASE_REF: ${{ env.GITHUB_BASE_REF }}
+        GITHUB_HEAD_REF: ${{ env.GITHUB_HEAD_REF }}
+        INPUT_GH_TOKEN: ${{ inputs.gh_token }}
+        INPUT_DIRECTORY: ${{ inputs.directory }}
+        INPUT_ALLOW_HASH_HREF: ${{ inputs.allow_hash_href }}
+        INPUT_ALLOW_MISSING_HREF: ${{ inputs.allow_missing_href }}
+        INPUT_ASSUME_EXTENSION: ${{ inputs.assume_extension }}
+        INPUT_CHECK_FAVICON: ${{ inputs.check_favicon }}
+        INPUT_CHECK_LINKS: ${{ inputs.check_links }}
+        INPUT_CHECK_IMAGES: ${{ inputs.check_images }}
+        INPUT_CHECK_SCRIPTS: ${{ inputs.check_scripts }}
+        INPUT_CHECK_OPENGRAPH: ${{ inputs.check_opengraph }}
+        INPUT_CHECK_EXTERNAL_HASH: ${{ inputs.check_external_hash }}
+        INPUT_CHECK_INTERNAL_HASH: ${{ inputs.check_internal_hash }}
+        INPUT_CHECK_SRI: ${{ inputs.check_sri }}
+        INPUT_DIRECTORY_INDEX_FILE: ${{ inputs.directory_index_file }}
+        INPUT_DISABLE_EXTERNAL: ${{ inputs.disable_external }}
+        INPUT_ENFORCE_HTTPS: ${{ inputs.enforce_https }}
+        INPUT_EXTENSIONS: ${{ inputs.extensions }}
+        INPUT_IGNORE_EMPTY_ALT: ${{ inputs.ignore_empty_alt }}
+        INPUT_IGNORE_FILES: ${{ inputs.ignore_files }}
+        INPUT_IGNORE_EMPTY_MAILTO: ${{ inputs.ignore_empty_mailto }}
+        INPUT_IGNORE_MISSING_ALT: ${{ inputs.ignore_missing_alt }}
+        INPUT_IGNORE_STATUS_CODES: ${{ inputs.ignore_status_codes }}
+        INPUT_IGNORE_URLS: ${{ inputs.ignore_urls }}
+        INPUT_IGNORE_NEW_FILES: ${{ inputs.ignore_new_files }}
+        INPUT_SWAP_URLS: ${{ inputs.swap_urls }}
+        INPUT_HOST: ${{ inputs.host }}
+        INPUT_BASE_PATH: ${{ inputs.base_path }}
+        INPUT_MAX_CONCURRENCY: ${{ inputs.max_concurrency }}
+        INPUT_CONNECT_TIMEOUT: ${{ inputs.connect_timeout }}
+        INPUT_FOLLOWLOCATION: ${{ inputs.followlocation }}
+        INPUT_SSL_VERIFYPEER: ${{ inputs.ssl_verifypeer }}
+        INPUT_SSL_VERIFYHOST: ${{ inputs.ssl_verifyhost }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_RETRIES: ${{ inputs.retries }}
 
 branding:
   icon: link
