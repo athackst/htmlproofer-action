@@ -2,72 +2,79 @@
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
+    "options": {
+        "env": {
+            "PATH": "${workspaceFolder}/.venv/bin:${env:PATH}"
+        }
+    },
     "tasks": [
         {
             "label": "bundle: install",
             "type": "shell",
-            "command": "bundle install"
+            "command": "bundle install",
+            "problemMatcher": []
         },
         {
             "label": "bundle: update",
             "type": "shell",
-            "command": "bundle update"
+            "command": "bundle update",
+            "problemMatcher": []
         },
         {
             "label": "docker: build",
             "type": "shell",
-            "command": "docker build -t althack/htmlproofer:latest ."
+            "command": "docker build --pull -t althack/htmlproofer:latest .",
+            "problemMatcher": []
         },
         {
             "label": "docker: test",
             "type": "shell",
-            "dependsOn": ["docker: build"],
-            "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
+            "dependsOn": [
+                "docker: build"
+            ],
+            "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
             "group": "test"
         },
         {
             "label": "lint",
             "type": "shell",
-            "command": "rubocop",
+            "command": "bundle exec rubocop",
             "group": "test"
         },
         {
             "label": "lint (fix)",
             "type": "shell",
-            "command": "rubocop -A"
+            "command": "bundle exec rubocop -A"
         },
         {
             "label": "test",
             "type": "shell",
-            "command": "rspec tests/*spec.rb",
+            "command": "bundle exec rspec spec/*spec.rb",
             "presentation": {
                 "clear": true
             },
-            "group": "test",
-            "options": {
-                "env": {
-                    "INPUT_DIRECTORY": "site",
-                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/",
-                    "INPUT_ALLOW_MISSING_HREF": "true"
-                }
-            }
+            "group": "test"
         },
         {
             "label": "mkdocs: build",
             "type": "shell",
-            "command": "mkdocs_simple_gen --build"
-        },     
+            "command": "mkdocs_simple_gen --build",
+            "problemMatcher": []
+        },
         {
             "label": "mkdocs: test",
             "type": "shell",
-            "dependsOn":["mkdocs: build"],
-            "command": "ruby lib/main.rb",
+            "dependsOn": [
+                "mkdocs: build"
+            ],
+            "command": "ruby lib/html_proofer_action.rb",
             "group": "test",
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
-                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/",
-                    "INPUT_ALLOW_MISSING_HREF": "true"
+                    "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack",
+                    "INPUT_ALLOW_MISSING_HREF": "true",
+                    "INPUT_IGNORE_NEW_FILES": "true"
                 }
             }
         },
@@ -75,12 +82,16 @@
             "label": "test: all",
             "type": "shell",
             "dependsOrder": "parallel",
-            "dependsOn":["test", "mkdocs: test", "docker: test", "lint"],
+            "dependsOn": [
+                "test",
+                "mkdocs: test",
+                "docker: test",
+                "lint"
+            ],
             "group": {
                 "kind": "test",
                 "isDefault": true
-            },
+            }
         }
-
     ]
 }

@@ -10,5 +10,8 @@ group :development do
   gem 'debug'
   gem 'dotenv'
   gem 'rspec'
-  gem 'rubocop'
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec', require: false
+  gem 'ruby-lsp', require: false
+  gem 'ruby-lsp-rspec', require: false
 end

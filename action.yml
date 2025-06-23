@@ -51,13 +51,13 @@ inputs:
     description: Require that links use HTTPS
     required: false
   extensions:
-    description: An array of Strings indicating the file extensions you would like to check (including the dot)
+    description: A list of Strings indicating the file extensions you would like to check (including the dot)
     required: false
   ignore_empty_alt:
     description: If `true`, ignores images with empty/missing alt tags
     required: false
   ignore_files:
-    description: Newline-separated list of regex or strings containing file paths that are safe to ignore
+    description: A list (new line or comma separated) list of regex or strings containing file paths that are safe to ignore
     required: false
   ignore_empty_mailto:
     description:  If `true`, allows `mailto:` `href`s which do not contain an email address.
@@ -66,10 +66,10 @@ inputs:
     description: If `true`, ignores images with missing alt tags
     required: false
   ignore_status_codes:
-    description: An array of numbers representing status codes to ignore.
+    description: A list of numbers representing status codes to ignore.
     required: false
   ignore_urls:
-    description: Newline-separated list of URLs to ignore.  Uses same syntax as htmlproofer.
+    description: A list (new line or comma separated) of Strings or RegExps containing URLs that are safe to ignore.
     required: false
     default: |
       https://fonts.gstatic.com
@@ -146,6 +146,7 @@ inputs:
     description: Maximum parallel processes
     required: false
     deprecationMessage: Setting `max_paralell` has been deprecated in htmlproofer
+
 runs:
   using: "docker"
   image: "Dockerfile"

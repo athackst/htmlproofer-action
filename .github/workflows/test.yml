@@ -16,7 +16,7 @@ jobs:
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Unit tests
-        run: bundle exec rspec tests/*_spec.rb
+        run: bundle exec rspec spec/*_spec.rb
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -26,4 +26,4 @@ jobs:
         with:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Unit tests
-        run: bundle exec rubocop lib/* tests/*
+        run: bundle exec rubocop lib/* spec/*

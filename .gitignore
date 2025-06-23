@@ -62,3 +62,7 @@ mkdocs.yml
 # htmlproofer generated files
 .cookies
 .env
+
+venv
+.venv
+*.bak
