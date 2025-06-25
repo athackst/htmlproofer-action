@@ -32,7 +32,7 @@
             "dependsOn": [
                 "docker: build"
             ],
-            "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
+            "command": "docker run --workdir /workspace -v${workspaceFolder}:/workspace -e INPUT_DIRECTORY='./site' -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
             "group": "test"
         },
         {
