@@ -49,7 +49,7 @@ describe HTMLProoferAction::GitHelpers do
     context 'when fallback used (no PR or push)' do
       before do
         ENV.delete('GITHUB_EVENT_NAME')
-        ENV['BASE_BRANCH'] = 'origin/main'
+        ENV['GITHUB_REF'] = 'origin/main'
 
         allow(Open3).to receive(:capture3)
           .with('git merge-base origin/main HEAD')

@@ -67,7 +67,7 @@ module HTMLProoferAction
     end
 
     def self.fallback_new_files_from_diff
-      base_branch = ENV['BASE_BRANCH'] || 'origin/main'
+      base_branch = ENV['GITHUB_REF'] || 'origin/main'
       sha, _err, status = Open3.capture3("git merge-base #{base_branch} HEAD")
       base_sha = sha.strip
 
