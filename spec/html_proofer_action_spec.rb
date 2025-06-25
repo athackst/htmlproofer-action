@@ -532,6 +532,7 @@ RSpec.describe HTMLProoferAction do
         # Set environment
         ENV['INPUT_DIRECTORY'] = temp_dir
         ENV['INPUT_IGNORE_NEW_FILES'] = 'true'
+        ENV['GITHUB_EVENT_NAME'] = 'test'
         ENV['GITHUB_REF'] = 'main'
 
         expect(htmlproofer_status_output).to match(

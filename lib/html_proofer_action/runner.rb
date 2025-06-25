@@ -12,8 +12,8 @@ module HTMLProoferAction
   module Runner
     def self.run(options = nil)
       options ||= build_options
-      directory = EnvOptions.get_str('DIRECTORY', '/site')
-      puts "Running HTMLProofer in #{directory} with options:"
+      directory = EnvOptions.get_str('DIRECTORY', '.')
+      puts "Running HTMLProofer in #{File.expand_path(directory)} with options:"
       puts JSON.pretty_generate(options)
       abort('No checks run') if options[:checks].empty?
       HTMLProofer.check_directory(directory, options).run
