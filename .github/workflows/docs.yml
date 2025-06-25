@@ -37,8 +37,8 @@ jobs:
         run: |
           echo "VERSION=dev" >> $GITHUB_ENV
           echo "DEFAULT_VERSION=" >> $GITHUB_ENV
-      # - name: Setup config
-      #   uses: athackst/athackst.mkdocs@main
+      - name: Setup config
+        uses: athackst/athackst.mkdocs@main
       - name: Build dev docs
         uses: athackst/mkdocs-simple-plugin@main
         with:

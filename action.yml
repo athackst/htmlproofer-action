@@ -158,9 +158,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install htmlproofer
-      run: gem install html-proofer
-      shell: bash
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
 
     - name: Run Htmlproofer
       run: ${{ github.action_path }}/entrypoint.sh
