@@ -155,8 +155,6 @@ inputs:
     required: false
     deprecationMessage: Setting `max_paralell` has been deprecated in htmlproofer
 
-
-
 runs:
   using: "composite"
   steps:
@@ -168,13 +166,6 @@ runs:
       run: ${{ github.action_path }}/entrypoint.sh
       shell: bash
       env:
-        GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
-        GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
-        GITHUB_REF: ${{ env.GITHUB_REF }}
-        GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-        GITHUB_SHA: ${{ env.GITHUB_SHA }}
-        GITHUB_BASE_REF: ${{ env.GITHUB_BASE_REF }}
-        GITHUB_HEAD_REF: ${{ env.GITHUB_HEAD_REF }}
         INPUT_GH_TOKEN: ${{ inputs.gh_token }}
         INPUT_DIRECTORY: ${{ inputs.directory }}
         INPUT_ALLOW_HASH_HREF: ${{ inputs.allow_hash_href }}
