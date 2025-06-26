@@ -73,6 +73,10 @@ inputs:
     required: false
     default: |
       https://fonts.gstatic.com
+  ignore_new_files:
+    description: Whether to ignore files that are new
+    required: false
+    default: 'false'
   swap_urls:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
@@ -109,6 +113,10 @@ inputs:
     description: Number of times to retry checking links
     required: false
     default: 3
+  gh_token:
+    description: Github token
+    required: false
+    default: ${{ github.token }}
   # Deprecated
   check_html:
     description: Validate HTML

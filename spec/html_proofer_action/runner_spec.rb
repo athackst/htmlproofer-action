@@ -3,8 +3,10 @@
 require 'spec_helper'
 require 'html_proofer_action/runner'
 require 'html_proofer_action/env_options'
+require 'html_proofer_action/git_helpers'
 
 EnvOptions = HTMLProoferAction::EnvOptions
+GitHelpers = HTMLProoferAction::GitHelpers
 
 RSpec.describe HTMLProoferAction::Runner do
   subject(:runner) { described_class }
@@ -41,11 +43,12 @@ RSpec.describe HTMLProoferAction::Runner do
         get_only_regex_list: [/skip/],
         get_regex_list: [/ignore-this/]
       )
+      allow(described_class).to receive(:ignore_new_files).and_return([/new-file/])
     end
 
-    it 'combines ignore regex lists' do
+    it 'combines ignore regex lists and new files' do
       result = described_class.build_ignore_urls
-      expect(result).to eq([/skip/, /ignore-this/])
+      expect(result).to eq([/skip/, /ignore-this/, /new-file/])
     end
   end
 
@@ -70,6 +73,25 @@ RSpec.describe HTMLProoferAction::Runner do
 
     it 'calls append_swap_map with values as empty strings' do
       expect(captured_defaults.values).to all(eq(''))
+    end
+  end
+
+  describe '.ignore_new_files' do
+    before do
+      allow(EnvOptions).to receive(:get_bool).with('IGNORE_NEW_FILES', false).and_return(true)
+      allow(GitHelpers).to receive_messages(
+        detect_new_files: ['foo.html', 'bar/index.html']
+      )
+    end
+
+    let(:result) { described_class.ignore_new_files }
+
+    it 'returns two regex entries for new files' do
+      expect(result.length).to eq(2)
+    end
+
+    it 'returns regex entries for file patterns' do
+      expect(result).to all(be_a(Regexp))
     end
   end
 
@@ -113,6 +135,8 @@ RSpec.describe HTMLProoferAction::Runner do
                                                                                                          /foo/ => 'bar',
                                                                                                          /baz/ => 'qux'
                                                                                                        })
+
+      allow(described_class).to receive(:ignore_new_files).and_return([])
     end
 
     let(:result) { described_class.build_options }

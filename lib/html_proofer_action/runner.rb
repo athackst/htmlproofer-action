@@ -5,14 +5,15 @@ require 'json'
 require 'uri'
 
 require_relative 'env_options'
+require_relative 'git_helpers'
 
 module HTMLProoferAction
   # Helper module to get all of the options for HTMLProofer
   module Runner
     def self.run(options = nil)
       options ||= build_options
-      directory = EnvOptions.get_str('DIRECTORY', '/site')
-      puts "Running HTMLProofer in #{directory} with options:"
+      directory = EnvOptions.get_str('DIRECTORY', '.')
+      puts "Running HTMLProofer in #{File.expand_path(directory)} with options:"
       puts JSON.pretty_generate(options)
       abort('No checks run') if options[:checks].empty?
       HTMLProofer.check_directory(directory, options).run
@@ -25,7 +26,8 @@ module HTMLProoferAction
     def self.build_ignore_urls
       puts 'Getting ignore urls'
       EnvOptions.get_only_regex_list('URL_IGNORE_RE', []) +
-        EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], [])
+        EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], []) +
+        ignore_new_files
     end
 
     def self.default_swap
@@ -38,6 +40,20 @@ module HTMLProoferAction
         output[Regexp.new("^#{base_name}")] = ''
       end
       output
+    end
+
+    def self.ignore_new_files
+      return [] unless EnvOptions.get_bool('IGNORE_NEW_FILES', false)
+
+      new_files = GitHelpers.detect_new_files
+
+      return [] if new_files.nil?
+
+      new_files.map do |filename|
+        basename = Regexp.escape(File.basename(filename, File.extname(filename)))
+        original_ext = Regexp.escape(File.extname(filename).sub(/^\./, '')) # no dot
+        Regexp.new(".*#{basename}(/index)?\\.(#{original_ext}|html?)$", Regexp::IGNORECASE)
+      end
     end
 
     # rubocop: disable Metrics/AbcSize
