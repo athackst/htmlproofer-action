@@ -91,14 +91,14 @@ GEM
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
-    prism (1.7.0)
+    prism (1.8.0)
     psych (5.3.1)
       date
       stringio
     public_suffix (7.0.2)
     racc (1.8.1)
     rainbow (3.1.1)
-    rbs (3.9.5)
+    rbs (3.10.2)
       logger
     rdoc (7.0.1)
       erb
@@ -137,7 +137,7 @@ GEM
     rubocop-rspec (3.9.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.81)
-    ruby-lsp (0.26.4)
+    ruby-lsp (0.26.5)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
       rbs (>= 3, < 5)
