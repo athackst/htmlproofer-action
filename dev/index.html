@@ -416,6 +416,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#enable-htmlproofer-cache-with-github-actions-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable HTMLProofer cache with GitHub Actions cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#swap-a-url" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -581,6 +592,17 @@
     <span class="md-ellipsis">
       
         Ignore a url
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-htmlproofer-cache-with-github-actions-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable HTMLProofer cache with GitHub Actions cache
       
     </span>
   </a>
@@ -800,6 +822,11 @@
 <td>Number of times to retry checking links</td>
 <td>3</td>
 </tr>
+<tr>
+<td><code>cache</code></td>
+<td>JSON configuration for HTMLProofer caching</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <p>The following options are currently not supported by this action</p>
@@ -896,6 +923,17 @@
 <span class="w">    </span><span class="nt">ignore_urls</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">      </span><span class="no">/twitter.com/</span>
 <span class="w">      </span><span class="no">https://fonts.gstatic.com</span>
+</code></pre></div>
+<h3 id="enable-htmlproofer-cache-with-github-actions-cache">Enable HTMLProofer cache with GitHub Actions cache</h3>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cache HTMLProofer</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v3</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tmp/.htmlproofer</span>
+<span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ runner.os }}-htmlproofer</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
+<span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
+<span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{</span><span class="nv"> </span><span class="s">&quot;timeframe&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">&quot;external&quot;:</span><span class="nv"> </span><span class="s">&quot;2w&quot;,</span><span class="nv"> </span><span class="s">&quot;internal&quot;:</span><span class="nv"> </span><span class="s">&quot;1w&quot;</span><span class="nv"> </span><span class="s">}</span><span class="nv"> </span><span class="s">}&#39;</span>
 </code></pre></div>
 <h3 id="swap-a-url">Swap a url</h3>
 <p>This swaps urls so that local base name and version numbers are disregarded in url links</p>
