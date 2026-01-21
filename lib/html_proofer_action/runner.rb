@@ -60,7 +60,7 @@ module HTMLProoferAction
     # rubocop: disable Metrics/MethodLength
     # This function just builds options.  It's easier to read them all together than to separate them up.
     def self.build_options
-      {
+      options = {
         allow_hash_href: EnvOptions.get_bool('ALLOW_HASH_HREF', true),
         allow_missing_href: EnvOptions.get_bool('ALLOW_MISSING_HREF', false),
         assume_extension: EnvOptions.get_str('ASSUME_EXTENSION', '.html'),
@@ -98,6 +98,9 @@ module HTMLProoferAction
           cookiejar: '.cookies'
         }
       }
+      cache_options = EnvOptions.get_json('CACHE')
+      options[:cache] = cache_options unless cache_options.nil?
+      options
     end
     # rubocop: enable Metrics/AbcSize
     # rubocop: enable Metrics/MethodLength

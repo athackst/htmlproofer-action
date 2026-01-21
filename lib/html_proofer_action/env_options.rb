@@ -85,5 +85,28 @@ module HTMLProoferAction
       end
       output
     end
+
+    def self.get_json(name, fallback = nil)
+      s = get_env(name)
+      return fallback if s.nil? || s.empty?
+
+      data = JSON.parse(s)
+      symbolize_keys(data)
+    rescue JSON::ParserError
+      fallback
+    end
+
+    def self.symbolize_keys(value)
+      case value
+      when Hash
+        value.each_with_object({}) do |(key, val), acc|
+          acc[key.to_sym] = symbolize_keys(val)
+        end
+      when Array
+        value.map { |item| symbolize_keys(item) }
+      else
+        value
+      end
+    end
   end
 end

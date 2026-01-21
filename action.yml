@@ -76,7 +76,7 @@ inputs:
   ignore_new_files:
     description: Whether to ignore files that are new
     required: false
-    default: 'false'
+    default: 'true'
   swap_urls:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
@@ -113,6 +113,9 @@ inputs:
     description: Number of times to retry checking links
     required: false
     default: 3
+  cache:
+    description: JSON configuration for HTMLProofer caching (e.g. { "timeframe": { "external": "2w", "internal": "1w" } })
+    required: false
   gh_token:
     description: Github token
     required: false

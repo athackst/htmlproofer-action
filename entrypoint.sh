@@ -11,7 +11,7 @@ while [ "$tries" -ge 1 ]; do
     break
   fi
   if [ "$tries" -ge 1 ]; then
-    sleep 30
+    sleep 60
   fi
 done
 
