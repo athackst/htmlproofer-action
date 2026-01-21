@@ -12,18 +12,27 @@
             "label": "bundle: install",
             "type": "shell",
             "command": "bundle install",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
             "problemMatcher": []
         },
         {
             "label": "bundle: update",
             "type": "shell",
             "command": "bundle update",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
             "problemMatcher": []
         },
         {
             "label": "docker: build",
             "type": "shell",
             "command": "docker build --pull -t althack/htmlproofer:latest .",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
             "problemMatcher": []
         },
         {
@@ -40,17 +49,26 @@
             "label": "lint",
             "type": "shell",
             "command": "bundle exec rubocop",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
             "group": "test"
         },
         {
             "label": "lint (fix)",
             "type": "shell",
-            "command": "bundle exec rubocop -A"
+            "command": "bundle exec rubocop -A",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
         },
         {
             "label": "test",
             "type": "shell",
             "command": "bundle exec rspec spec/*spec.rb",
+            "options": {
+                "cwd": "${workspaceFolder}/htmlproofer"
+            },
             "presentation": {
                 "clear": true
             },
@@ -68,7 +86,7 @@
             "dependsOn": [
                 "mkdocs: build"
             ],
-            "command": "ruby lib/html_proofer_action.rb",
+            "command": "ruby htmlproofer/lib/html_proofer_action.rb",
             "group": "test",
             "options": {
                 "env": {

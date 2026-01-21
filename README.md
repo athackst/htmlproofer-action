@@ -68,6 +68,7 @@ jobs:
 | `host`                 | The host URL of your site so urls can be evaluated as local.                                                                                        | `${{ github.repository_owner }}.github.io\/ ` |
 | `base_path`            | The base path of your site so urls can be evaluated as local.                                                                                       | `${{ github.event.repository.name }}`         |
 | `retries`              | Number of times to retry checking links                                                                                                             | 3                                             |
+| `cache`                | JSON configuration for HTMLProofer caching                                                                                                         |                                              |
 
 The following options are currently not supported by this action
 
@@ -153,6 +154,20 @@ This uses the same syntax as htmlproofer, but you can either use a comma or new 
     ignore_urls: |
       /twitter.com/
       https://fonts.gstatic.com
+```
+
+### Enable HTMLProofer cache with GitHub Actions cache
+
+```yaml
+- name: Cache HTMLProofer
+  uses: actions/cache@v3
+  with:
+    path: tmp/.htmlproofer
+    key: ${{ runner.os }}-htmlproofer
+- name: Htmlproofer
+  uses: athackst/htmlproofer-action@main
+  with:
+    cache: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
 ```
 
 ### Swap a url
