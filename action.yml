@@ -169,7 +169,7 @@ runs:
         path: tmp/.htmlproofer
         key: ${{ runner.os }}-htmlproofer
     - name: Htmlproofer
-      uses: athackst/htmlproofer-action/htmlproofer@main
+      uses: ${{ github.action_path }}/htmlproofer
       with:
         directory: ${{ inputs.directory }}
         allow_hash_href: ${{ inputs.allow_hash_href }}
