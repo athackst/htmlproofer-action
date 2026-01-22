@@ -4,6 +4,7 @@ require 'html-proofer'
 require 'json'
 require 'uri'
 
+require_relative 'cache_summary'
 require_relative 'env_options'
 require_relative 'git_helpers'
 
@@ -17,6 +18,9 @@ module HTMLProoferAction
       puts JSON.pretty_generate(options)
       abort('No checks run') if options[:checks].empty?
       HTMLProofer.check_directory(directory, options).run
+      return unless options.key?(:cache)
+
+      CacheSummary.print(options[:cache])
     end
 
     def self.build_swap_urls
