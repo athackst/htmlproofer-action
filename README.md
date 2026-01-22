@@ -1,16 +1,31 @@
 # htmlproofer-action
 
-A [Github Action](https://github.com/features/actions) that runs [htmlproofer](https://github.com/gjtorikian/html-proofer).
+A [GitHub Action](https://github.com/features/actions) that runs [html-proofer](https://github.com/gjtorikian/html-proofer).
 
 Defaults are set up to support jekyll + Github Pages websites.
 
 ## Usage
 
-Add this snippet to a github workflow after the step that builds your site.
+Add this snippet to a GitHub workflow after the step that builds your site.
 
 ```yaml
 - uses: athackst/htmlproofer-action@main
 ```
+
+### Reusable workflow (optional)
+
+If you prefer a reusable workflow (for example, to include cross-run caching with `actions/cache`), you can call the workflow directly:
+
+```yaml
+jobs:
+  htmlproofer:
+    uses: athackst/htmlproofer-action/.github/workflows/workflow.yml@main
+    with:
+      directory: ./_site
+      cache: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
+```
+
+Note: reusable workflows run as separate jobs, so if you need build output from another job, upload it as an artifact and download it in the reusable workflow job.
 
 ### Quickstart
 
@@ -27,7 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -49,7 +64,6 @@ jobs:
 | `allow_hash_href`      | If `true`, assumes `href="#"` anchors are valid                                                                                                     | `true`                                        |
 | `allow_missing_href`   | If `true`, does not flag `a` tags missing `href`. In HTML5, this is technically allowed, but could also be human error.                             | `false`                                       |
 | `assume_extension`     | Automatically add specified extension to files for internal links, to allow extensionless URLs (as supported by most servers)                       | `.html`                                       |
-| `checks`               | An array of Strings indicating which checks you want to run                                                                                         | `['Links', 'Images', 'Scripts']`              |
 | `check_external_hash`  | Checks whether external hashes exist (even if the webpage exists)                                                                                   | `true`                                        |
 | `check_internal_hash`  | Checks whether internal hashes exist (even if the webpage exists)                                                                                   | `true`                                        |
 | `check_sri`            | Check that `<link>` and `<script>` external resources use SRI                                                                                       | false                                         |
@@ -63,12 +77,12 @@ jobs:
 | `ignore_missing_alt`   | If `true`, ignores images with missing alt tags                                                                                                     | `false`                                       |
 | `ignore_status_codes`  | A list of numbers representing status codes to ignore.                                                                                              | `[]`                                          |
 | `ignore_urls`          | A list of Strings or RegExps containing URLs that are safe to ignore. This affects all HTML attributes, such as `alt` tags on images.               | `[]`                                          |
-| `ignore_new_files`     | If `true`, will ignore any new or renamed files in the change set.                                                                                  | `false`                                       |
+| `ignore_new_files`     | If `true`, will ignore any new or renamed files in the change set.                                                                                  | `true`                                        |
 | `swap_urls`            | A hash containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`.                           | `{}`                                          |
-| `host`                 | The host URL of your site so urls can be evaluated as local.                                                                                        | `${{ github.repository_owner }}.github.io\/ ` |
+| `host`                 | The host URL of your site so urls can be evaluated as local.                                                                                        | `${{ github.repository_owner }}.github.io`    |
 | `base_path`            | The base path of your site so urls can be evaluated as local.                                                                                       | `${{ github.event.repository.name }}`         |
 | `retries`              | Number of times to retry checking links                                                                                                             | 3                                             |
-| `cache`                | JSON configuration for HTMLProofer caching                                                                                                         |                                              |
+| `cache`                | JSON configuration for HTMLProofer caching                                                                                                         | `{ "timeframe": { "external": "2w", "internal": "1w" } }` |
 
 The following options are currently not supported by this action
 
@@ -92,7 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
@@ -134,7 +148,7 @@ jobs:
   github-pages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: Build and push docs
         uses: athackst/mkdocs-simple-plugin@main
       - name: Htmlproofer
@@ -170,7 +184,9 @@ This uses the same syntax as htmlproofer, but you can either use a comma or new 
     cache: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
 ```
 
-### Swap a url
+When caching is enabled, the action prints a cache summary in the logs and includes it in the GitHub step summary.
+
+### Swap a URL
 
 This swaps urls so that local base name and version numbers are disregarded in url links
 
@@ -186,11 +202,11 @@ This swaps urls so that local base name and version numbers are disregarded in u
       ^\/v\d+\.\d+\.\d+:
 ```
 
-## Local docker
+## Local Docker
 
 You can also run this locally using the docker image. This can be helpful in understanding errors.
 
-I make a local alias that calls the docker file with environment variables set based on my common use cases.
+I make a local alias that calls the Docker image with environment variables set based on my common use cases.
 
 ```sh
 function htmlproofer_action() {

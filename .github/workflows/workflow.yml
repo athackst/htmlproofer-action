@@ -1,0 +1,68 @@
+name: HTMLProofer (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        description: The directory to scan
+        required: false
+        default: './_site'
+        type: string
+      ignore_empty_alt:
+        required: false
+        type: string
+      ignore_files:
+        required: false
+        type: string
+      ignore_empty_mailto:
+        required: false
+        type: string
+      ignore_missing_alt:
+        required: false
+        type: string
+      ignore_status_codes:
+        required: false
+        type: string
+      ignore_urls:
+        required: false
+        type: string
+      ignore_new_files:
+        required: false
+        type: string
+      swap_urls:
+        required: false
+        type: string
+      host:
+        required: false
+        type: string
+      base_path:
+        required: false
+        type: string
+      gh_token:
+        required: false
+        type: string
+
+jobs:
+  htmlproofer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache HTMLProofer
+        uses: actions/cache@v3
+        with:
+          path: tmp/.htmlproofer
+          key: ${{ runner.os }}-htmlproofer
+      - name: HTMLProofer
+        uses: athackst/htmlproofer-action/htmlproofer@main
+        with:
+          directory: ${{ inputs.directory }}
+          ignore_empty_alt: ${{ inputs.ignore_empty_alt }}
+          ignore_files: ${{ inputs.ignore_files }}
+          ignore_empty_mailto: ${{ inputs.ignore_empty_mailto }}
+          ignore_missing_alt: ${{ inputs.ignore_missing_alt }}
+          ignore_status_codes: ${{ inputs.ignore_status_codes }}
+          ignore_urls: ${{ inputs.ignore_urls }}
+          ignore_new_files: ${{ inputs.ignore_new_files }}
+          swap_urls: ${{ inputs.swap_urls }}
+          host: ${{ inputs.host }}
+          base_path: ${{ inputs.base_path }}
+          gh_token: ${{ inputs.gh_token }}

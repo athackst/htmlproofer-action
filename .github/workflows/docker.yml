@@ -31,7 +31,7 @@ jobs:
       - name: Build and push docker image
         uses: docker/build-push-action@v6.18.0
         with:
-          context: ./htmlproofer
-          file: ./htmlproofer/Dockerfile
+          context: .
+          file: Dockerfile
           tags: althack/htmlproofer:${{ env.VERSION }}
           push: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}

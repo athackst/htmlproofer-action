@@ -1,6 +1,6 @@
-name: HtmlProofer Action
+name: HtmlProofer Docker
 author: athackst
-description: Run HtmlProofer
+description: Run HtmlProofer in a docker container
 
 inputs:
   # required inputs
@@ -76,7 +76,7 @@ inputs:
   ignore_new_files:
     description: Whether to ignore files that are new
     required: false
-    default: 'true'
+    default: 'false'
   swap_urls:
     description: Newline-separated list of regex expressions to swap in urls
     required: false
@@ -114,7 +114,7 @@ inputs:
     required: false
     default: 3
   cache:
-    description: 'JSON configuration for HTMLProofer caching'
+    description: JSON configuration for HTMLProofer caching
     required: false
     default: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
   gh_token:
@@ -160,52 +160,8 @@ inputs:
     deprecationMessage: Setting `max_paralell` has been deprecated in htmlproofer
 
 runs:
-  using: "composite"
-  steps:
-    - name: Cache for HTMLProofer
-      if: ${{ inputs.cache != '' }}
-      uses: actions/cache@v5
-      with:
-        path: tmp/.htmlproofer
-        key: ${{ runner.os }}-htmlproofer
-    - name: Htmlproofer
-      uses: athackst/htmlproofer-action/htmlproofer@main
-      with:
-        directory: ${{ inputs.directory }}
-        allow_hash_href: ${{ inputs.allow_hash_href }}
-        allow_missing_href: ${{ inputs.allow_missing_href }}
-        assume_extension: ${{ inputs.assume_extension }}
-        check_favicon: ${{ inputs.check_favicon }}
-        check_links: ${{ inputs.check_links }}
-        check_images: ${{ inputs.check_images }}
-        check_scripts: ${{ inputs.check_scripts }}
-        check_opengraph: ${{ inputs.check_opengraph }}
-        check_external_hash: ${{ inputs.check_external_hash }}
-        check_internal_hash: ${{ inputs.check_internal_hash }}
-        check_sri: ${{ inputs.check_sri }}
-        directory_index_file: ${{ inputs.directory_index_file }}
-        disable_external: ${{ inputs.disable_external }}
-        enforce_https: ${{ inputs.enforce_https }}
-        extensions: ${{ inputs.extensions }}
-        ignore_empty_alt: ${{ inputs.ignore_empty_alt }}
-        ignore_files: ${{ inputs.ignore_files }}
-        ignore_empty_mailto: ${{ inputs.ignore_empty_mailto }}
-        ignore_missing_alt: ${{ inputs.ignore_missing_alt }}
-        ignore_status_codes: ${{ inputs.ignore_status_codes }}
-        ignore_urls: ${{ inputs.ignore_urls }}
-        ignore_new_files: ${{ inputs.ignore_new_files }}
-        swap_urls: ${{ inputs.swap_urls }}
-        host: ${{ inputs.host }}
-        base_path: ${{ inputs.base_path }}
-        max_concurrency: ${{ inputs.max_concurrency }}
-        connect_timeout: ${{ inputs.connect_timeout }}
-        followlocation: ${{ inputs.followlocation }}
-        ssl_verifypeer: ${{ inputs.ssl_verifypeer }}
-        ssl_verifyhost: ${{ inputs.ssl_verifyhost }}
-        timeout: ${{ inputs.timeout }}
-        retries: ${{ inputs.retries }}
-        cache: ${{ inputs.cache }}
-        gh_token: ${{ inputs.gh_token }}
+  using: "docker"
+  image: "Dockerfile"
 
 branding:
   icon: link
