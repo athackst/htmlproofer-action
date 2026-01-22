@@ -46,7 +46,7 @@ jobs:
           default_version: ${{ env.DEFAULT_VERSION }}
           push: ${{ github.ref == 'refs/heads/main' || github.event_name == 'release' }}
       - name: Htmlproofer
-        uses: ./
+        uses: ./htmlproofer/
         with:
           directory: site
           ignore_urls: |
