@@ -164,7 +164,7 @@ runs:
   steps:
     - name: Cache for HTMLProofer
       if: ${{ inputs.cache != '' }}
-      uses: actions/cache@v3
+      uses: actions/cache@v5
       with:
         path: tmp/.htmlproofer
         key: ${{ runner.os }}-htmlproofer
