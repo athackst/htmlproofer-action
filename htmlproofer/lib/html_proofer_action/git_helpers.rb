@@ -25,8 +25,6 @@ module HTMLProoferAction
       ctx = pr_context_values
       return [] unless ctx.values.all?
 
-      puts "Fetching file list via compare: #{ctx[:base_ref]}...#{ctx[:head_ref]}"
-
       ENV['GH_TOKEN'] = ctx[:token] # Set token globally for this process
 
       output, err, status = Open3.capture3(
@@ -57,8 +55,6 @@ module HTMLProoferAction
       before_sha = ENV['GITHUB_EVENT_BEFORE'] || ''
       return [] if before_sha.empty?
 
-      puts "Fetching new files from push diff (before SHA: #{before_sha})..."
-
       output, err, status = Open3.capture3("git diff -z --name-only --diff-filter=AR #{before_sha}")
       return output.split("\0") if status.success?
 
@@ -72,8 +68,6 @@ module HTMLProoferAction
       base_sha = sha.strip
 
       return [] if base_sha.empty? || !status.success?
-
-      puts "Fetching new files from fallback diff (base SHA: #{base_sha})..."
 
       output, err, status = Open3.capture3("git diff -z --name-only --diff-filter=AR #{base_sha}")
       return output.split("\0") if status.success?

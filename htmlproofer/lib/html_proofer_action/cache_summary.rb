@@ -25,12 +25,30 @@ module HTMLProoferAction
     end
 
     def self.print_summary(data)
-      %w[external internal].each do |section|
-        total, failures, urls = summarize(data, section)
-        puts "#{section} cached: #{total} (failures rechecked: #{failures})"
-        urls.first(20).each { |url| puts "  - #{url}" }
-        puts "  ... and #{total - 20} more" if total > 20
-      end
+      print_header
+      %w[external internal].each { |section| print_section(data, section) }
+      print_footer
+    end
+
+    def self.print_header
+      puts ''
+      puts '<details><summary>HTMLProofer Cache Summary</summary>'
+      puts ''
+    end
+
+    def self.print_section(data, section)
+      total, failures, urls = summarize(data, section)
+      puts "#{section} cached: #{total} (failures rechecked: #{failures})"
+      urls.first(20).each { |url| puts "  - #{url}" }
+      puts ''
+      puts "  ... and #{total - 20} more" if total > 20
+      puts ''
+    end
+
+    def self.print_footer
+      puts ''
+      puts '</details>'
+      puts ''
     end
 
     def self.cache_path(cache_options)
@@ -39,6 +57,6 @@ module HTMLProoferAction
       File.join(storage_dir, cache_file)
     end
 
-    private_class_method :summarize, :print_summary, :cache_path
+    private_class_method :summarize, :print_summary, :cache_path, :print_header, :print_section, :print_footer
   end
 end
