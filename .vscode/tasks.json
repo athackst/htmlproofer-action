@@ -41,7 +41,6 @@
             "dependsOn": [
                 "docker: build"
             ],
-            // "command": "docker run --workdir=/workspace -v ${workspaceFolder}:/workspace -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
             "command": "docker run -v ${workspaceFolder}/site:/site -e INPUT_IGNORE_URLS='https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack' -e INPUT_ALLOW_MISSING_HREF=true althack/htmlproofer:latest",
             "group": "test"
         },
@@ -61,6 +60,7 @@
             "options": {
                 "cwd": "${workspaceFolder}/htmlproofer"
             },
+            "problemMatcher": []
         },
         {
             "label": "test",
@@ -86,14 +86,15 @@
             "dependsOn": [
                 "mkdocs: build"
             ],
-            "command": "ruby htmlproofer/lib/html_proofer_action.rb",
+            "command": "./htmlproofer/entrypoint.sh",
             "group": "test",
             "options": {
                 "env": {
                     "INPUT_DIRECTORY": "site",
                     "INPUT_IGNORE_URLS": "https://fonts.gstatic.com,/linkedin\\.com/,https://twitter.com/althack",
                     "INPUT_ALLOW_MISSING_HREF": "true",
-                    "INPUT_IGNORE_NEW_FILES": "true"
+                    "INPUT_IGNORE_NEW_FILES": "true",
+                    "GITHUB_STEP_SUMMARY": "${workspaceFolder}/htmlproofer/step_summary.txt",
                 }
             }
         },

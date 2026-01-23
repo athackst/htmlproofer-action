@@ -162,50 +162,110 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache for HTMLProofer
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Htmlproofer image
+      uses: docker/build-push-action@v6.18.0
+      with:
+        context: ${{ github.action_path }}/htmlproofer
+        file: ${{ github.action_path }}/htmlproofer/Dockerfile
+        tags: htmlproofer-action:local
+        load: true
+        cache-from: type=gha,scope=htmlproofer-action
+        cache-to: type=gha,mode=max,scope=htmlproofer-action
+      env:
+        DOCKER_BUILD_SUMMARY: false
+        DOCKER_BUILD_RECORD_UPLOAD: false
+
+    - name: Cache HTMLProofer
       if: ${{ inputs.cache != '' }}
       uses: actions/cache@v5
       with:
         path: tmp/.htmlproofer
         key: ${{ runner.os }}-htmlproofer
+        
     - name: Htmlproofer
-      uses: athackst/htmlproofer-action/htmlproofer@main
-      with:
-        directory: ${{ inputs.directory }}
-        allow_hash_href: ${{ inputs.allow_hash_href }}
-        allow_missing_href: ${{ inputs.allow_missing_href }}
-        assume_extension: ${{ inputs.assume_extension }}
-        check_favicon: ${{ inputs.check_favicon }}
-        check_links: ${{ inputs.check_links }}
-        check_images: ${{ inputs.check_images }}
-        check_scripts: ${{ inputs.check_scripts }}
-        check_opengraph: ${{ inputs.check_opengraph }}
-        check_external_hash: ${{ inputs.check_external_hash }}
-        check_internal_hash: ${{ inputs.check_internal_hash }}
-        check_sri: ${{ inputs.check_sri }}
-        directory_index_file: ${{ inputs.directory_index_file }}
-        disable_external: ${{ inputs.disable_external }}
-        enforce_https: ${{ inputs.enforce_https }}
-        extensions: ${{ inputs.extensions }}
-        ignore_empty_alt: ${{ inputs.ignore_empty_alt }}
-        ignore_files: ${{ inputs.ignore_files }}
-        ignore_empty_mailto: ${{ inputs.ignore_empty_mailto }}
-        ignore_missing_alt: ${{ inputs.ignore_missing_alt }}
-        ignore_status_codes: ${{ inputs.ignore_status_codes }}
-        ignore_urls: ${{ inputs.ignore_urls }}
-        ignore_new_files: ${{ inputs.ignore_new_files }}
-        swap_urls: ${{ inputs.swap_urls }}
-        host: ${{ inputs.host }}
-        base_path: ${{ inputs.base_path }}
-        max_concurrency: ${{ inputs.max_concurrency }}
-        connect_timeout: ${{ inputs.connect_timeout }}
-        followlocation: ${{ inputs.followlocation }}
-        ssl_verifypeer: ${{ inputs.ssl_verifypeer }}
-        ssl_verifyhost: ${{ inputs.ssl_verifyhost }}
-        timeout: ${{ inputs.timeout }}
-        retries: ${{ inputs.retries }}
-        cache: ${{ inputs.cache }}
-        gh_token: ${{ inputs.gh_token }}
+      shell: bash
+      env:
+        INPUT_DIRECTORY: ${{ inputs.directory }}
+        INPUT_ALLOW_HASH_HREF: ${{ inputs.allow_hash_href }}
+        INPUT_ALLOW_MISSING_HREF: ${{ inputs.allow_missing_href }}
+        INPUT_ASSUME_EXTENSION: ${{ inputs.assume_extension }}
+        INPUT_CHECK_FAVICON: ${{ inputs.check_favicon }}
+        INPUT_CHECK_LINKS: ${{ inputs.check_links }}
+        INPUT_CHECK_IMAGES: ${{ inputs.check_images }}
+        INPUT_CHECK_SCRIPTS: ${{ inputs.check_scripts }}
+        INPUT_CHECK_OPENGRAPH: ${{ inputs.check_opengraph }}
+        INPUT_CHECK_EXTERNAL_HASH: ${{ inputs.check_external_hash }}
+        INPUT_CHECK_INTERNAL_HASH: ${{ inputs.check_internal_hash }}
+        INPUT_CHECK_SRI: ${{ inputs.check_sri }}
+        INPUT_DIRECTORY_INDEX_FILE: ${{ inputs.directory_index_file }}
+        INPUT_DISABLE_EXTERNAL: ${{ inputs.disable_external }}
+        INPUT_ENFORCE_HTTPS: ${{ inputs.enforce_https }}
+        INPUT_EXTENSIONS: ${{ inputs.extensions }}
+        INPUT_IGNORE_EMPTY_ALT: ${{ inputs.ignore_empty_alt }}
+        INPUT_IGNORE_FILES: ${{ inputs.ignore_files }}
+        INPUT_IGNORE_EMPTY_MAILTO: ${{ inputs.ignore_empty_mailto }}
+        INPUT_IGNORE_MISSING_ALT: ${{ inputs.ignore_missing_alt }}
+        INPUT_IGNORE_STATUS_CODES: ${{ inputs.ignore_status_codes }}
+        INPUT_IGNORE_URLS: ${{ inputs.ignore_urls }}
+        INPUT_IGNORE_NEW_FILES: ${{ inputs.ignore_new_files }}
+        INPUT_SWAP_URLS: ${{ inputs.swap_urls }}
+        INPUT_HOST: ${{ inputs.host }}
+        INPUT_BASE_PATH: ${{ inputs.base_path }}
+        INPUT_MAX_CONCURRENCY: ${{ inputs.max_concurrency }}
+        INPUT_CONNECT_TIMEOUT: ${{ inputs.connect_timeout }}
+        INPUT_FOLLOWLOCATION: ${{ inputs.followlocation }}
+        INPUT_SSL_VERIFYPEER: ${{ inputs.ssl_verifypeer }}
+        INPUT_SSL_VERIFYHOST: ${{ inputs.ssl_verifyhost }}
+        INPUT_TIMEOUT: ${{ inputs.timeout }}
+        INPUT_RETRIES: ${{ inputs.retries }}
+        INPUT_CACHE: ${{ inputs.cache }}
+        INPUT_GH_TOKEN: ${{ inputs.gh_token }}
+        GITHUB_STEP_SUMMARY: ${{ env.GITHUB_STEP_SUMMARY }}
+      run: |
+        docker run --rm \
+          -e GITHUB_STEP_SUMMARY \
+          -e INPUT_DIRECTORY \
+          -e INPUT_ALLOW_HASH_HREF \
+          -e INPUT_ALLOW_MISSING_HREF \
+          -e INPUT_ASSUME_EXTENSION \
+          -e INPUT_CHECK_FAVICON \
+          -e INPUT_CHECK_LINKS \
+          -e INPUT_CHECK_IMAGES \
+          -e INPUT_CHECK_SCRIPTS \
+          -e INPUT_CHECK_OPENGRAPH \
+          -e INPUT_CHECK_EXTERNAL_HASH \
+          -e INPUT_CHECK_INTERNAL_HASH \
+          -e INPUT_CHECK_SRI \
+          -e INPUT_DIRECTORY_INDEX_FILE \
+          -e INPUT_DISABLE_EXTERNAL \
+          -e INPUT_ENFORCE_HTTPS \
+          -e INPUT_EXTENSIONS \
+          -e INPUT_IGNORE_EMPTY_ALT \
+          -e INPUT_IGNORE_FILES \
+          -e INPUT_IGNORE_EMPTY_MAILTO \
+          -e INPUT_IGNORE_MISSING_ALT \
+          -e INPUT_IGNORE_STATUS_CODES \
+          -e INPUT_IGNORE_URLS \
+          -e INPUT_IGNORE_NEW_FILES \
+          -e INPUT_SWAP_URLS \
+          -e INPUT_HOST \
+          -e INPUT_BASE_PATH \
+          -e INPUT_MAX_CONCURRENCY \
+          -e INPUT_CONNECT_TIMEOUT \
+          -e INPUT_FOLLOWLOCATION \
+          -e INPUT_SSL_VERIFYPEER \
+          -e INPUT_SSL_VERIFYHOST \
+          -e INPUT_TIMEOUT \
+          -e INPUT_RETRIES \
+          -e INPUT_CACHE \
+          -e INPUT_GH_TOKEN \
+          -v "${{ github.workspace }}:/workspace" \
+          -v "$GITHUB_STEP_SUMMARY:$GITHUB_STEP_SUMMARY" \
+          -w /workspace \
+          htmlproofer-action:local
 
 branding:
   icon: link
