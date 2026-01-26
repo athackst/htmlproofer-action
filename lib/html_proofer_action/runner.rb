@@ -4,6 +4,7 @@ require 'html-proofer'
 require 'json'
 require 'uri'
 
+require_relative 'cache_summary'
 require_relative 'env_options'
 require_relative 'git_helpers'
 
@@ -13,9 +14,24 @@ module HTMLProoferAction
     def self.run(options = nil)
       options ||= build_options
       directory = EnvOptions.get_str('DIRECTORY', '.')
-      puts "Running HTMLProofer in #{File.expand_path(directory)} with options:"
-      puts JSON.pretty_generate(options)
+      print_options(directory, options)
       abort('No checks run') if options[:checks].empty?
+      run_proofer(directory, options)
+      CacheSummary.print(options[:cache]) if options.key?(:cache)
+    end
+
+    def self.print_options(directory, options)
+      puts '<details><summary>HTMLProofer Options</summary>'
+      puts "Running in directory: #{File.expand_path(directory)}"
+      puts ''
+      puts '```json'
+      puts JSON.pretty_generate(options)
+      puts '```'
+      puts '</details>'
+      puts ''
+    end
+
+    def self.run_proofer(directory, options)
       HTMLProofer.check_directory(directory, options).run
     end
 
@@ -24,7 +40,6 @@ module HTMLProoferAction
     end
 
     def self.build_ignore_urls
-      puts 'Getting ignore urls'
       EnvOptions.get_only_regex_list('URL_IGNORE_RE', []) +
         EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], []) +
         ignore_new_files
@@ -104,5 +119,7 @@ module HTMLProoferAction
     end
     # rubocop: enable Metrics/AbcSize
     # rubocop: enable Metrics/MethodLength
+
+    private_class_method :print_options, :run_proofer
   end
 end

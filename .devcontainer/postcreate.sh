@@ -5,8 +5,6 @@ source .venv/bin/activate
 pip install mkdocs mkdocs-simple-plugin mkdocs-material
 echo "source $(pwd)/.venv/bin/activate" >> ~/.bashrc
 
-cd htmlproofer
-
 # Detect Ruby version
 RUBY_VERSION=$(ruby -v | awk '{print $2}')
 echo "$RUBY_VERSION" > .ruby-version
