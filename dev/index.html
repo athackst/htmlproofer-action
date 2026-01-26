@@ -355,6 +355,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#reusable-workflow-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reusable workflow (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#quickstart" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -430,7 +441,7 @@
   <a href="#swap-a-url" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Swap a url
+        Swap a URL
       
     </span>
   </a>
@@ -446,7 +457,7 @@
   <a href="#local-docker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Local docker
+        Local Docker
       
     </span>
   </a>
@@ -538,6 +549,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#reusable-workflow-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reusable workflow (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#quickstart" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -613,7 +635,7 @@
   <a href="#swap-a-url" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Swap a url
+        Swap a URL
       
     </span>
   </a>
@@ -629,7 +651,7 @@
   <a href="#local-docker" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Local docker
+        Local Docker
       
     </span>
   </a>
@@ -665,12 +687,22 @@
 
 
 <h1 id="htmlproofer-action">htmlproofer-action</h1>
-<p>A <a href="https://github.com/features/actions">Github Action</a> that runs <a href="https://github.com/gjtorikian/html-proofer">htmlproofer</a>.</p>
+<p>A <a href="https://github.com/features/actions">GitHub Action</a> that runs <a href="https://github.com/gjtorikian/html-proofer">html-proofer</a>.</p>
 <p>Defaults are set up to support jekyll + Github Pages websites.</p>
 <h2 id="usage">Usage</h2>
-<p>Add this snippet to a github workflow after the step that builds your site.</p>
+<p>Add this snippet to a GitHub workflow after the step that builds your site.</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
 </code></pre></div>
+<h3 id="reusable-workflow-optional">Reusable workflow (optional)</h3>
+<p>If you prefer a reusable workflow (for example, to include cross-run caching with <code>actions/cache</code>), you can call the workflow directly:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">htmlproofer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action/.github/workflows/workflow.yml@main</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">directory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./_site</span>
+<span class="w">      </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{</span><span class="nv"> </span><span class="s">&quot;timeframe&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">&quot;external&quot;:</span><span class="nv"> </span><span class="s">&quot;2w&quot;,</span><span class="nv"> </span><span class="s">&quot;internal&quot;:</span><span class="nv"> </span><span class="s">&quot;1w&quot;</span><span class="nv"> </span><span class="s">}</span><span class="nv"> </span><span class="s">}&#39;</span>
+</code></pre></div>
+<p>Note: reusable workflows run as separate jobs, so if you need build output from another job, upload it as an artifact and download it in the reusable workflow job.</p>
 <h3 id="quickstart">Quickstart</h3>
 <div class="highlight"><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and deploy Jekyll site to GitHub Pages</span>
 
@@ -684,7 +716,7 @@
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout</span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Ruby</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ruby/setup-ruby@v1</span>
 <span class="w">        </span><span class="nt">with</span><span class="p">:</span>
@@ -726,11 +758,6 @@
 <td><code>assume_extension</code></td>
 <td>Automatically add specified extension to files for internal links, to allow extensionless URLs (as supported by most servers)</td>
 <td><code>.html</code></td>
-</tr>
-<tr>
-<td><code>checks</code></td>
-<td>An array of Strings indicating which checks you want to run</td>
-<td><code>['Links', 'Images', 'Scripts']</code></td>
 </tr>
 <tr>
 <td><code>check_external_hash</code></td>
@@ -800,7 +827,7 @@
 <tr>
 <td><code>ignore_new_files</code></td>
 <td>If <code>true</code>, will ignore any new or renamed files in the change set.</td>
-<td><code>false</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
 <td><code>swap_urls</code></td>
@@ -810,7 +837,7 @@
 <tr>
 <td><code>host</code></td>
 <td>The host URL of your site so urls can be evaluated as local.</td>
-<td><code>${{ github.repository_owner }}.github.io\/</code></td>
+<td><code>${{ github.repository_owner }}.github.io</code></td>
 </tr>
 <tr>
 <td><code>base_path</code></td>
@@ -825,7 +852,7 @@
 <tr>
 <td><code>cache</code></td>
 <td>JSON configuration for HTMLProofer caching</td>
-<td></td>
+<td><code>{ "timeframe": { "external": "2w", "internal": "1w" } }</code></td>
 </tr>
 </tbody>
 </table>
@@ -869,7 +896,7 @@
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Checkout</span>
-<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v3</span>
+<span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Setup Pages</span>
 <span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pages</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/configure-pages@v3</span>
@@ -907,7 +934,7 @@
 <span class="w">  </span><span class="nt">github-pages</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
 <span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v2</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v6</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Build and push docs</span>
 <span class="w">        </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/mkdocs-simple-plugin@main</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
@@ -935,7 +962,8 @@
 <span class="w">  </span><span class="nt">with</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">cache</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{</span><span class="nv"> </span><span class="s">&quot;timeframe&quot;:</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">&quot;external&quot;:</span><span class="nv"> </span><span class="s">&quot;2w&quot;,</span><span class="nv"> </span><span class="s">&quot;internal&quot;:</span><span class="nv"> </span><span class="s">&quot;1w&quot;</span><span class="nv"> </span><span class="s">}</span><span class="nv"> </span><span class="s">}&#39;</span>
 </code></pre></div>
-<h3 id="swap-a-url">Swap a url</h3>
+<p>When caching is enabled, the action prints a cache summary in the logs and includes it in the GitHub step summary.</p>
+<h3 id="swap-a-url">Swap a URL</h3>
 <p>This swaps urls so that local base name and version numbers are disregarded in url links</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Htmlproofer</span>
 <span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">athackst/htmlproofer-action@main</span>
@@ -947,9 +975,9 @@
 <span class="w">      </span><span class="no">^\/dev:</span>
 <span class="w">      </span><span class="no">^\/v\d+\.\d+\.\d+:</span>
 </code></pre></div>
-<h2 id="local-docker">Local docker</h2>
+<h2 id="local-docker">Local Docker</h2>
 <p>You can also run this locally using the docker image. This can be helpful in understanding errors.</p>
-<p>I make a local alias that calls the docker file with environment variables set based on my common use cases.</p>
+<p>I make a local alias that calls the Docker image with environment variables set based on my common use cases.</p>
 <div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>htmlproofer_action<span class="o">()</span><span class="w"> </span><span class="o">{</span>
 <span class="w">        </span><span class="nv">curr_dir</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PWD</span><span class="s2">/</span><span class="nv">$1</span><span class="s2">&quot;</span>
 <span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Running on </span><span class="nv">$curr_dir</span><span class="s2">&quot;</span>
