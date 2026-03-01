@@ -52,7 +52,7 @@ jobs:
           path: tmp/.htmlproofer
           key: ${{ runner.os }}-htmlproofer
       - name: HTMLProofer
-        uses: athackst/htmlproofer-action/htmlproofer@main
+        uses: athackst/htmlproofer-action@main
         with:
           directory: ${{ inputs.directory }}
           ignore_empty_alt: ${{ inputs.ignore_empty_alt }}
