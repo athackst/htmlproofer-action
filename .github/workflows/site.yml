@@ -19,7 +19,6 @@ jobs:
     uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
     with:
       pages: false
-      version: latest
     secrets: inherit
 
   site-main:
@@ -31,7 +30,7 @@ jobs:
     uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
     with:
       pages: true
-      version: latest
+      version: dev
     secrets: inherit
 
   site-release:
@@ -43,6 +42,6 @@ jobs:
     uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
     with:
       pages: true
-      version: latest
+      version: ${{ github.event.release.tag_name }} latest
       release-tag: ${{ github.event.release.tag_name }}
     secrets: inherit
