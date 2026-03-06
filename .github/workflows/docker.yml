@@ -1,7 +1,6 @@
 name: Docker
 
 on:
-  pull_request:
   push:
     branches:
       - main
@@ -17,7 +16,7 @@ on:
 
 concurrency:
   group: docker-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   docker:
