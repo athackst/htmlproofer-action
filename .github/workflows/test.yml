@@ -2,9 +2,11 @@ name: Test
 
 on:
   pull_request:
-  push:
-    branches: [main]
   workflow_dispatch:
+
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   unit:
@@ -17,6 +19,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Unit tests
         run: bundle exec rspec spec/*_spec.rb
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -27,3 +30,36 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Unit tests
         run: bundle exec rubocop lib/* spec/*
+
+  test-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push docker image
+        uses: docker/build-push-action@v7.0.0
+        with:
+          context: .
+          file: Dockerfile
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: althack/htmlproofer${{ github.event.pull_request.number || github.ref }}
+          push: false
+
+  test-site:
+    if: ${{ github.event_name == 'pull_request' }}
+    permissions:
+      contents: read
+    uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
+    with:
+      pages: false
+    secrets: inherit
+
+  complete:
+    needs: [unit, lint, test-docker, test-site]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Success
+        run: echo "All tests passed!"
