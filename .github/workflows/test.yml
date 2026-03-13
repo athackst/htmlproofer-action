@@ -49,13 +49,23 @@ jobs:
           push: false
 
   test-site:
-    if: ${{ github.event_name == 'pull_request' }}
-    permissions:
-      contents: read
-    uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
-    with:
-      pages: false
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build docs
+        uses: athackst/mkdocs-simple-plugin@main
+        with:
+          push: false
+      - name: Cache HTMLProofer
+        uses: actions/cache@v5
+        with:
+          path: tmp/.htmlproofer
+          key: htmlproofer
+      - name: Test docs
+        uses: ./
+        with:
+          directory: site/
 
   complete:
     needs: [unit, lint, test-docker, test-site]
