@@ -12,48 +12,17 @@ Add this snippet to a GitHub workflow after the step that builds your site.
 - uses: athackst/htmlproofer-action@main
 ```
 
-### Reusable workflow (optional)
-
-If you prefer a reusable workflow (for example, to include cross-run caching with `actions/cache`), you can call the workflow directly:
-
-```yaml
-jobs:
-  htmlproofer:
-    uses: athackst/htmlproofer-action/.github/workflows/workflow.yml@main
-    with:
-      directory: ./_site
-      cache: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
-```
-
-Note: reusable workflows run as separate jobs, so if you need build output from another job, upload it as an artifact and download it in the reusable workflow job.
-
 ### Quickstart
 
 ```yaml
-name: Build and deploy Jekyll site to GitHub Pages
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  github-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          cache-version: 0
-      - name: Build with Jekyll
-        # Outputs to the './_site' directory by default
-        run: bundle exec jekyll build
-        env:
-          JEKYLL_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: athackst/htmlproofer-action@main
+# Cache recommended to reduce frequency of external checks
+- name: Cache HTMLProofer
+  uses: actions/cache@v5
+  with:
+    path: tmp/.htmlproofer
+    key: htmlproofer
+# Run htmlproofer-action
+- uses: athackst/htmlproofer-action@main
 ```
 
 ### Options
@@ -92,6 +61,38 @@ The following options are currently not supported by this action
 | `only_4xx`        | Only reports errors for links that fall within the 4xx status code range.                                                                       | `false` |
 | `swap_attributes` | JSON-formatted config that maps element names to the preferred attribute to check                                                               | `{}`    |
 
+## Examples
+
+### Use with mkdocs
+
+```yaml
+name: Build and deploy Jekyll site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build and push docs
+        uses: athackst/mkdocs-simple-plugin@main
+      - name: Cache HTMLProofer
+        uses: actions/cache@v5
+        with:
+          path: tmp/.htmlproofer
+          key: htmlproofer
+      - name: Htmlproofer
+        uses: athackst/htmlproofer-action@main
+        with:
+          directory: site
+```
+
+### Use with jekyll
+
 ```yaml
 name: Build Jekyll site
 on:
@@ -112,6 +113,11 @@ jobs:
         uses: actions/configure-pages@v3
       - name: Build
         uses: actions/jekyll-build-pages@v1
+      - name: Cache HTMLProofer
+        uses: actions/cache@v5
+        with:
+          path: tmp/.htmlproofer
+          key: htmlproofer
       - name: HTMLProofer
         uses: athackst/htmlproofer-action@main
         with:
@@ -130,31 +136,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-```
-
-## Examples
-
-### Use with mkdocs
-
-```yaml
-name: Build and deploy Jekyll site to GitHub Pages
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  github-pages:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - name: Build and push docs
-        uses: athackst/mkdocs-simple-plugin@main
-      - name: Htmlproofer
-        uses: athackst/htmlproofer-action@main
-        with:
-          directory: site
 ```
 
 ### Ignore a url
