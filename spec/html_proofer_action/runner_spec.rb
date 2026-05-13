@@ -76,6 +76,27 @@ RSpec.describe HTMLProoferAction::Runner do
     end
   end
 
+  describe '.default_swap' do
+    before do
+      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://www.primerpages.com')
+      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/semiliterate')
+    end
+
+    def apply_swap(url)
+      described_class.default_swap.each_with_object(url.dup) do |(pattern, replacement), rewritten|
+        rewritten.gsub!(pattern, replacement)
+      end
+    end
+
+    it 'strips only the leading host and base path from absolute urls' do
+      expect(apply_swap('https://www.primerpages.com/semiliterate/semiliterate/ci')).to eq('/semiliterate/ci')
+    end
+
+    it 'strips the base path from root-relative urls' do
+      expect(apply_swap('/semiliterate/ci')).to eq('/ci')
+    end
+  end
+
   describe '.ignore_new_files' do
     before do
       allow(EnvOptions).to receive(:get_bool).with('IGNORE_NEW_FILES', false).and_return(true)
