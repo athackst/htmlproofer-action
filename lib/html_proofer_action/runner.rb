@@ -51,8 +51,8 @@ module HTMLProoferAction
       base_name = EnvOptions.get_str('BASE_PATH')
       # Create regex host_url/base_name and /base_name
       if !host_url.empty? && !base_name.empty?
-        output[Regexp.new("^.*#{host_url}#{base_name}")] = ''
-        output[Regexp.new("^#{base_name}")] = ''
+        output[Regexp.new("^#{Regexp.escape(base_name)}")] = ''
+        output[Regexp.new("^.*?#{Regexp.escape(host_url)}#{Regexp.escape(base_name)}")] = ''
       end
       output
     end
