@@ -67,3 +67,6 @@ mkdocs.yml
 venv/
 .venv/
 *.bak
+
+.codex
+.agents
