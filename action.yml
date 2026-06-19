@@ -1,6 +1,8 @@
-name: HtmlProofer Docker
-author: athackst
-description: Run HtmlProofer in a docker container
+name: HTMLProofer Action
+description: Run HTMLProofer through the Ruby gem API with broad option support, retries, and cache-friendly defaults.
+branding:
+  icon: link
+  color: green
 
 inputs:
   # required inputs
@@ -162,7 +164,3 @@ inputs:
 runs:
   using: "docker"
   image: "Dockerfile"
-
-branding:
-  icon: link
-  color: green
