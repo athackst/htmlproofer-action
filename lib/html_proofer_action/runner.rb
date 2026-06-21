@@ -101,14 +101,14 @@ module HTMLProoferAction
         ignore_urls: build_ignore_urls,
         swap_urls: build_swap_urls,
         hydra: {
-          max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 50)
+          max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 3)
         },
         typhoeus: {
-          connecttimeout: EnvOptions.get_int('CONNECT_TIMEOUT', 30),
+          connecttimeout: EnvOptions.get_int('CONNECT_TIMEOUT', 45),
           followlocation: EnvOptions.get_bool('FOLLOWLOCATION', true),
           ssl_verifypeer: EnvOptions.get_bool('SSL_VERIFYPEER', false),
           ssl_verifyhost: EnvOptions.get_int('SSL_VERIFYHOST', 0),
-          timeout: EnvOptions.get_int('TIMEOUT', 120),
+          timeout: EnvOptions.get_int('TIMEOUT', 180),
           cookiefile: '.cookies',
           cookiejar: '.cookies'
         }
