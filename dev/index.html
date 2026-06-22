@@ -819,9 +819,24 @@
 <td><code>${{ github.event.repository.name }}</code></td>
 </tr>
 <tr>
+<td><code>max_concurrency</code></td>
+<td>Maximum number of concurrent requests</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>connect_timeout</code></td>
+<td>HTTP connection timeout</td>
+<td>45</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>HTTP request timeout</td>
+<td>180</td>
+</tr>
+<tr>
 <td><code>retries</code></td>
 <td>Number of times to retry checking links</td>
-<td>3</td>
+<td>6</td>
 </tr>
 <tr>
 <td><code>cache</code></td>
