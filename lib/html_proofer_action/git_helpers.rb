@@ -25,9 +25,8 @@ module HTMLProoferAction
       ctx = pr_context_values
       return [] unless ctx.values.all?
 
-      ENV['GH_TOKEN'] = ctx[:token] # Set token globally for this process
-
       output, err, status = Open3.capture3(
+        { 'GH_TOKEN' => ctx[:token] },
         "gh api repos/#{ctx[:repo]}/compare/#{ctx[:base_ref]}...#{ctx[:head_ref]} --jq '.files[] | select(.status == \"added\" or .status == \"renamed\") | .filename'" # rubocop:disable Layout/LineLength
       )
 

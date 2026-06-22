@@ -14,7 +14,7 @@ RSpec.describe HTMLProoferAction::Runner do
   describe '.run' do
     context 'when options are provided' do
       let(:options) { { checks: ['Links'], log_level: ':debug' } }
-      let(:directory) { EnvOptions.get_str('DIRECTORY', '/site') }
+      let(:directory) { EnvOptions.get_str('DIRECTORY', '.') }
       let(:htmlproofer_double) { instance_double(HTMLProofer::Runner, run: nil) }
 
       before do
@@ -131,10 +131,10 @@ RSpec.describe HTMLProoferAction::Runner do
       allow(EnvOptions).to receive(:get_bool).with('FOLLOWLOCATION', true).and_return(true)
       allow(EnvOptions).to receive(:get_bool).with('SSL_VERIFYPEER', false).and_return(true)
 
-      allow(EnvOptions).to receive(:get_int).with('MAX_CONCURRENCY', 50).and_return(50)
-      allow(EnvOptions).to receive(:get_int).with('CONNECT_TIMEOUT', 30).and_return(30)
+      allow(EnvOptions).to receive(:get_int).with('MAX_CONCURRENCY', 3).and_return(3)
+      allow(EnvOptions).to receive(:get_int).with('CONNECT_TIMEOUT', 45).and_return(45)
       allow(EnvOptions).to receive(:get_int).with('SSL_VERIFYHOST', 0).and_return(0)
-      allow(EnvOptions).to receive(:get_int).with('TIMEOUT', 120).and_return(120)
+      allow(EnvOptions).to receive(:get_int).with('TIMEOUT', 180).and_return(180)
 
       allow(EnvOptions).to receive(:get_str).with('DIRECTORY', '/site').and_return('/site')
       allow(EnvOptions).to receive(:get_str).with('ASSUME_EXTENSION', '.html').and_return('.html')
@@ -199,11 +199,11 @@ RSpec.describe HTMLProoferAction::Runner do
     end
 
     it 'includes hydra max_concurrency' do
-      expect(result[:hydra][:max_concurrency]).to eq(50)
+      expect(result[:hydra][:max_concurrency]).to eq(3)
     end
 
     it 'includes typhoeus connecttimeout' do
-      expect(result[:typhoeus][:connecttimeout]).to eq(30)
+      expect(result[:typhoeus][:connecttimeout]).to eq(45)
     end
 
     it 'includes typhoeus followlocation' do
@@ -219,7 +219,7 @@ RSpec.describe HTMLProoferAction::Runner do
     end
 
     it 'includes typhoeus timeout' do
-      expect(result[:typhoeus][:timeout]).to eq(120)
+      expect(result[:typhoeus][:timeout]).to eq(180)
     end
 
     it 'includes typhoeus cookiefile' do

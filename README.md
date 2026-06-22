@@ -50,7 +50,10 @@ Add this snippet to a GitHub workflow after the step that builds your site.
 | `swap_urls`            | A hash containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`.                           | `{}`                                          |
 | `host`                 | The host URL of your site so urls can be evaluated as local.                                                                                        | `${{ github.repository_owner }}.github.io`    |
 | `base_path`            | The base path of your site so urls can be evaluated as local.                                                                                       | `${{ github.event.repository.name }}`         |
-| `retries`              | Number of times to retry checking links                                                                                                             | 3                                             |
+| `max_concurrency`      | Maximum number of concurrent requests                                                                                                               | 3                                             |
+| `connect_timeout`      | HTTP connection timeout                                                                                                                             | 45                                            |
+| `timeout`              | HTTP request timeout                                                                                                                                | 180                                           |
+| `retries`              | Number of times to retry checking links                                                                                                             | 6                                             |
 | `cache`                | JSON configuration for HTMLProofer caching                                                                                                         | `{ "timeframe": { "external": "2w", "internal": "1w" } }` |
 
 The following options are currently not supported by this action

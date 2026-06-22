@@ -21,8 +21,8 @@ describe HTMLProoferAction::GitHelpers do
 
         allow(Open3).to receive(:capture3)
           .with(
-            "gh api repos/user/repo/compare/main...feature-branch --jq '.files[] | select(.status == \"added\" or .status == \"renamed\") | .filename'",
-            { 'GH_TOKEN' => 'testtoken' }
+            { 'GH_TOKEN' => 'testtoken' },
+            "gh api repos/user/repo/compare/main...feature-branch --jq '.files[] | select(.status == \"added\" or .status == \"renamed\") | .filename'"
           ).and_return(["file1.html\nfile2.html", '', instance_double(Process::Status, success?: true)])
       end
 

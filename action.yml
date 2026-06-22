@@ -94,10 +94,12 @@ inputs:
   max_concurrency:
     description: Maximum number of concurrent requests
     required: false
+    default: 3
   # Typhoeus options
   connect_timeout:
     description: HTTP connection timeout
     required: false
+    default: 45
   followlocation:
     description: If 'true' will follow redirections
     required: false
@@ -110,11 +112,12 @@ inputs:
   timeout:
     description: HTTP request timeout
     required: false
+    default: 180
   # Other
   retries:
     description: Number of times to retry checking links
     required: false
-    default: 3
+    default: 6
   cache:
     description: JSON configuration for HTMLProofer caching
     required: false
