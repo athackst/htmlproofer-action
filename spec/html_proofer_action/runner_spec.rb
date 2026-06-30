@@ -77,23 +77,55 @@ RSpec.describe HTMLProoferAction::Runner do
   end
 
   describe '.default_swap' do
-    before do
-      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://www.primerpages.com')
-      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/semiliterate')
-    end
-
     def apply_swap(url)
       described_class.default_swap.each_with_object(url.dup) do |(pattern, replacement), rewritten|
         rewritten.gsub!(pattern, replacement)
       end
     end
 
-    it 'strips only the leading host and base path from absolute urls' do
-      expect(apply_swap('https://www.primerpages.com/semiliterate/semiliterate/ci')).to eq('/semiliterate/ci')
+    context 'with a custom base path' do
+      before do
+        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://www.primerpages.com')
+        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/semiliterate')
+      end
+
+      it 'strips only the leading host and base path from absolute urls' do
+        expect(apply_swap('https://www.primerpages.com/semiliterate/semiliterate/ci')).to eq('/semiliterate/ci')
+      end
+
+      it 'strips the base path from root-relative urls' do
+        expect(apply_swap('/semiliterate/ci')).to eq('/ci')
+      end
     end
 
-    it 'strips the base path from root-relative urls' do
-      expect(apply_swap('/semiliterate/ci')).to eq('/ci')
+    context 'with an empty base path' do
+      before do
+        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://athackst.github.io')
+        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('')
+      end
+
+      it 'strips the host from absolute urls' do
+        expect(apply_swap('https://athackst.github.io/htmlproofer-action')).to eq('/htmlproofer-action')
+      end
+
+      it 'does not strip root-relative urls' do
+        expect(apply_swap('/htmlproofer-action')).to eq('/htmlproofer-action')
+      end
+    end
+
+    context 'with a root base path' do
+      before do
+        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://athackst.github.io')
+        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/')
+      end
+
+      it 'strips the host from absolute urls' do
+        expect(apply_swap('https://athackst.github.io/htmlproofer-action')).to eq('/htmlproofer-action')
+      end
+
+      it 'does not strip root-relative urls' do
+        expect(apply_swap('/htmlproofer-action')).to eq('/htmlproofer-action')
+      end
     end
   end
 

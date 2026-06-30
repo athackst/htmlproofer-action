@@ -46,15 +46,25 @@ module HTMLProoferAction
     end
 
     def self.default_swap
-      output = {}
-      host_url = EnvOptions.get_str('HOST')
-      base_name = EnvOptions.get_str('BASE_PATH')
-      # Create regex host_url/base_name and /base_name
-      if !host_url.empty? && !base_name.empty?
-        output[Regexp.new("^#{Regexp.escape(base_name)}")] = ''
-        output[Regexp.new("^.*?#{Regexp.escape(host_url)}#{Regexp.escape(base_name)}")] = ''
-      end
-      output
+      host_url = EnvOptions.get_str('HOST').chomp('/')
+      base_name = normalize_base_path(EnvOptions.get_str('BASE_PATH'))
+      return {} if host_url.empty?
+
+      escaped_host = Regexp.escape(host_url)
+      return { Regexp.new("^.*?#{escaped_host}(?=/|$)") => '' } if base_name.empty?
+
+      escaped_base = Regexp.escape(base_name)
+      {
+        Regexp.new("^#{escaped_base}") => '',
+        Regexp.new("^.*?#{escaped_host}#{escaped_base}") => ''
+      }
+    end
+
+    def self.normalize_base_path(base_name)
+      return '' if base_name.empty? || base_name == '/'
+
+      base_name = "/#{base_name}" unless base_name.start_with?('/')
+      base_name.chomp('/')
     end
 
     def self.ignore_new_files
@@ -120,6 +130,6 @@ module HTMLProoferAction
     # rubocop: enable Metrics/AbcSize
     # rubocop: enable Metrics/MethodLength
 
-    private_class_method :print_options, :run_proofer
+    private_class_method :print_options, :run_proofer, :normalize_base_path
   end
 end
