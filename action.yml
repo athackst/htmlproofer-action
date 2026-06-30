@@ -87,7 +87,7 @@ inputs:
     required: false
     default: ${{ github.repository_owner }}.github.io
   base_path:
-    description: The base name of your site
+    description: The base path of your site
     required: false
     default: /${{ github.event.repository.name }}
   # Hydra options
