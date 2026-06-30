@@ -101,7 +101,7 @@ module HTMLProoferAction
         ignore_urls: build_ignore_urls,
         swap_urls: build_swap_urls,
         hydra: {
-          max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 3)
+          max_concurrency: EnvOptions.get_int('MAX_CONCURRENCY', 25)
         },
         typhoeus: {
           connecttimeout: EnvOptions.get_int('CONNECT_TIMEOUT', 45),
