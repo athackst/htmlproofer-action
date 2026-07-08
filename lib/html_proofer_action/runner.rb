@@ -49,14 +49,25 @@ module HTMLProoferAction
       host_url = EnvOptions.get_str('HOST').chomp('/')
       base_name = normalize_base_path(EnvOptions.get_str('BASE_PATH'))
       return {} if host_url.empty?
-
-      escaped_host = Regexp.escape(host_url)
-      return { Regexp.new("^.*?#{escaped_host}(?=/|$)") => '' } if base_name.empty?
-
+    
+      host_pattern =
+        if host_url.match?(%r{^https?://})
+          Regexp.escape(host_url)
+        else
+          "https?://#{Regexp.escape(host_url)}"
+        end
+    
+      if base_name.empty?
+        return {
+          Regexp.new("^#{host_pattern}(?=/|$)") => ''
+        }
+      end
+    
       escaped_base = Regexp.escape(base_name)
+    
       {
-        Regexp.new("^#{escaped_base}") => '',
-        Regexp.new("^.*?#{escaped_host}#{escaped_base}") => ''
+        Regexp.new("^#{escaped_base}(?=/|$)") => '',
+        Regexp.new("^#{host_pattern}#{escaped_base}(?=/|$)") => ''
       }
     end
 
