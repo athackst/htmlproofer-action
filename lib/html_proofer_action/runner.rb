@@ -49,22 +49,17 @@ module HTMLProoferAction
       host_url = EnvOptions.get_str('HOST').chomp('/')
       base_name = normalize_base_path(EnvOptions.get_str('BASE_PATH'))
       return {} if host_url.empty?
-    
-      host_pattern =
-        if host_url.match?(%r{^https?://})
-          Regexp.escape(host_url)
-        else
-          "https?://#{Regexp.escape(host_url)}"
-        end
-    
+
+      host_pattern = host_url_pattern(host_url)
+
       if base_name.empty?
         return {
           Regexp.new("^#{host_pattern}(?=/|$)") => ''
         }
       end
-    
+
       escaped_base = Regexp.escape(base_name)
-    
+
       {
         Regexp.new("^#{escaped_base}(?=/|$)") => '',
         Regexp.new("^#{host_pattern}#{escaped_base}(?=/|$)") => ''
@@ -76,6 +71,12 @@ module HTMLProoferAction
 
       base_name = "/#{base_name}" unless base_name.start_with?('/')
       base_name.chomp('/')
+    end
+
+    def self.host_url_pattern(host_url)
+      return Regexp.escape(host_url) if host_url.match?(%r{^https?://})
+
+      "https?://#{Regexp.escape(host_url)}"
     end
 
     def self.ignore_new_files
@@ -141,6 +142,6 @@ module HTMLProoferAction
     # rubocop: enable Metrics/AbcSize
     # rubocop: enable Metrics/MethodLength
 
-    private_class_method :print_options, :run_proofer, :normalize_base_path
+    private_class_method :print_options, :run_proofer, :normalize_base_path, :host_url_pattern
   end
 end

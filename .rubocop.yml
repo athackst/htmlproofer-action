@@ -3,3 +3,9 @@ plugins: rubocop-rspec
 
 AllCops:
   NewCops: enable
+
+Metrics/ModuleLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 20
