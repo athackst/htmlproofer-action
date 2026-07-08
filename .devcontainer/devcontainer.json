@@ -3,14 +3,11 @@
 {
 	"name": "Ruby",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:jammy",
+	"image": "mcr.microsoft.com/devcontainers/ruby:3.3-bookworm",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:4.0.0": {}, // for building the action image
 		"ghcr.io/devcontainers/features/python:1": {}, // For testing with mkdocs
-		"ghcr.io/devcontainers/features/ruby:2.0.0": {
-			"version": "3.3.0"
-		} // For htmlproofer
 	},
 	"customizations": {
 		"vscode": {
