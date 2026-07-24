@@ -17,6 +17,7 @@ COPY lib lib
 RUN bundle config set without 'development' && bundle install
 
 COPY entrypoint.sh .
+COPY scripts scripts
 
 WORKDIR /site
 

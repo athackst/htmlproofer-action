@@ -7,7 +7,7 @@ branding:
 inputs:
   # required inputs
   directory:
-    description: The directory to scan
+    description: Directory containing the built site
     required: true
     default: "./_site"
   # optional inputs
@@ -39,7 +39,8 @@ inputs:
     description: Check whether external anchors exist
     required: false
   check_internal_hash:
-    description: Checks whether internal hashes exist (even if the webpage exists)
+    description: Check whether internal anchors exist
+    required: false
   check_sri:
     description: Check that `<link>` and `<script>` external resources use SRI
     required: false
@@ -53,13 +54,13 @@ inputs:
     description: Require that links use HTTPS
     required: false
   extensions:
-    description: A list of Strings indicating the file extensions you would like to check (including the dot)
+    description: Comma- or newline-separated file extensions to check, including the leading dot
     required: false
   ignore_empty_alt:
-    description: If `true`, ignores images with empty/missing alt tags
+    description: If `true`, allows images with empty alt attributes
     required: false
   ignore_files:
-    description: A list (new line or comma separated) list of regex or strings containing file paths that are safe to ignore
+    description: Comma- or newline-separated file paths or regular expressions to ignore
     required: false
   ignore_empty_mailto:
     description:  If `true`, allows `mailto:` `href`s which do not contain an email address.
@@ -68,51 +69,53 @@ inputs:
     description: If `true`, ignores images with missing alt tags
     required: false
   ignore_status_codes:
-    description: A list of numbers representing status codes to ignore.
+    description: Comma- or newline-separated HTTP status codes to ignore
     required: false
   ignore_urls:
-    description: A list (new line or comma separated) of Strings or RegExps containing URLs that are safe to ignore.
+    description: Comma- or newline-separated URLs or regular expressions to ignore
     required: false
-    default: |
-      https://fonts.gstatic.com
   ignore_new_files:
-    description: Whether to ignore files that are new
+    description: On pull requests, ignore files that are new or renamed
     required: false
     default: 'false'
   swap_urls:
-    description: Newline-separated list of regex expressions to swap in urls
+    description: Comma- or newline-separated regular-expression:replacement URL substitutions
     required: false
   host:
-    description: The host URL of your site
+    description: Public host used to resolve absolute site URLs as local
     required: false
     default: ${{ github.repository_owner }}.github.io
   base_path:
-    description: The base path of your site
+    description: Path below the host where the site is published
     required: false
     default: /${{ github.event.repository.name }}
+  site_url_swap:
+    description: Generate URL substitutions from host and base_path
+    required: false
+    default: 'true'
   # Hydra options
   max_concurrency:
-    description: Maximum number of concurrent requests
+    description: Maximum number of concurrent HTTP requests
     required: false
   # Typhoeus options
   connect_timeout:
-    description: HTTP connection timeout
+    description: HTTP connection timeout in seconds
     required: false
   followlocation:
     description: If 'true' will follow redirections
     required: false
   ssl_verifypeer:
-    description: If you’re hitting a non-verifiable SSL server then you’ll have to disable peer verification to make SSL work
+    description: Verify the remote TLS certificate
     required: false
   ssl_verifyhost:
-    description: "If you are getting `SSL: certificate subject name does not match target host name` from curl"
+    description: curl host-verification setting (use 2 to verify)
     required: false
   timeout:
-    description: HTTP request timeout
+    description: HTTP request timeout in seconds
     required: false
   # Other
   retries:
-    description: Number of times to retry checking links
+    description: Total attempts before failure; retries wait 60 seconds
     required: false
     default: 6
   cache:
@@ -120,7 +123,7 @@ inputs:
     required: false
     default: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
   gh_token:
-    description: Github token
+    description: GitHub token used to inspect pull-request changes
     required: false
     default: ${{ github.token }}
   # Deprecated

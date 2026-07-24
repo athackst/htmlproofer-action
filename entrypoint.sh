@@ -1,5 +1,8 @@
 #!/bin/sh
 
+INPUT_SWAP_URLS="$(ruby "$(dirname "$0")/scripts/site_url_swaps.rb")"
+export INPUT_SWAP_URLS
+
 tries="${INPUT_RETRIES:-1}"
 
 code=1
