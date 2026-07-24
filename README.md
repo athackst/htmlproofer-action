@@ -104,7 +104,8 @@ Separate multiple entries with commas or newlines. Escape a literal colon as
 | `ssl_verifypeer` | Verify the remote TLS certificate | `false` |
 | `ssl_verifyhost` | curl host-verification setting | `0` |
 | `timeout` | HTTP request timeout in seconds | `30` |
-| `retries` | Total attempts before the action fails; retries wait 60 seconds | `6` |
+| `retries` | Total attempts before the action fails | `6` |
+| `retry_wait` | Seconds to wait between failed attempts | `60` |
 | `cache` | JSON object configuring HTMLProofer's cache; use an empty input to disable it | `{ "timeframe": { "external": "2w", "internal": "1w" } }` |
 | `gh_token` | Token used to inspect pull-request changes for `ignore_new_files` | `${{ github.token }}` |
 

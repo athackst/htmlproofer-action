@@ -122,6 +122,10 @@ inputs:
     description: Total attempts before failure; retries wait 60 seconds
     required: false
     default: 6
+  retry_wait:
+    description: Seconds to wait between failed attempts
+    required: false
+    default: 60
   cache:
     description: JSON configuration for HTMLProofer caching
     required: false

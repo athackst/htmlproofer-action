@@ -7,6 +7,7 @@ INPUT_IGNORE_URLS="$(ruby "$(dirname "$0")/scripts/common_ignores.rb")"
 export INPUT_IGNORE_URLS
 
 tries="${INPUT_RETRIES:-1}"
+retry_wait="${INPUT_RETRY_WAIT:-60}"
 
 code=1
 run_log=""
@@ -20,7 +21,7 @@ while [ "$tries" -ge 1 ]; do
     break
   fi
   if [ "$tries" -ge 1 ]; then
-    sleep 60
+    sleep "$retry_wait"
   fi
 done
 
