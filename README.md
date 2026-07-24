@@ -1,213 +1,329 @@
 # htmlproofer-action
 
-A [GitHub Action](https://github.com/features/actions) that runs [html-proofer](https://github.com/gjtorikian/html-proofer).
-
-Defaults are set up to support jekyll + Github Pages websites.
+A [GitHub Action](https://github.com/features/actions) that runs
+[HTMLProofer](https://github.com/gjtorikian/html-proofer) against a built static
+site. Its defaults are tailored to Jekyll sites hosted on GitHub Pages.
 
 ## Usage
 
-Add this snippet to a GitHub workflow after the step that builds your site.
+Add the action after the step that builds your site:
 
 ```yaml
 - uses: athackst/htmlproofer-action@main
 ```
 
-### Quickstart
+HTMLProofer can cache link-check results. Persisting that cache reduces repeated
+external requests:
 
 ```yaml
-# Cache recommended to reduce frequency of external checks
-- name: Cache HTMLProofer
-  uses: actions/cache@v5
+- name: Restore HTMLProofer cache
+  uses: actions/cache/restore@v6
   with:
     path: tmp/.htmlproofer
-    key: htmlproofer
-# Run htmlproofer-action
-- uses: athackst/htmlproofer-action@main
+    key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
+    restore-keys: |
+      ${{ runner.os }}-htmlproofer-
+
+- name: Check site
+  uses: athackst/htmlproofer-action@main
+
+- name: Save HTMLProofer cache
+  if: always()
+  uses: actions/cache/save@v6
+  with:
+    path: tmp/.htmlproofer
+    key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
 ```
 
-### Options
+### Inputs
 
-| Name                   | Description                                                                                                                                         | Default                                       |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `directory`            | The directory to scan                                                                                                                               | ./\_site **(required)**                       |
-| `allow_hash_href`      | If `true`, assumes `href="#"` anchors are valid                                                                                                     | `true`                                        |
-| `allow_missing_href`   | If `true`, does not flag `a` tags missing `href`. In HTML5, this is technically allowed, but could also be human error.                             | `false`                                       |
-| `assume_extension`     | Automatically add specified extension to files for internal links, to allow extensionless URLs (as supported by most servers)                       | `.html`                                       |
-| `check_external_hash`  | Checks whether external hashes exist (even if the webpage exists)                                                                                   | `true`                                        |
-| `check_internal_hash`  | Checks whether internal hashes exist (even if the webpage exists)                                                                                   | `true`                                        |
-| `check_sri`            | Check that `<link>` and `<script>` external resources use SRI                                                                                       | false                                         |
-| `directory_index_file` | Sets the file to look for when a link refers to a directory.                                                                                        | `index.html`                                  |
-| `disable_external`     | If `true`, does not run the external link checker                                                                                                   | `false`                                       |
-| `enforce_https`        | Fails a link if it's not marked as `https`.                                                                                                         | `true`                                        |
-| `extensions`           | An array of Strings indicating the file extensions you would like to check (including the dot)                                                      | `['.html']`                                   |
-| `ignore_empty_alt`     | If `true`, ignores images with empty/missing alt tags (in other words, `<img alt>` and `<img alt="">` are valid; set this to `false` to flag those) | `true`                                        |
-| `ignore_files`         | An array of Strings or RegExps containing file paths that are safe to ignore.                                                                       | `[]`                                          |
-| `ignore_empty_mailto`  | If `true`, allows `mailto:` `href`s which do not contain an email address.                                                                          | `false`                                       |
-| `ignore_missing_alt`   | If `true`, ignores images with missing alt tags                                                                                                     | `false`                                       |
-| `ignore_status_codes`  | A list of numbers representing status codes to ignore.                                                                                              | `[]`                                          |
-| `ignore_urls`          | A list of Strings or RegExps containing URLs that are safe to ignore. This affects all HTML attributes, such as `alt` tags on images.               | `[]`                                          |
-| `ignore_new_files`     | If `true`, will ignore any new or renamed files in the change set.                                                                                  | `true`                                        |
-| `swap_urls`            | A hash containing key-value pairs of `RegExp => String`. It transforms URLs that match `RegExp` into `String` via `gsub`.                           | `{}`                                          |
-| `host`                 | The host URL of your site so urls can be evaluated as local.                                                                                        | `${{ github.repository_owner }}.github.io`    |
-| `base_path`            | The base path of your site so urls can be evaluated as local.                                                                                       | `/${{ github.event.repository.name }}`        |
-| `max_concurrency`      | Maximum number of concurrent requests                                                                                                               | 3                                             |
-| `connect_timeout`      | HTTP connection timeout                                                                                                                             | 45                                            |
-| `timeout`              | HTTP request timeout                                                                                                                                | 180                                           |
-| `retries`              | Number of times to retry checking links                                                                                                             | 6                                             |
-| `cache`                | JSON configuration for HTMLProofer caching                                                                                                         | `{ "timeframe": { "external": "2w", "internal": "1w" } }` |
+The defaults below are the effective defaults when the project is run as a
+GitHub Action. Boolean inputs accept `true` or `false`. List inputs accept
+comma-separated or newline-separated values.
 
-The following options are currently not supported by this action
+#### Site and checks
 
-| Name              | Description                                                                                                                                     | Default |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `log_level`       | Sets the logging level, as determined by [Yell](https://github.com/rudionrails/yell). One of `:debug`, `:info`, `:warn`, `:error`, or `:fatal`. | `:info` |
-| `only_4xx`        | Only reports errors for links that fall within the 4xx status code range.                                                                       | `false` |
-| `swap_attributes` | JSON-formatted config that maps element names to the preferred attribute to check                                                               | `{}`    |
+| Input | Description | Default |
+| --- | --- | --- |
+| `directory` | Directory containing the built site | `./_site` |
+| `allow_hash_href` | Treat `href="#"` as valid | `true` |
+| `allow_missing_href` | Allow `a` elements without an `href` | `false` |
+| `assume_extension` | Add this extension when resolving extensionless internal URLs | `.html` |
+| `check_favicon` | Check whether favicons are valid | `false` |
+| `check_links` | Check `a` and `link` elements | `true` |
+| `check_images` | Check `img` elements | `true` |
+| `check_scripts` | Check `script` elements | `true` |
+| `check_opengraph` | Check images and URLs in Open Graph metadata | `false` |
+| `check_external_hash` | Check fragments on external URLs | `true` |
+| `check_internal_hash` | Check fragments on internal URLs | `true` |
+| `check_sri` | Require SRI on external `link` and `script` resources | `false` |
+| `directory_index_file` | File used when a URL refers to a directory | `index.html` |
+| `disable_external` | Disable external URL checks | `false` |
+| `enforce_https` | Fail HTTP links | `true` |
+| `extensions` | File extensions to check, including the leading dot | `.html` |
+| `ignore_empty_alt` | Allow images whose `alt` attribute is empty | `true` |
+| `ignore_missing_alt` | Allow images whose `alt` attribute is missing | `false` |
+| `ignore_empty_mailto` | Allow `mailto:` links without an email address | `false` |
+| `ignore_files` | File paths or `/regular expressions/` to skip | none |
+| `ignore_status_codes` | HTTP status codes to ignore | none |
+| `ignore_urls` | Additional URLs or `/regular expressions/` to skip | none |
+| `ignore_common` | Ignore URLs that commonly reject automated link checks | `true` |
+| `ignore_new_files` | On pull requests, ignore new or renamed files detected by Git | `false` |
+
+HTMLProofer treats empty and missing alt attributes independently.
+`ignore_empty_alt` controls empty attributes, while `ignore_missing_alt`
+controls missing attributes.
+
+When `ignore_common` is enabled, the action entrypoint adds
+`https://fonts.gstatic.com` to `ignore_urls`. Set `ignore_common: false` to
+check that URL normally. User-provided `ignore_urls` are preserved in either
+mode.
+
+#### URL mapping
+
+| Input | Description | Default |
+| --- | --- | --- |
+| `host` | Public host used to resolve absolute site URLs as local | `${{ github.repository_owner }}.github.io` |
+| `base_path` | Path below the host where the site is published | `/${{ github.event.repository.name }}` |
+| `site_url_swap` | Generate URL substitutions from `host` and `base_path` | `true` |
+| `swap_urls` | Additional URL substitutions in `regular-expression:replacement` form | none |
+
+When `site_url_swap` is enabled, the action entrypoint generates substitutions
+that remove the configured host and base path before HTMLProofer resolves local
+URLs. User-provided `swap_urls` entries are added to those substitutions.
+Separate multiple entries with commas or newlines. Escape a literal colon as
+`\:`.
+
+#### HTTP and action behavior
+
+| Input | Description | Default |
+| --- | --- | --- |
+| `max_concurrency` | Maximum number of concurrent HTTP requests | `2` |
+| `connect_timeout` | Connection timeout in seconds | `10` |
+| `followlocation` | Follow HTTP redirects | `true` |
+| `ssl_verifypeer` | Verify the remote TLS certificate | `false` |
+| `ssl_verifyhost` | curl host-verification setting | `0` |
+| `timeout` | HTTP request timeout in seconds | `30` |
+| `retries` | Total attempts before the action fails; retries wait 60 seconds | `6` |
+| `cache` | JSON object configuring HTMLProofer's cache; use an empty input to disable it | `{ "timeframe": { "external": "2w", "internal": "1w" } }` |
+| `gh_token` | Token used to inspect pull-request changes for `ignore_new_files` | `${{ github.token }}` |
+
+> [!CAUTION]
+> TLS peer and host verification are disabled by default. Set
+> `ssl_verifypeer: true` and `ssl_verifyhost: 2` when the sites you check use
+> publicly trusted certificates.
+
+### Deprecated inputs
+
+These aliases remain available for compatibility but should not be used in new
+workflows:
+
+| Deprecated input | Replacement |
+| --- | --- |
+| `check_html` | `check_links` |
+| `check_img_http` | `check_images` |
+| `empty_alt_ignore` | `ignore_empty_alt` |
+| `missing_alt_ignore` | `ignore_missing_alt` |
+| `url_ignore`, `url_ignore_re` | `ignore_urls` |
+| `url_swap` | `swap_urls` |
+
+`internal_domains` and the misspelled `max_paralell` are accepted by the action
+metadata but no longer affect HTMLProofer.
+
+The HTMLProofer options `log_level`, `only_4xx`, and `swap_attributes` are not
+currently exposed as action inputs.
 
 ## Examples
 
-### Use with mkdocs
+### MkDocs
 
 ```yaml
-name: Build and deploy Jekyll site to GitHub Pages
+name: Check MkDocs site
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  github-pages:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - name: Build and push docs
+      - uses: actions/checkout@v7
+      - name: Build documentation
         uses: athackst/mkdocs-simple-plugin@main
-      - name: Cache HTMLProofer
-        uses: actions/cache@v5
+      - name: Restore HTMLProofer cache
+        uses: actions/cache/restore@v6
         with:
           path: tmp/.htmlproofer
-          key: htmlproofer
-      - name: Htmlproofer
+          key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-htmlproofer-
+      - name: Check site
         uses: athackst/htmlproofer-action@main
         with:
           directory: site
+      - name: Save HTMLProofer cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: tmp/.htmlproofer
+          key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
 ```
 
-### Use with jekyll
+### Jekyll and GitHub Pages
+
+`actions/configure-pages` provides the correct host and base path for user,
+organization, and project sites:
 
 ```yaml
-name: Build Jekyll site
+name: Build and check Jekyll site
+
 on:
   push:
-    branches: ["main"]
+    branches: [main]
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Setup Pages
+      - uses: actions/checkout@v7
+      - name: Configure Pages
         id: pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
       - name: Build
         uses: actions/jekyll-build-pages@v1
-      - name: Cache HTMLProofer
-        uses: actions/cache@v5
+      - name: Restore HTMLProofer cache
+        uses: actions/cache/restore@v6
         with:
           path: tmp/.htmlproofer
-          key: htmlproofer
-      - name: HTMLProofer
+          key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-htmlproofer-
+      - name: Check site
         uses: athackst/htmlproofer-action@main
         with:
           host: ${{ steps.pages.outputs.host }}
           base_path: ${{ steps.pages.outputs.base_path }}
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Save HTMLProofer cache
+        if: always()
+        uses: actions/cache/save@v6
+        with:
+          path: tmp/.htmlproofer
+          key: ${{ runner.os }}-htmlproofer-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-pages-artifact@v3
+
   deploy:
-    runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
-### Ignore a url
+### Ignore URLs
 
-This uses the same syntax as htmlproofer, but you can either use a comma or new line to separate values.
+Plain strings are matched literally. Surround an entry with `/` to treat it as
+a regular expression:
 
 ```yaml
-- name: Htmlproofer
-  uses: athackst/htmlproofer-action@main
+- uses: athackst/htmlproofer-action@main
   with:
     ignore_urls: |
-      /twitter.com/
-      https://fonts.gstatic.com
+      /https:\/\/(www\.)?twitter\.com/
+      https://example.com/expected-404
 ```
 
-### Enable HTMLProofer cache with GitHub Actions cache
+### Add URL substitutions
+
+This removes version prefixes from root-relative URLs:
 
 ```yaml
-- name: Cache HTMLProofer
-  uses: actions/cache@v3
+- uses: athackst/htmlproofer-action@main
   with:
-    path: tmp/.htmlproofer
-    key: ${{ runner.os }}-htmlproofer
-- name: Htmlproofer
-  uses: athackst/htmlproofer-action@main
-  with:
-    cache: '{ "timeframe": { "external": "2w", "internal": "1w" } }'
+    swap_urls: |
+      ^/dev:
+      ^/v\d+\.\d+\.\d+:
 ```
 
-When caching is enabled, the action prints a cache summary in the logs and includes it in the GitHub step summary.
-
-### Swap a URL
-
-This swaps urls so that local base name and version numbers are disregarded in url links
+### Configure or disable the HTMLProofer cache
 
 ```yaml
-- name: Htmlproofer
-  uses: athackst/htmlproofer-action@main
+- uses: athackst/htmlproofer-action@main
   with:
-    directory: site
-    url_swap: |
-      ^https.?\/\/.*.github.io\/${{ github.event.repository.name }}:
-      ^\/${{ github.event.repository.name }}:
-      ^\/dev:
-      ^\/v\d+\.\d+\.\d+:
+    cache: '{ "timeframe": { "external": "1w", "internal": "3d" } }'
 ```
 
-## Local Docker
+To disable HTMLProofer caching, pass an empty value and omit the `actions/cache`
+step:
 
-You can also run this locally using the docker image. This can be helpful in understanding errors.
-
-I make a local alias that calls the Docker image with environment variables set based on my common use cases.
-
-```sh
-function htmlproofer_action() {
-        curr_dir="$PWD/$1"
-        echo "Running on $curr_dir"
-        base_dir=$(basename "$PWD")
-        url_swap="^\/${base_dir}:,^\/dev:,^\/v\d+\.\d+\.\d+:"
-        docker run -v ${curr_dir}:/site -e INPUT_URL_SWAP=${url_swap} althack/htmlproofer:latest
-}
+```yaml
+- uses: athackst/htmlproofer-action@main
+  with:
+    cache: ""
 ```
 
-Then I can just go to the folder the site is built in and run the htmlproofer.
+When caching is enabled, the action prints cache statistics in its log and in
+the GitHub step summary.
+
+The examples use separate restore and save actions so the cache is saved even
+when HTMLProofer reports broken links. HTMLProofer writes `cache.json` before
+reporting its failures, and `if: always()` lets the save step run after the
+failed check.
+
+The run ID and attempt number make each saved key unique, including workflow
+reruns. The restore prefix selects the newest cache visible to the current
+branch or pull-request scope. GitHub restricts cache access by Git ref, so a
+cache created for one pull request is not available to a different pull
+request.
+
+## Local Docker usage
+
+The Docker image runs from `/site`, so mount the built site there. GitHub
+expressions from `action.yml` are unavailable locally; pass any required inputs
+as `INPUT_*` environment variables. The entrypoint enables `site_url_swap` by
+default, but generates no substitutions when `INPUT_HOST` is empty.
 
 ```bash
-htmlproofer _site
+docker run --rm \
+  --volume "$PWD/_site:/site" \
+  --env INPUT_HOST=example.github.io \
+  --env INPUT_BASE_PATH=/example \
+  althack/htmlproofer:latest
 ```
+
+When used directly through Docker, `directory` defaults to `.`, retries default
+to `1`, caching is disabled, and `host` and `base_path` are empty. The
+HTMLProofer option defaults implemented by the Ruby library are the same as
+those listed above.
+
+## Where defaults live
+
+There are two runtime layers:
+
+- The Ruby library owns HTMLProofer defaults such as enabled checks,
+  concurrency, and HTTP timeouts. These defaults also apply to direct Docker
+  usage and unit tests.
+- `action.yml` owns GitHub-specific and wrapper defaults such as repository
+  expressions, retry count, token, cache policy, and the default build
+  directory.
+
+Keeping a Ruby-owned default out of `action.yml` avoids two sources of truth:
+an omitted input reaches the library as unset, and the library applies its
+default. If a library default is repeated in `action.yml`, GitHub always sends
+that value and can hide later library changes. The tradeoff is that GitHub's
+Marketplace UI does not display those implicit defaults, so this table is the
+complete user-facing reference.
 
 ## License
 
-This software is licensed under [Apache 2.0](https://github.com/athackst/htmlproofer-action/blob/main/LICENSE).
+This software is licensed under the
+[Apache License 2.0](https://github.com/athackst/htmlproofer-action/blob/main/LICENSE).

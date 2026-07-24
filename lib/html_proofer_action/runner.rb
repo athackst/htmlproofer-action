@@ -36,47 +36,13 @@ module HTMLProoferAction
     end
 
     def self.build_swap_urls
-      EnvOptions.append_swap_map(%w[SWAP_URLS URL_SWAP], default_swap)
+      EnvOptions.append_swap_map(%w[SWAP_URLS URL_SWAP], {})
     end
 
     def self.build_ignore_urls
       EnvOptions.get_only_regex_list('URL_IGNORE_RE', []) +
         EnvOptions.get_regex_list(%w[IGNORE_URLS URL_IGNORE], []) +
         ignore_new_files
-    end
-
-    def self.default_swap
-      host_url = EnvOptions.get_str('HOST').chomp('/')
-      base_name = normalize_base_path(EnvOptions.get_str('BASE_PATH'))
-      return {} if host_url.empty?
-
-      host_pattern = host_url_pattern(host_url)
-
-      if base_name.empty?
-        return {
-          Regexp.new("^#{host_pattern}(?=/|$)") => ''
-        }
-      end
-
-      escaped_base = Regexp.escape(base_name)
-
-      {
-        Regexp.new("^#{escaped_base}(?=/|$)") => '',
-        Regexp.new("^#{host_pattern}#{escaped_base}(?=/|$)") => ''
-      }
-    end
-
-    def self.normalize_base_path(base_name)
-      return '' if base_name.empty? || base_name == '/'
-
-      base_name = "/#{base_name}" unless base_name.start_with?('/')
-      base_name.chomp('/')
-    end
-
-    def self.host_url_pattern(host_url)
-      return Regexp.escape(host_url) if host_url.match?(%r{^https?://})
-
-      "https?://#{Regexp.escape(host_url)}"
     end
 
     def self.ignore_new_files
@@ -142,6 +108,6 @@ module HTMLProoferAction
     # rubocop: enable Metrics/AbcSize
     # rubocop: enable Metrics/MethodLength
 
-    private_class_method :print_options, :run_proofer, :normalize_base_path, :host_url_pattern
+    private_class_method :print_options, :run_proofer
   end
 end

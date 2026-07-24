@@ -53,79 +53,12 @@ RSpec.describe HTMLProoferAction::Runner do
   end
 
   describe '.build_swap_urls' do
-    let(:captured_defaults) { {} }
+    it 'parses only explicit swap inputs' do
+      allow(EnvOptions).to receive(:append_swap_map)
+        .with(%w[SWAP_URLS URL_SWAP], {})
+        .and_return({ /foo/ => 'bar' })
 
-    before do
-      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('http://example.com')
-      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/blog')
-      allow(EnvOptions).to receive(:append_swap_map).with(%w[SWAP_URLS URL_SWAP], anything)
-                                                    .and_wrap_original do |_method, _keys, defaults|
-        captured_defaults.merge!(defaults)
-        {}
-      end
-
-      described_class.build_swap_urls
-    end
-
-    it 'calls append_swap_map with default_swap keys as regex' do
-      expect(captured_defaults.keys).to all(be_a(Regexp))
-    end
-
-    it 'calls append_swap_map with values as empty strings' do
-      expect(captured_defaults.values).to all(eq(''))
-    end
-  end
-
-  describe '.default_swap' do
-    def apply_swap(url)
-      described_class.default_swap.each_with_object(url.dup) do |(pattern, replacement), rewritten|
-        rewritten.gsub!(pattern, replacement)
-      end
-    end
-
-    context 'with a custom base path' do
-      before do
-        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://www.primerpages.com')
-        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/semiliterate')
-      end
-
-      it 'strips only the leading host and base path from absolute urls' do
-        expect(apply_swap('https://www.primerpages.com/semiliterate/semiliterate/ci')).to eq('/semiliterate/ci')
-      end
-
-      it 'strips the base path from root-relative urls' do
-        expect(apply_swap('/semiliterate/ci')).to eq('/ci')
-      end
-    end
-
-    context 'with an empty base path' do
-      before do
-        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://athackst.github.io')
-        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('')
-      end
-
-      it 'strips the host from absolute urls' do
-        expect(apply_swap('https://athackst.github.io/htmlproofer-action')).to eq('/htmlproofer-action')
-      end
-
-      it 'does not strip root-relative urls' do
-        expect(apply_swap('/htmlproofer-action')).to eq('/htmlproofer-action')
-      end
-    end
-
-    context 'with a root base path' do
-      before do
-        allow(EnvOptions).to receive(:get_str).with('HOST').and_return('https://athackst.github.io')
-        allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('/')
-      end
-
-      it 'strips the host from absolute urls' do
-        expect(apply_swap('https://athackst.github.io/htmlproofer-action')).to eq('/htmlproofer-action')
-      end
-
-      it 'does not strip root-relative urls' do
-        expect(apply_swap('/htmlproofer-action')).to eq('/htmlproofer-action')
-      end
+      expect(described_class.build_swap_urls).to eq({ /foo/ => 'bar' })
     end
   end
 
@@ -163,17 +96,14 @@ RSpec.describe HTMLProoferAction::Runner do
       allow(EnvOptions).to receive(:get_bool).with('FOLLOWLOCATION', true).and_return(true)
       allow(EnvOptions).to receive(:get_bool).with('SSL_VERIFYPEER', false).and_return(true)
 
-      allow(EnvOptions).to receive(:get_int).with('MAX_CONCURRENCY', 3).and_return(3)
-      allow(EnvOptions).to receive(:get_int).with('CONNECT_TIMEOUT', 45).and_return(45)
+      allow(EnvOptions).to receive(:get_int).with('MAX_CONCURRENCY', 2).and_return(2)
+      allow(EnvOptions).to receive(:get_int).with('CONNECT_TIMEOUT', 10).and_return(10)
       allow(EnvOptions).to receive(:get_int).with('SSL_VERIFYHOST', 0).and_return(0)
-      allow(EnvOptions).to receive(:get_int).with('TIMEOUT', 180).and_return(180)
+      allow(EnvOptions).to receive(:get_int).with('TIMEOUT', 30).and_return(30)
 
       allow(EnvOptions).to receive(:get_str).with('DIRECTORY', '/site').and_return('/site')
       allow(EnvOptions).to receive(:get_str).with('ASSUME_EXTENSION', '.html').and_return('.html')
       allow(EnvOptions).to receive(:get_str).with('DIRECTORY_INDEX_FILE', 'index.html').and_return('index.html')
-      allow(EnvOptions).to receive(:get_str).with('BASE_PATH').and_return('')
-      allow(EnvOptions).to receive(:get_str).with('HOST').and_return('')
-
       allow(EnvOptions).to receive(:return_value_if).with('CHECK_FAVICON', false, 'Favicon').and_return('Favicon')
       allow(EnvOptions).to receive(:return_value_if).with(%w[CHECK_LINKS CHECK_HTML], true, 'Links').and_return('Links')
       allow(EnvOptions).to receive(:return_value_if).with(%w[CHECK_IMAGES CHECK_IMG_HTTP], true, 'Images').and_return('Images')
@@ -231,11 +161,11 @@ RSpec.describe HTMLProoferAction::Runner do
     end
 
     it 'includes hydra max_concurrency' do
-      expect(result[:hydra][:max_concurrency]).to eq(3)
+      expect(result[:hydra][:max_concurrency]).to eq(2)
     end
 
     it 'includes typhoeus connecttimeout' do
-      expect(result[:typhoeus][:connecttimeout]).to eq(45)
+      expect(result[:typhoeus][:connecttimeout]).to eq(10)
     end
 
     it 'includes typhoeus followlocation' do
@@ -251,7 +181,7 @@ RSpec.describe HTMLProoferAction::Runner do
     end
 
     it 'includes typhoeus timeout' do
-      expect(result[:typhoeus][:timeout]).to eq(180)
+      expect(result[:typhoeus][:timeout]).to eq(30)
     end
 
     it 'includes typhoeus cookiefile' do
