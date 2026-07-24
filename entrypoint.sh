@@ -3,6 +3,9 @@
 INPUT_SWAP_URLS="$(ruby "$(dirname "$0")/scripts/site_url_swaps.rb")"
 export INPUT_SWAP_URLS
 
+INPUT_IGNORE_URLS="$(ruby "$(dirname "$0")/scripts/common_ignores.rb")"
+export INPUT_IGNORE_URLS
+
 tries="${INPUT_RETRIES:-1}"
 
 code=1

@@ -66,12 +66,18 @@ comma-separated or newline-separated values.
 | `ignore_empty_mailto` | Allow `mailto:` links without an email address | `false` |
 | `ignore_files` | File paths or `/regular expressions/` to skip | none |
 | `ignore_status_codes` | HTTP status codes to ignore | none |
-| `ignore_urls` | URLs or `/regular expressions/` to skip | none |
+| `ignore_urls` | Additional URLs or `/regular expressions/` to skip | none |
+| `ignore_common` | Ignore URLs that commonly reject automated link checks | `true` |
 | `ignore_new_files` | On pull requests, ignore new or renamed files detected by Git | `false` |
 
 HTMLProofer treats empty and missing alt attributes independently.
 `ignore_empty_alt` controls empty attributes, while `ignore_missing_alt`
 controls missing attributes.
+
+When `ignore_common` is enabled, the action entrypoint adds
+`https://fonts.gstatic.com` to `ignore_urls`. Set `ignore_common: false` to
+check that URL normally. User-provided `ignore_urls` are preserved in either
+mode.
 
 #### URL mapping
 

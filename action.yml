@@ -74,6 +74,10 @@ inputs:
   ignore_urls:
     description: Comma- or newline-separated URLs or regular expressions to ignore
     required: false
+  ignore_common:
+    description: Ignore URLs that commonly reject automated link checks
+    required: false
+    default: 'true'
   ignore_new_files:
     description: On pull requests, ignore files that are new or renamed
     required: false
