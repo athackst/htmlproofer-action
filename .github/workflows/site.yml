@@ -19,7 +19,8 @@ jobs:
   build-site:
     permissions:
       contents: read
-    uses: athackst/ci/.github/workflows/mkdocs_site.yml@main
+      pages: read
+    uses: athackst/ci/.github/workflows/jekyll_site.yml@main
     with:
       version: ${{ github.event.release.tag_name || 'dev' }}
 
