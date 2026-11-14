@@ -6,6 +6,7 @@ require 'spec_helper'
 require 'open3'
 require 'tmpdir'
 require 'fileutils'
+require_relative 'support/image_server'
 
 require 'html_proofer_action'
 
@@ -125,6 +126,46 @@ RSpec.describe HTMLProoferAction do
       stderr: '',
       stdout: a_string_including('finished successfully')
     )
+  end
+
+  context 'with an external image served over HTTP' do
+    let(:image_server) { ImageServer.new }
+
+    around do |example|
+      Dir.mktmpdir do |directory|
+        ENV['INPUT_DIRECTORY'] = directory
+        ENV['INPUT_ENFORCE_HTTPS'] = 'false'
+        ENV['INPUT_DISABLE_EXTERNAL'] = 'false'
+        example.run
+      end
+    ensure
+      image_server.close
+    end
+
+    def write_external_image(path)
+      File.write(File.join(ENV.fetch('INPUT_DIRECTORY'), 'index.html'),
+                 %(<html><body><img src="#{image_server.url}#{path}" alt="Test image"></body></html>))
+    end
+
+    it 'accepts an external image that returns HTTP 200', :aggregate_failures do
+      write_external_image('/image.png')
+      expect(htmlproofer_status_output).to match(
+        status: 0,
+        stderr: '',
+        stdout: a_string_including('finished successfully')
+      )
+      expect(image_server.requests).to include('/image.png')
+    end
+
+    it 'rejects an external image that returns HTTP 404', :aggregate_failures do
+      write_external_image('/missing.png')
+      expect(htmlproofer_status_output).to match(
+        status: 1,
+        stderr: a_string_including('status code 404'),
+        stdout: a_string_including('')
+      )
+      expect(image_server.requests).to include('/missing.png')
+    end
   end
 
   it 'checks HTTP images when check_images option set to true' do

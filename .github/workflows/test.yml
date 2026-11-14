@@ -68,8 +68,17 @@ jobs:
           directory: site/
 
   complete:
+    if: ${{ always() }}
     needs: [unit, lint, test-docker, test-site]
     runs-on: ubuntu-latest
     steps:
-      - name: Success
-        run: echo "All tests passed!"
+      - name: Check test results
+        env:
+          NEEDS_RESULTS: ${{ toJSON(needs) }}
+        run: |
+          echo "$NEEDS_RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          if ! echo "$NEEDS_RESULTS" | jq -e 'all(.[]; .result == "success")' > /dev/null; then
+            echo "::error::All test jobs must succeed. A job failed, was cancelled, or was skipped."
+            exit 1
+          fi
+          echo "All tests passed!"
