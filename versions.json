@@ -6,6 +6,32 @@
     "version": "dev"
   },
   {
+    "aliases": [
+      "latest"
+    ],
+    "properties": {},
+    "title": "v2.2.1",
+    "version": "v2.2.1"
+  },
+  {
+    "aliases": [],
+    "properties": {},
+    "title": "v2.2.0",
+    "version": "v2.2.0"
+  },
+  {
+    "aliases": [],
+    "properties": {},
+    "title": "v2.1.0",
+    "version": "v2.1.0"
+  },
+  {
+    "aliases": [],
+    "properties": {},
+    "title": "v2.0.1",
+    "version": "v2.0.1"
+  },
+  {
     "aliases": [],
     "properties": {},
     "title": "v2.0.0",
@@ -52,31 +78,5 @@
     "properties": {},
     "title": "v0.2.0",
     "version": "v0.2.0"
-  },
-  {
-    "aliases": [],
-    "properties": {},
-    "title": "v2.0.1",
-    "version": "v2.0.1"
-  },
-  {
-    "aliases": [],
-    "properties": {},
-    "title": "v2.1.0",
-    "version": "v2.1.0"
-  },
-  {
-    "aliases": [],
-    "properties": {},
-    "title": "v2.2.0",
-    "version": "v2.2.0"
-  },
-  {
-    "aliases": [
-      "latest"
-    ],
-    "properties": {},
-    "title": "v2.2.1",
-    "version": "v2.2.1"
   }
 ]
