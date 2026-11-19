@@ -43,6 +43,5 @@ jobs:
       id-token: write
     uses: athackst/ci/.github/workflows/deploy_site.yml@main
     with:
-      type: branch
       version: ${{ needs.build-site.outputs.version }}
     secrets: inherit
